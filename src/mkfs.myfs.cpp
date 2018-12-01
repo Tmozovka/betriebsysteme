@@ -9,6 +9,8 @@
 #include "myfs.h"
 #include "blockdevice.h"
 #include "macros.h"
+#include <stdio.h>
+
 
 int main(int argc, char *argv[]) {
 
@@ -21,26 +23,26 @@ int main(int argc, char *argv[]) {
 
 	if(fs.fuseReaddir("/",buf,new int(*)(), 0, new fuse_file_info)==-1)
 			{
-			cout<<"error in main in fuseReaddir"<<endl;
+			printf("error in main in fuseReaddir");
 			return-1;
 			}
 
-		cout << buf<<endl;
+		printf(buf);
 
 	fs.deleteFile("file 1");
 
 
 	fs.addFile("file 2",S_IFDIR | 0444,7,"file 1");
 	fs.readFile("file 2", buf,7,0,new fuse_file_info);
-	cout << buf<<endl;
+	printf(buf);
 	//fuseReaddir(const char *path, void *buffer, fuse_fill_dir_t filler, off_t offset, struct fuse_file_info *fileInfo)
 	if(fs.fuseReaddir("/",buf,new int(*)(), 0, new fuse_file_info)==-1)
 		{
-		cout<<"error in main in fuseReaddir"<<endl;
+		printf("error in main in fuseReaddir");
 		return-1;
 		}
 
-	cout << buf<<endl;
+	printf(buf);
 	fs.deleteFile("file 2");
     //no mistakes? It's done!
     return 0;

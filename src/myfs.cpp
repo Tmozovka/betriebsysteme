@@ -37,7 +37,7 @@ MyFS* MyFS::Instance() {
 
 MyFS::MyFS() {
     this->logFile= stderr;
-    //wieso funktioniert das nicht?
+
     SuperBlock * sp = new SuperBlock();
     dMap * dmap = new dMap();
     MyFAT  *fat = new MyFAT();
