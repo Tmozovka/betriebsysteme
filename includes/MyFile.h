@@ -21,8 +21,16 @@ public:
 	MyFile();
 
 	~MyFile();
+	//get
 	time_t getLastMod(){return lastMod;}
 	off_t getSize(){return size;}
 	int getFirstBlock(){return firstBlock;}
 	string getName(){return name;}
+
+	//set
+	void setLastMod(time_t t){ lastMod=t;}
+	void setSize(off_t s){ size=s;}
+	void  setName(string n){ name=n;}
+	void setLastAccess(time_t t){lastAccess=t;}
+
 };

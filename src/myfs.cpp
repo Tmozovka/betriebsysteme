@@ -18,6 +18,7 @@
 #include "macros.h"
 #include "myfs.h"
 #include "myfs-info.h"
+
 using namespace std;
 
 
@@ -181,9 +182,15 @@ int MyFS::fuseOpen(const char *path, struct fuse_file_info *fileInfo) { // How t
 	}
 
 	else cout << "Unable to open file";*/
-
+    if(root.getFile(path,new MyFile())==-1)
+    {
+    	fileInfo->fh=1;
+    	printf("error in fuseOpen in root.getFile(path,new MyFile()");
+    	RETURN(-EPERM);
+    }
 	if(blocks.open(path)==-1)
 		{
+		fileInfo->fh=1;
 		printf("error in fuseOpen in blocks.open(path)");
 		RETURN(-EPERM);
 
@@ -198,6 +205,13 @@ int MyFS::fuseRead(const char *path, char *buf, size_t size, off_t offset, struc
     // TODO: Implement this!
 	if (offset > size) // not possible
 		RETURN(-1);
+
+	if(fuseOpen(path,fileInfo)==-1)
+	{
+		printf("error in fuseOpen");
+				RETURN(-EPERM);
+	}
+
 
 	char * buffer;
 	
@@ -237,11 +251,92 @@ int MyFS::fuseRead(const char *path, char *buf, size_t size, off_t offset, struc
 	RETURN(0);
 
 }
-
+/*int MyFS::fuseWrite
+- mit fuseWrite kann man den Inhalt einer Datei verändern
+- mit size kann ich festlegen, wie viel ich verändern möchte, mit offset, wo in der Datei ich
+etwas ändern möchte und buf ist mein Inhalt, den ich in die schon vorhandene Datei einfügen
+möchte*/
 int MyFS::fuseWrite(const char *path, const char *buf, size_t size, off_t offset, struct fuse_file_info *fileInfo) {
     LOGM();
     
     // TODO: Implement this!
+
+
+   	char * buffer;
+
+
+   	MyFile *flink;
+   	if( root.getFile( path, flink)==-1)
+   	{
+   	   		printf("error in fuseWrite in root.getFile( path, &fcopy)");
+   	   				RETURN(-EPERM);
+   	}
+
+   	if (offset > flink->getSize()) // not possible
+   	   		RETURN(-1);
+
+   	if(fuseRead(path,buffer,flink->getSize(),0,fileInfo)==-1)
+   	   	{
+   	   		printf("error in fuseRead");
+   	   				RETURN(-EPERM);
+   	   	}
+
+   	bool big =flink->getSize()-offset<size;
+   	//1) change size and other config
+   	size_t newSize=(big?offset+size:flink->getSize());
+   	flink->setSize(newSize);
+   	flink->setLastMod(time(NULL));
+   	flink->setLastAccess(time(NULL));
+
+   	//write in blocks
+   		int count=offset;
+   		while(count!=0)
+   		{
+   			buffer++;
+   			count--;
+   		}
+
+   		while(*buf!='\n')
+   				{
+   					*(buffer++)=*(buf++);
+   				}
+
+
+   		//rewrite buffer in the same file in blocks
+
+
+   		int blocksNumber = ceil(newSize / BD_BLOCK_SIZE);
+   		int currentBlock = flink->getFirstBlock();
+
+   			while (currentBlock != -1&&blocksNumber!=0&&*buffer!='\n')
+   			{
+   				if( blocks.write(currentBlock, buffer)==0)
+   				{
+   				// how much buffer could i write in block?
+   				int c=512;
+   				while(c!=0||*buffer!='\n')
+   				{
+   					buffer++;
+   					c--;
+   				}
+
+   				}
+   				else
+   				{
+   					printf("error in fuseWRITE blocks.write(currentBlock, buffer) ");
+   					RETURN(-EPERM);
+   				}
+
+   				if(fat.getNext(currentBlock,&currentBlock)==-1)
+   				{
+   					printf("error in fuseWrite fat.getNext(currentBlock,&currentBlock)");
+   				RETURN(-ENOENT);
+   				}
+
+   				blocksNumber--;
+
+   	}
+
     
     RETURN(0);
 }
