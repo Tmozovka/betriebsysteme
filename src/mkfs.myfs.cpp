@@ -14,12 +14,12 @@ int main(int argc, char *argv[]) {
 
     // TODO: Implement file system generation & copying of files here
 	//We can try to test first hier
-	MyFS* fs = new MyFS();
+	MyFS fs = new MyFS();
 	printf("%i", fs);
 	char * buf;
-	fs->addFile("file 1",S_IFDIR | 0444,7,"file 1");
+	fs.addFile("file 1",S_IFDIR | 0444,7,"file 1");
 
-	if(fs->fuseReaddir("/",buf,new int(*)(), 0, new fuse_file_info)==-1)
+	if(fs.fuseReaddir("/",buf,new int(*)(), 0, new fuse_file_info)==-1)
 			{
 			cout<<"error in main in fuseReaddir"<<endl;
 			return-1;
@@ -27,21 +27,21 @@ int main(int argc, char *argv[]) {
 
 		cout << buf<<endl;
 
-	fs->deleteFile("file 1");
+	fs.deleteFile("file 1");
 
 
-	fs->addFile("file 2",S_IFDIR | 0444,7,"file 1");
-	fs->readFile("file 2", buf,7,0,new fuse_file_info);
+	fs.addFile("file 2",S_IFDIR | 0444,7,"file 1");
+	fs.readFile("file 2", buf,7,0,new fuse_file_info);
 	cout << buf<<endl;
 	//fuseReaddir(const char *path, void *buffer, fuse_fill_dir_t filler, off_t offset, struct fuse_file_info *fileInfo)
-	if(fs->fuseReaddir("/",buf,new int(*)(), 0, new fuse_file_info)==-1)
+	if(fs.fuseReaddir("/",buf,new int(*)(), 0, new fuse_file_info)==-1)
 		{
 		cout<<"error in main in fuseReaddir"<<endl;
 		return-1;
 		}
 
 	cout << buf<<endl;
-	fs->deleteFile("file 2");
+	fs.deleteFile("file 2");
     //no mistakes? It's done!
     return 0;
 }
