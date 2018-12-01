@@ -36,7 +36,8 @@ private:
 public:
     	static MyFS *Instance();
 
-		static SuperBlock sp;
+
+    	static SuperBlock sp;
 		static dMap dmap;
 		static MyFAT fat;
 		static MyRoot root;

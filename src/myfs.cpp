@@ -18,6 +18,10 @@
 #include "macros.h"
 #include "myfs.h"
 #include "myfs-info.h"
+#include "fat.h"
+#include "superBlock.h"
+#include "myfs.h"
+
 
 using namespace std;
 
@@ -34,11 +38,11 @@ MyFS* MyFS::Instance() {
 MyFS::MyFS() {
     this->logFile= stderr;
     //wieso funktioniert das nicht?
-    sp = new SuperBlock();
-    dmap = new dMap();
-    fat = new MyFAT();
-    root = new MyRoot();
-    blocks = new BlockDevice();
+    SuperBlock * sp = new SuperBlock();
+    dMap * dmap = new dMap();
+    MyFAT  *fat = new MyFAT();
+    MyRoot * root = new MyRoot();
+    BlockDevice * blocks = new BlockDevice();
     printf("Konstruktor von MyFS ist beendet");
 }
 
