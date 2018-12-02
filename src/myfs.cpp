@@ -401,6 +401,8 @@ int MyFS::fuseRelease(const char *path, struct fuse_file_info *fileInfo) {
     
     // TODO: Implement this!
     //temporeres Zeug loeschen
+    fileInfo->fh=NULL;
+    //sonst noch was?
     
     RETURN(0);
 }
