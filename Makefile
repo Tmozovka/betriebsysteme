@@ -29,6 +29,7 @@ MKFS_MYFS_OBJS = $(OBJDIR)/blockdevice.o \
 	$(OBJDIR)/dMap.o \
 	$(OBJDIR)/fat.o \
 	$(OBJDIR)/root.o \
+	$(OBJDIR)/MyFile.o \
 	$(OBJDIR)/superBlock.o \
 	$(OBJDIR)/mkfs.myfs.o
 
@@ -39,6 +40,7 @@ MOUNT_MYFS_OBJS = $(OBJDIR)/blockdevice.o \
 	$(OBJDIR)/dMap.o \
 	$(OBJDIR)/fat.o \
 	$(OBJDIR)/root.o \
+	$(OBJDIR)/MyFile.o \
 	$(OBJDIR)/superBlock.o \
 	$(OBJDIR)/mount.myfs.o
 

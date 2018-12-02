@@ -36,12 +36,12 @@ MyFS* MyFS::Instance() {
 
 MyFS::MyFS() {
     this->logFile= stderr;
-
-    SuperBlock * sp = new SuperBlock();
+// so geht es nicht. es werden neue Variablen erstellt. Wir brauchen ein Konstruktor fuer alte
+   /* SuperBlock * sp = new SuperBlock();
     dMap * dmap = new dMap();
     MyFAT  *fat = new MyFAT();
     MyRoot * root = new MyRoot();
-    BlockDevice * blocks = new BlockDevice();
+    BlockDevice * blocks = new BlockDevice();*/
 
     printf("Konstruktor von MyFS ist beendet");
 }
@@ -114,8 +114,8 @@ int MyFS::addFile(const char * name, mode_t mode, off_t size, char * text)
 	blocks[blocksNumber + 1] = 0;
 	if (dmap.getFreeBlocks(blocksNumber, &blocks) == 0)
 	{
-		root.addFile(name, size, mode);
-		for (int i = 1; i <= blocksNumber; i++)
+		root.addFile(name, size, mode,blocks[0]);
+		for (int i = 0; i <= blocksNumber; i++)
 		{
 			dmap.setUsed(i);
 			if(fat.link(blocks[i], &blocks[i+1])==-1)
@@ -191,7 +191,7 @@ int MyFS::fuseGetattr(const char *path, struct stat *st) {
 	MyFile fcopy;
 	if(root.getFile(path,&fcopy)==-1)
 		{//Wieso funktioniert LOGM nicht?
-		LOGM("can't get file from root root.getFile(path, &fcopy)");
+		//LOGM("can't get file from root root.getFile(path, &fcopy)");
 		RETURN(-ENOENT);
 		}
 
@@ -237,7 +237,14 @@ int MyFS::fuseMknod(const char *path, mode_t mode, dev_t dev) { //??? wir brauch
 	// Information about the file is saved in the objekt File 
 	// dev_t dev muss ID von unsere file system sein
 
-	if(root.addFile(path, 512, S_IFREG | 0444)==-1)
+    int * blocks[1];
+    if(dmap.getFreeBlocks(1,blocks)==-1)
+    {
+    	printf("can't add file in root dmap is full dmap.getFreeBlocks(1,blocks)");
+    	RETURN(-1);
+    }
+
+	if(root.addFile(path, 512,mode, (*blocks)[0])==-1)
 		{
 		printf("can't add file in root root.addFile(path, 512, S_IFREG | 0444)");
 		RETURN(-EPERM);
@@ -426,12 +433,15 @@ int MyFS::fuseReaddir(const char *path, void *buffer, fuse_fill_dir_t filler, of
 	filler(buffer, "..", NULL, 0); // Parent Directory
 
 
+	string * listNames;
 
-		for(int i=1; root.getFileTry(i)!=-1;i++)
+	root.getArray(listNames);
+
+		for(int i=0; i<listNames->length();i++)
 		{
 		//convert from string to char. Do we need string?
-			char *name = new char[root.getFile(i).getName().length() + 1];
-			strcpy(name, root.getFile(i).getName().c_str());
+			char *name = new char[listNames[i].length() + 1];
+			strcpy(name, listNames[i].c_str());
 		//////////////////////////////////////////////////////////////////////
 
 		filler(buffer, name , NULL, 0);
