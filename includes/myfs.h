@@ -87,7 +87,6 @@ public:
     int fuseCreate(const char *, mode_t, struct fuse_file_info *); //implement
     void fuseDestroy();
     
-    // TODO: Add methods of your file system here
 		
 		// int fuseCreate(const char *, mode_t, struct fuse_file_info *);
     	int addFile(const char * name, mode_t mode, off_t size, char * text);

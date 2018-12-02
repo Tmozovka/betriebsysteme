@@ -21,11 +21,11 @@ int main(int argc, char *argv[]) {
 
 	if(fs.fuseReaddir("/",buf,new int(*)(), 0, new fuse_file_info)==-1)
 			{
-			cout<<"error in main in fuseReaddir"<<endl;
+
 			return-1;
 			}
 
-		cout << buf<<endl;
+
 
 	fs.deleteFile("file 1");
 
@@ -36,11 +36,11 @@ int main(int argc, char *argv[]) {
 	//fuseReaddir(const char *path, void *buffer, fuse_fill_dir_t filler, off_t offset, struct fuse_file_info *fileInfo)
 	if(fs.fuseReaddir("/",buf,new int(*)(), 0, new fuse_file_info)==-1)
 		{
-		cout<<"error in main in fuseReaddir"<<endl;
+
 		return-1;
 		}
 
-	cout << buf<<endl;
+
 	fs.deleteFile("file 2");
     //no mistakes? It's done!
     return 0;

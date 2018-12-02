@@ -21,7 +21,6 @@
 
 using namespace std;
 
-
 MyFS* MyFS::_instance = NULL;
 
 MyFS* MyFS::Instance() {
@@ -33,12 +32,7 @@ MyFS* MyFS::Instance() {
 
 MyFS::MyFS() {
     this->logFile= stderr;
-    //wieso funktioniert das nicht?
-    sp = new SuperBlock();
-    dmap = new dMap();
-    fat = new MyFAT();
-    root = new MyRoot();
-    blocks = new BlockDevice();
+
     printf("Konstruktor von MyFS ist beendet");
 }
 
@@ -146,7 +140,7 @@ int MyFS::deleteFile(const char *name)
 	//1 delete file from root
 	//2 set bloks unused (change FAT, this changes are executed in Dmap.setUnused funktion)
 
-
+	//TODO MODE prueffen
 	MyFile fcopy;
 	if(root.getFile(name, &fcopy)==-1||
 	root.deleteFile(name)==-1)
@@ -178,7 +172,6 @@ int MyFS::deleteFile(const char *name)
  RETURN(0);
 }
 
-
 int MyFS::fuseGetattr(const char *path, struct stat *st) {
     LOGM();
     //TODO
@@ -187,8 +180,8 @@ int MyFS::fuseGetattr(const char *path, struct stat *st) {
 
 	MyFile fcopy;
 	if(root.getFile(path,&fcopy)==-1)
-		{//TODO: richtigen Fehlecode zurueckgeben
-		printf("can't get file from root root.getFile(path, &fcopy)");
+		{//Wieso funktioniert LOGM nicht?
+		LOGM("can't get file from root root.getFile(path, &fcopy)");
 		RETURN(-ENOENT);
 		}
 
@@ -200,7 +193,7 @@ int MyFS::fuseGetattr(const char *path, struct stat *st) {
 
 	if (strcmp(path, "/") == 0)
 	{
-		st->st_mode = S_IFDIR | 0444;
+		st->st_mode = S_IFDIR | 0555;
 		st->st_nlink = 2; // Why "two" hardlinks instead of "one"? The answer is here: http://unix.stackexchange.com/a/101536
 		//size = sum size all files in dir
 	}
@@ -217,7 +210,6 @@ int MyFS::fuseGetattr(const char *path, struct stat *st) {
     RETURN(0);
 
 }
-
 
 int MyFS::fuseMknod(const char *path, mode_t mode, dev_t dev) { //??? wir brauchen das nicht
     LOGM();
@@ -244,14 +236,12 @@ int MyFS::fuseMknod(const char *path, mode_t mode, dev_t dev) { //??? wir brauch
 	RETURN(0);
 }
 
-
 int MyFS::fuseUnlink(const char *path) {
     LOGM();
     
     RETURN( deleteFile(path));
 
 }
-
 
 int MyFS::fuseOpen(const char *path, struct fuse_file_info *fileInfo) { // How to open file from hier?
     LOGM();
@@ -271,6 +261,8 @@ int MyFS::fuseOpen(const char *path, struct fuse_file_info *fileInfo) { // How t
 	}
 
 	else cout << "Unable to open file";*/
+    //TODO Pruefen ob es nicht zu viel geoeffnete Dateien berets gibt
+    //TODO auf der bestimmte Stelle nach dem blocks.open oder blocks.read,blocks.write noch blocks.close() einfuegen (Einleitung in BSUe-Teil1 Folie 31)
     if(root.getFile(path,new MyFile())==-1)
     {
     	fileInfo->fh=1;
@@ -303,7 +295,7 @@ etwas ändern möchte und buf ist mein Inhalt, den ich in die schon vorhandene D
 möchte*/
 int MyFS::fuseWrite(const char *path, const char *buf, size_t size, off_t offset, struct fuse_file_info *fileInfo) {
     LOGM();
-    
+    //TODO MODE prueffen
     // TODO: Implement this!
 
 
