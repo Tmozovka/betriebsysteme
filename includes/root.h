@@ -19,7 +19,9 @@ private:
 public:
 	//TODO KONSTRUKTOR DESTRUKTOR
 	//MyRoot();
+
 	MyRoot(MyFile firstfile);
+	MyRoot();
 	MyRoot(string name, off_t size, mode_t mode,int firstBlock);
 	~MyRoot();
 

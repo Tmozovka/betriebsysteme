@@ -45,6 +45,9 @@ MyRoot::MyRoot(MyFile firstfile) {
 	files.push_front(firstfile);
 }
 
+MyRoot::MyRoot() {
+	addressRoot=NULL;
+}
 //MyFile(string cname, uid_t cuser, gid_t cgroup, off_t csize, mode_t cmode, time_t clastAccess,
 //time_t clastMod, time_t clastStatusChange, int cfirstBlock);
 

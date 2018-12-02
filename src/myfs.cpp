@@ -36,12 +36,12 @@ MyFS* MyFS::Instance() {
 
 MyFS::MyFS() {
     this->logFile= stderr;
-// so geht es nicht. es werden neue Variablen erstellt. Wir brauchen ein Konstruktor fuer alte
-   /* SuperBlock * sp = new SuperBlock();
-    dMap * dmap = new dMap();
-    MyFAT  *fat = new MyFAT();
-    MyRoot * root = new MyRoot();
-    BlockDevice * blocks = new BlockDevice();*/
+
+    sp = new SuperBlock();
+    dmap = new dMap();
+    fat = new MyFAT();
+    root = new MyRoot();
+    blocks = new BlockDevice();
 
     printf("Konstruktor von MyFS ist beendet");
 }
@@ -71,7 +71,7 @@ int MyFS::readFile(const char *path, char *buf, size_t size, off_t offset, struc
 		char * buffer;
 
 		MyFile fcopy;
-		if(root.getFile(path, &fcopy)==-1)
+		if(root->getFile(path, &fcopy)==-1)
 		{
 
 				printf("can't get file from root root.getFile(path, &fcopy)");
@@ -83,7 +83,7 @@ int MyFS::readFile(const char *path, char *buf, size_t size, off_t offset, struc
 
 		while (currentBlock != -1&&blocksNumber!=0)
 		{
-			if( blocks.read(currentBlock, buffer)==0)
+			if( blocks->read(currentBlock, buffer)==0)
 			{
 				while (*buffer != '\n')
 					*(++buf) = *(buffer++);
@@ -94,7 +94,7 @@ int MyFS::readFile(const char *path, char *buf, size_t size, off_t offset, struc
 				RETURN(-EPERM);
 			}
 
-			if(fat.getNext(currentBlock,&currentBlock)==-1)
+			if(fat->getNext(currentBlock,&currentBlock)==-1)
 			{
 				printf("error in fuseREAD fat.getNext(currentBlock,&currentBlock)");
 			RETURN(-ENOENT);
@@ -112,20 +112,20 @@ int MyFS::addFile(const char * name, mode_t mode, off_t size, char * text)
 	int blocksNumber = ceil(size / BD_BLOCK_SIZE);
 	int*  blocks = new int[blocksNumber+1];
 	blocks[blocksNumber + 1] = 0;
-	if (dmap.getFreeBlocks(blocksNumber, &blocks) == 0)
+	if (dmap->getFreeBlocks(blocksNumber, &blocks) == 0)
 	{
-		root.addFile(name, size, mode,blocks[0]);
+		root->addFile(name, size, mode,blocks[0]);
 		for (int i = 0; i <= blocksNumber; i++)
 		{
-			dmap.setUsed(i);
-			if(fat.link(blocks[i], &blocks[i+1])==-1)
+			dmap->setUsed(i);
+			if(fat->link(blocks[i], &blocks[i+1])==-1)
 				{
 				RETURN(-1);
 				printf("error in addFile in fat.link(blocks[i], &blocks[i+1] ");
 				}
 
 			//char *buffer; // wofuer brauchen wir buffer hier
-		    if( this->blocks.write(i, text)==-1)
+		    if( this->blocks->write(i, text)==-1)
 		    {
 		    	printf("error in addFile in this->blocks.write(i, \"try\")");
 		    }
@@ -152,8 +152,8 @@ int MyFS::deleteFile(const char *name)
 
 	//TODO MODE prueffen
 	MyFile fcopy;
-	if(root.getFile(name, &fcopy)==-1||
-	root.deleteFile(name)==-1)
+	if(root->getFile(name, &fcopy)==-1||
+	root->deleteFile(name)==-1)
 	{
 	printf("error in deleteFeil in root.getFile(name, &fcopy)==-1||root.deleteFile(name)==-1");
 			RETURN(-ENOENT);
@@ -164,13 +164,13 @@ int MyFS::deleteFile(const char *name)
 
 	while (blocksNumber!=0&&currentBlock!=-1)
 	{
-		if(dmap.setUnused(currentBlock)==-1)
+		if(dmap->setUnused(currentBlock)==-1)
 		{
 			printf("error in deleteFile in dmap.setUnused(currentBlock)");
 			RETURN(-EPERM);
 		}
 
-		if(fat.getNext(currentBlock, &currentBlock)==-1)
+		if(fat->getNext(currentBlock, &currentBlock)==-1)
 		{
 			printf("error in deleteFeil in fat.getNext(currentBlock, &currentBlock");
 			RETURN(-EPERM);
@@ -189,7 +189,7 @@ int MyFS::fuseGetattr(const char *path, struct stat *st) {
 	//printf("\tAttributes of %s requested\n", path);
 
 	MyFile fcopy;
-	if(root.getFile(path,&fcopy)==-1)
+	if(root->getFile(path,&fcopy)==-1)
 		{//Wieso funktioniert LOGM nicht?
 		//LOGM("can't get file from root root.getFile(path, &fcopy)");
 		RETURN(-ENOENT);
@@ -238,13 +238,13 @@ int MyFS::fuseMknod(const char *path, mode_t mode, dev_t dev) { //??? wir brauch
 	// dev_t dev muss ID von unsere file system sein
 
     int * blocks[1];
-    if(dmap.getFreeBlocks(1,blocks)==-1)
+    if(dmap->getFreeBlocks(1,blocks)==-1)
     {
     	printf("can't add file in root dmap is full dmap.getFreeBlocks(1,blocks)");
     	RETURN(-1);
     }
 
-	if(root.addFile(path, 512,mode, (*blocks)[0])==-1)
+	if(root->addFile(path, 512,mode, (*blocks)[0])==-1)
 		{
 		printf("can't add file in root root.addFile(path, 512, S_IFREG | 0444)");
 		RETURN(-EPERM);
@@ -280,13 +280,13 @@ int MyFS::fuseOpen(const char *path, struct fuse_file_info *fileInfo) { // How t
 	else cout << "Unable to open file";*/
     //TODO Pruefen ob es nicht zu viel geoeffnete Dateien berets gibt
     //TODO auf der bestimmte Stelle nach dem blocks.open oder blocks.read,blocks.write noch blocks.close() einfuegen (Einleitung in BSUe-Teil1 Folie 31)
-    if(root.getFile(path,new MyFile())==-1)
+    if(root->getFile(path,new MyFile())==-1)
     {
     	fileInfo->fh=1;
     	printf("error in fuseOpen in root.getFile(path,new MyFile()");
     	RETURN(-EPERM);
     }
-	if(blocks.open(path)==-1)
+	if(blocks->open(path)==-1)
 		{
 		fileInfo->fh=1;
 		printf("error in fuseOpen in blocks.open(path)");
@@ -320,7 +320,7 @@ int MyFS::fuseWrite(const char *path, const char *buf, size_t size, off_t offset
 
 
    	MyFile *flink;
-   	if( root.getFile( path, flink)==-1)
+   	if( root->getFile( path, flink)==-1)
    	{
    	   		printf("error in fuseWrite in root.getFile( path, &fcopy)");
    	   				RETURN(-EPERM);
@@ -364,7 +364,7 @@ int MyFS::fuseWrite(const char *path, const char *buf, size_t size, off_t offset
 
    			while (currentBlock != -1&&blocksNumber!=0&&*buffer!='\n')
    			{
-   				if( blocks.write(currentBlock, buffer)==0)
+   				if( blocks->write(currentBlock, buffer)==0)
    				{
    				// how much buffer could i write in block?
    				int c=512;
@@ -381,7 +381,7 @@ int MyFS::fuseWrite(const char *path, const char *buf, size_t size, off_t offset
    					RETURN(-EPERM);
    				}
 
-   				if(fat.getNext(currentBlock,&currentBlock)==-1)
+   				if(fat->getNext(currentBlock,&currentBlock)==-1)
    				{
    					printf("error in fuseWrite fat.getNext(currentBlock,&currentBlock)");
    				RETURN(-ENOENT);
@@ -435,7 +435,7 @@ int MyFS::fuseReaddir(const char *path, void *buffer, fuse_fill_dir_t filler, of
 
 	string * listNames;
 
-	root.getArray(listNames);
+	root->getArray(listNames);
 
 		for(int i=0; i<listNames->length();i++)
 		{
