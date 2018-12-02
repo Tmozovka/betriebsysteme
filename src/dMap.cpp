@@ -25,7 +25,6 @@ int dMap::getFreeBlocks(int neededBlocks,  int* returnArray[]) {
 			*returnArray[neededBlocks - 1] = i;
 			neededBlocks--;
 		}
-
 		//Still more blocks needed?
 		if (neededBlocks == 0) {
 			return 0;

@@ -3,6 +3,7 @@
 
 class dMap{
 
+
 private:
 	//+1 because Blockno 0 is not used
 	static int dmap[BLOCK_NUMBER+1];
