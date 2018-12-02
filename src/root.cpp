@@ -74,14 +74,14 @@ int MyRoot::addFile(string name, off_t size, mode_t mode, int firstBlock) {
 
 
 int MyRoot::getFile(string name, MyFile * f) {
+
 	std::list<MyFile>::iterator it = files.begin();
 
 	while (it != files.end() || it->getName()!=name){
 		it++;
 	}
 
-	if(it==files.end())
-		{
+	if(it==files.end()){
 		printf("no such file in root");
 		return -1;
 		}
@@ -109,7 +109,7 @@ int MyRoot::deleteFile(string name) {
 
 void MyRoot::getArray(string * arr)
 {
-	arr=new string[files.size()];
+	arr = new string[files.size()];
 		int k = 0;
 		for (MyFile i: files) {
 			arr[k++] = i.getName();

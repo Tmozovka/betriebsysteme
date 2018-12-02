@@ -109,7 +109,7 @@ int MyFS::readFile(const char *path, char *buf, size_t size, off_t offset, struc
 // int fuseCreate(const char *, mode_t, struct fuse_file_info *);
 int MyFS::addFile(const char * name, mode_t mode, off_t size, char * text)
 {
-	// TODo uEberpruefen, dass name nicht zweimal vergeben
+	// TODo Ueberpruefen, dass name nicht zweimal vergeben
 	int blocksNumber = ceil(size / BD_BLOCK_SIZE);
 	int*  blocks = new int[blocksNumber+1];
 	blocks[blocksNumber + 1] = 0;
