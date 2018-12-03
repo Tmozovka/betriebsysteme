@@ -38,7 +38,7 @@ int dMap::getFreeBlocks(int neededBlocks,  int* returnArray[]) {
 
 int dMap::setUsed(int blockNumber) {
 
-	if(blockNumber>BLOCK_NUMBER||blockNumber<0)
+	if(blockNumber>=BLOCK_NUMBER||blockNumber<0)
 		return -1;
 
 	dmap[blockNumber] = 1;
@@ -47,7 +47,7 @@ int dMap::setUsed(int blockNumber) {
 }
 
 int dMap::setUnused(int blockNumber) {
-if(blockNumber>BLOCK_NUMBER||blockNumber<0)
+if(blockNumber>=BLOCK_NUMBER||blockNumber<0)
 			return -1;
 
 	dmap[blockNumber] = 0;
