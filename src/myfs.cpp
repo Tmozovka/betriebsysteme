@@ -438,14 +438,21 @@ int MyFS::fuseReaddir(const char *path, void *buffer, fuse_fill_dir_t filler, of
 
 	printf("--> Getting The List of Files of %s\n", path);
 
+
+	// filler(void *buf, const char *name,const struct stat *stbuf, off_t off);
+	// struct stat <- can contain the file type
+
 	filler(buffer, ".", NULL, 0); // Current Directory
 	filler(buffer, "..", NULL, 0); // Parent Directory
 
+
+
 	string * listNames;
+	offset = 0;
 
 	root->getArray(listNames);
 
-		for(int i=0; i<(listNames->length()); i++){
+		for(int unsigned i=0; i<(listNames->length()); i++){
 		//convert from string to char. Do we need string?
 			char *name = new char[listNames[i].length() + 1];
 			strcpy(name, listNames[i].c_str());
