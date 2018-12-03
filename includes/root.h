@@ -17,6 +17,8 @@ private:
 	MyFile* addressRoot;
 
 public:
+
+
 	//TODO KONSTRUKTOR DESTRUKTOR
 	//MyRoot();
 

@@ -279,14 +279,22 @@ int MyFS::fuseOpen(const char *path, struct fuse_file_info *fileInfo) { // How t
 	}
 
 	else cout << "Unable to open file";*/
-    //TODO Pruefen ob es nicht zu viel geoeffnete Dateien berets gibt
+
+
     //TODO auf der bestimmte Stelle nach dem blocks.open oder blocks.read,blocks.write noch blocks.close() einfuegen (Einleitung in BSUe-Teil1 Folie 31)
+
+
     if(root->getFile(path,new MyFile())==-1)
     {
-    	fileInfo->fh=1;
-    	printf("error in fuseOpen in root.getFile(path,new MyFile()");
-    	RETURN(-EPERM);
+    	printf("File not found");
+    	RETURN(-ENOENT);
     }
+    //TOdo etwas tun, wenn path existiert
+    //vermerken, dass datei geöffnet
+    //Julia: als was merken? als int, ähnlich zu filedescriptor in liunx?
+    //falls zu viele datein schon geöffnet-> fehler
+
+
 	if(blocks->open(path)==-1)
 		{
 		fileInfo->fh=1;
