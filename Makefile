@@ -83,6 +83,7 @@ UNITTEST_OBJS = $(OBJDIR)/main.o \
 	$(OBJDIR)/test-blockdevice.o \
 	$(OBJDIR)/myfs.o \
 	$(OBJDIR)/test-myfs.o \
+	$(OBJDIR)/test-dMap.o \
 	$(OBJDIR)/helper.o
 
 # test targets
