@@ -41,18 +41,29 @@ MyFS* MyFS::Instance() {
 MyFS::MyFS() {
     this->logFile= stderr;
 
+
+    printf("Konstruktor von MyFS ist beendet \n");
+    LOG("Konstruktor von MyFS ist beendet \n");
+}
+
+MyFS::MyFS(char * nameCont) {
+    this->logFile= stderr;
+
     sp = new SuperBlock();
     dmap = new dMap();
     fat = new MyFAT();
     root = new MyRoot();
     blocks = new BlockDevice();
+    blocks->create(nameCont);
 
-    printf("Konstruktor von MyFS ist beendet");
+    printf("Konstruktor von MyFS ist beendet \n");
+    LOG("Konstruktor von MyFS ist beendet \n");
 }
 
 MyFS::~MyFS() {
 
-	printf("Destruktor von MyFS ist beendet");
+	printf("Destruktor von MyFS ist beendet \n");
+	LOG("Destruktor von MyFS ist beendet \n");
     
 }
 
@@ -113,15 +124,21 @@ int MyFS::readFile(const char *path, char *buf, size_t size, off_t offset, struc
 // int fuseCreate(const char *, mode_t, struct fuse_file_info *);
 int MyFS::addFile(const char * name, mode_t mode, off_t size, char * text)
 {
-
-	int blocksNumber = ceil(size / BD_BLOCK_SIZE);
+	off_t newSize=size;
+	while(newSize%BD_BLOCK_SIZE!=0)
+	{
+		*(text++)=' ';
+		newSize++;
+	}
+	//int blocksNumber = ceil(size / BD_BLOCK_SIZE);
+	int blocksNumber = newSize / BD_BLOCK_SIZE;
 	int*  blocks = new int[blocksNumber+1];
 	blocks[blocksNumber + 1] = 0;
 	if (dmap->getFreeBlocks(blocksNumber, &blocks) == 0)
 	{
 		if(root->addFile(name, size, mode,blocks[0])==-1)
 		{
-			printf("error in addFile in root->addFile(name, size, mode,blocks[0]");
+			printf("error in addFile in root->addFile(name, size, mode,blocks[0] \n");
 			return -1;
 		}
 
@@ -131,22 +148,25 @@ int MyFS::addFile(const char * name, mode_t mode, off_t size, char * text)
 			if(fat->link(blocks[i], &blocks[i+1])==-1)
 				{
 				RETURN(-1);
-				printf("error in addFile in fat.link(blocks[i], &blocks[i+1] ");
+				printf("error in addFile in fat.link(blocks[i], &blocks[i+1] \n");
 				}
 
 			//char *buffer; // wofuer brauchen wir buffer hier
 		    if( this->blocks->write(i, text)==-1)
 		    {
-		    	printf("error in addFile in this->blocks.write(i, \"try\")");
+		    	printf("error in addFile in this->blocks.write(i, \"try\") \n");
 		    }
+		    text+=BD_BLOCK_SIZE;
 		}
 	}
 	else
 	{
-		printf("error in addFile no free blocks in dmap");
+		printf("error in addFile no free blocks in dmap \n");
 		RETURN(-EPERM);
 		//no more place
 	}
+	LOG("addFile succes");
+	printf("addFile succes \n");
 	RETURN(0);
 }
 
@@ -205,7 +225,7 @@ int MyFS::fuseGetattr(const char *path, struct stat *st) {
 	MyFile fcopy;
 	if(root->getFile(path,&fcopy)==-1)
 		{//Wieso funktioniert LOGM nicht?
-		//LOGM("can't get file from root root.getFile(path, &fcopy)");
+		LOG("can't get file from root root.getFile(path, &fcopy)");
 		RETURN(-ENOENT);
 		}
 
@@ -485,7 +505,7 @@ int MyFS::fuseReaddir(const char *path, void *buffer, fuse_fill_dir_t filler, of
 		}
 
     RETURN(0);
-    
+    LOG("readDir success");
     // <<< My new code
 }
 

@@ -44,6 +44,7 @@ public:
     	BlockDevice * blocks ;
 		
     
+    MyFS(char * nameCont);
     MyFS();
     ~MyFS();
 

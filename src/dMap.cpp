@@ -6,7 +6,7 @@ dMap::dMap() {
 	for (int i = 0; i < BLOCK_NUMBER; i++)
 			dmap[i]=0;
 	firstFreeBlock = 0;
-	printf("Konstruktor von dMap ist beendet");
+	printf("Konstruktor von dMap ist beendet \n");
 }
 
 dMap::~dMap() {
@@ -14,7 +14,7 @@ dMap::~dMap() {
 	//Blockno 0 is not used
 	for (int i = 0; i < BLOCK_NUMBER; i++)
 		dmap[i]=-1;
-	printf("Destruktor von dMap ist beendet");
+	printf("Destruktor von dMap ist beendet \n");
 }
 
 int dMap::getFreeBlocks(int neededBlocks,  int* returnArray[]) {
@@ -22,7 +22,7 @@ int dMap::getFreeBlocks(int neededBlocks,  int* returnArray[]) {
 	for (int i = firstFreeBlock; i < BLOCK_NUMBER; i++) {
 
 		if (dmap[i] == 0) {
-			*returnArray[neededBlocks - 1] = i;
+			*returnArray[neededBlocks - 1] = i; //Fehler hier
 			neededBlocks--;
 		}
 		//Still more blocks needed?

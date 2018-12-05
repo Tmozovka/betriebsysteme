@@ -44,7 +44,7 @@ myFile ROOT::getFile(string name) {
 
 MyRoot::MyRoot(MyFile firstfile) {
 	addressRoot = new MyFile(firstfile);
-	//files.push_front(firstfile);
+	files.push_front(firstfile);
 }
 
 MyRoot::MyRoot() {
@@ -69,7 +69,7 @@ int MyRoot::addFile(string name, off_t size, mode_t mode, int firstBlock) {
 
 		if(name.length()>NAME_LENGTH)
 		{
-			printf("File's %s name is too big", name);
+			printf("File's %s name is too big \n", name);
 			return -1;
 		}
 
@@ -82,18 +82,18 @@ int MyRoot::addFile(string name, off_t size, mode_t mode, int firstBlock) {
 
 int MyRoot::getFile(string name, MyFile * f) {
 
-	/*std::list<MyFile>::iterator it = files.begin();
+	std::list<MyFile>::iterator it = files.begin();
 
 	while (it != files.end() || it->getName()!=name){
 		it++;
 	}
 
 	if(it==files.end()){
-		printf("no such file in root");
+		printf("no such file in root \n");
 		return -1;
 		}
 
-	*f=*it;*/
+	*f=*it;
 	return 0;
 
 }

@@ -24,7 +24,7 @@
 BlockDevice::BlockDevice(u_int32_t blockSize) {
     assert(blockSize % 512 == 0);
     this->blockSize= blockSize;
-    printf("Konstruktor von BlockDevice ist beendet");
+    printf("Konstruktor von BlockDevice ist beendet \n");
 }
 
 void BlockDevice::resize(u_int32_t blockSize) {

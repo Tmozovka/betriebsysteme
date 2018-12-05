@@ -32,7 +32,7 @@ MyFAT::MyFAT()
 for(int i=0;i<size;i++)
 	table[i]=-1;
 
-printf("Konstruktor von MyFat ist beendet");
+printf("Konstruktor von MyFat ist beendet \n");
 
 }
 
@@ -41,5 +41,5 @@ MyFAT::~MyFAT()
 	for(int i=0;i<size;i++)
 		table[i]=-1;
 
-	printf("Destruktor von MyFat ist beendet");
+	printf("Destruktor von MyFat ist beendet \n");
 }
