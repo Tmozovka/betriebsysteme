@@ -6,8 +6,8 @@ class dMap{
 
 private:
 
-	static int dmap[BLOCK_NUMBER];
-	static int firstFreeBlock;
+	 int dmap[BLOCK_NUMBER];
+	 int firstFreeBlock;
 
 public:
 

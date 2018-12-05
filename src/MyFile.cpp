@@ -32,7 +32,7 @@ MyFile::~MyFile() {//
 //TODO FEHLE FINDEN
 MyFile::MyFile() {
 	name = "";//Dateiname
-	user = "";//Benutzer
+	user = NULL;//Benutzer
 	group = NULL;//Gruppen-ID
 	size = NULL;//Dateigroesse
 	mode = NULL;//Zugriffsberechtigung

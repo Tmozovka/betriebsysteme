@@ -16,12 +16,12 @@ int main(int argc, char *argv[]) {
 
     // TODO: Implement file system generation & copying of files here
 	//We can try to test first hier
-	MyFS fs = new MyFS();
+	/*MyFS * fs = new MyFS();
 	printf("%i", fs);
 	char * buf;
-	fs.addFile("file 1",S_IFDIR | 0444,7,"file 1");
+	fs->addFile("file 1",S_IFDIR | 0444,7,"file 1");
 
-	if(fs.fuseReaddir("/",buf,new int(*)(), 0, new fuse_file_info)==-1)
+	if(fs->fuseReaddir("/",buf,new int(*)(), 0, new fuse_file_info)==-1)
 			{
 			printf("error in main in fuseReaddir");
 			return-1;
@@ -44,6 +44,6 @@ int main(int argc, char *argv[]) {
 
 	printf(buf);
 	fs.deleteFile("file 2");
-    //no mistakes? It's done!
+    //no mistakes? It's done!*/
     return 0;
 }
