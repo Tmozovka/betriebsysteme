@@ -41,23 +41,26 @@ myFile ROOT::getFile(string name) {
 
 #include "root.h"
 #include "myfs-structs.h"
+
 MyRoot::MyRoot(MyFile firstfile) {
-	*addressRoot=firstfile;
-	files.push_front(firstfile);
+	addressRoot = new MyFile(firstfile);
+	//files.push_front(firstfile);
 }
 
 MyRoot::MyRoot() {
 	addressRoot=NULL;
 }
+
 //MyFile(string cname, uid_t cuser, gid_t cgroup, off_t csize, mode_t cmode, time_t clastAccess,
 //time_t clastMod, time_t clastStatusChange, int cfirstBlock);
 
 MyRoot::MyRoot(string name, off_t size, mode_t mode,int firstBlock) {
 	//firstfile -> first block
 	MyFile * firstfile = new MyFile(name, getuid(), getgid(), size, mode, time(NULL),time(NULL),time(NULL), firstBlock);
-	*addressRoot=*firstfile;
+	addressRoot = firstfile;
 	files.push_front(*firstfile);
 }
+
 MyRoot::~MyRoot() {
 	files.clear();
 }
@@ -78,46 +81,42 @@ int MyRoot::addFile(string name, off_t size, mode_t mode, int firstBlock) {
 
 
 int MyRoot::getFile(string name, MyFile * f) {
-	std::list<MyFile>::iterator it = files.begin();
 
-	while (it != files.end() || it->getName()!=name)
-	{
+	/*std::list<MyFile>::iterator it = files.begin();
+
+	while (it != files.end() || it->getName()!=name){
 		it++;
 	}
 
-	if(it==files.end())
-		{
+	if(it==files.end()){
 		printf("no such file in root");
 		return -1;
 		}
 
-	*f=*it;
+	*f=*it;*/
 	return 0;
 
 }
 
 int MyRoot::deleteFile(string name) {
 	//In Root Verzeichnis Datei loeschen
-	if(files.size() != 0)
-	{
+	if(files.size() != 0){
 		MyFile filetodelete;
-	if(getFile(name, &filetodelete)==-1)
-	{
+
+		if(getFile(name, &filetodelete)==-1){
 		// no such file
-				return-1;
+			return-1;
 		}
+		files.remove(filetodelete);
 
-
-	files.remove(filetodelete);
-
-	return 0;
-}
+		return 0;
+	}
 	return -1;
 }
 
 void MyRoot::getArray(string * arr)
 {
-	arr=new string[files.size()];
+	arr = new string[files.size()];
 		int k = 0;
 		for (MyFile i: files) {
 			arr[k++] = i.getName();

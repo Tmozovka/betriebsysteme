@@ -114,7 +114,6 @@ int MyFS::readFile(const char *path, char *buf, size_t size, off_t offset, struc
 int MyFS::addFile(const char * name, mode_t mode, off_t size, char * text)
 {
 
-
 	int blocksNumber = ceil(size / BD_BLOCK_SIZE);
 	int*  blocks = new int[blocksNumber+1];
 	blocks[blocksNumber + 1] = 0;
@@ -278,7 +277,7 @@ int MyFS::fuseUnlink(const char *path) {
 int MyFS::fuseOpen(const char *path, struct fuse_file_info *fileInfo) { // How to open file from hier?
     LOGM();
 
-    // Wofür braucht man  fuse_file_info *fileInfo
+    // Wofuer braucht man  fuse_file_info *fileInfo
     // TODO: Implement this!
 	/*string line;
 	ifstream myfile(path);
@@ -293,14 +292,22 @@ int MyFS::fuseOpen(const char *path, struct fuse_file_info *fileInfo) { // How t
 	}
 
 	else cout << "Unable to open file";*/
-    //TODO Pruefen ob es nicht zu viel geoeffnete Dateien berets gibt
+
+
     //TODO auf der bestimmte Stelle nach dem blocks.open oder blocks.read,blocks.write noch blocks.close() einfuegen (Einleitung in BSUe-Teil1 Folie 31)
+
+
     if(root->getFile(path,new MyFile())==-1)
     {
-    	fileInfo->fh=1;
-    	printf("error in fuseOpen in root.getFile(path,new MyFile()");
-    	RETURN(-EPERM);
+    	printf("File not found");
+    	RETURN(-ENOENT);
     }
+    //TOdo etwas tun, wenn path existiert
+    //vermerken, dass datei geöffnet
+    //Julia: als was merken? als int, ähnlich zu filedescriptor in liunx?
+    //falls zu viele datein schon geöffnet-> fehler
+
+//fuseInit()
 	if(blocks->open(path)==-1)
 		{
 		fileInfo->fh=1;
@@ -321,10 +328,10 @@ int MyFS::fuseRead(const char *path, char *buf, size_t size, off_t offset, struc
 
 }
 /*int MyFS::fuseWrite
-- mit fuseWrite kann man den Inhalt einer Datei verändern
-- mit size kann ich festlegen, wie viel ich verändern möchte, mit offset, wo in der Datei ich
-etwas ändern möchte und buf ist mein Inhalt, den ich in die schon vorhandene Datei einfügen
-möchte*/
+- mit fuseWrite kann man den Inhalt einer Datei veraendern
+- mit size kann ich festlegen, wie viel ich veraendern moechte, mit offset, wo in der Datei ich
+etwas aendern moechte und buf ist mein Inhalt, den ich in die schon vorhandene Datei einfuegen
+moechte*/
 int MyFS::fuseWrite(const char *path, const char *buf, size_t size, off_t offset, struct fuse_file_info *fileInfo) {
     LOGM();
     //TODO MODE prueffen
@@ -415,6 +422,8 @@ int MyFS::fuseRelease(const char *path, struct fuse_file_info *fileInfo) {
     
     // TODO: Implement this!
     //temporeres Zeug loeschen
+    fileInfo->fh=NULL;
+    //sonst noch was?
     
     RETURN(0);
 }
@@ -423,13 +432,19 @@ int MyFS::fuseOpendir(const char *path, struct fuse_file_info *fileInfo) { // Is
     LOGM();
     
     // TODO: Implement this!
-    if (strcmp(path, "/") != 0) // If the user is trying to show the files/directories of the root directory show the following
+    if (strcmp(path, "/") != 0) // Root oeffnen
     {
-    	printf("error in fuseOpendir. such path doesn't exist");
-    	//such path doesn't exist
-    	fileInfo->fh=1;
-    			RETURN(-ENOENT);
+    	printf("Opening root directory");
+    	fileInfo->fh=1; //Julia: gibt es etwas sinnvolleres als sich "1" zu merken?
+
+    	return 0;
     }
+
+    if (strcmp(path, "/") == 0){ // es existieren keine anderen Directories, daher fehler
+    	printf("This directory doesnt exist, try opening the root directory");
+    	return -ENOENT ;//Datei oder Verzeichnis existiert nicht
+    }
+
     RETURN(0);
 }
 
@@ -437,31 +452,35 @@ int MyFS::fuseReaddir(const char *path, void *buffer, fuse_fill_dir_t filler, of
     LOGM();
     
     // TODO: Implement this!
-    	if(fuseOpendir(path,fileInfo)==-1)
-    		{
-	    		RETURN(-ENOENT);
-			}
+
+    if(fileInfo->fh == NULL){ //fh durch fuseopendir gesetzt-> bestaetigt existenz
+    	return -ENOENT ;//Datei oder Verzeichnis existiert nicht
+    }
 
 	printf("--> Getting The List of Files of %s\n", path);
+
+
+	// filler(void *buf, const char *name,const struct stat *stbuf, off_t off);
+	// struct stat <- can contain the file type
 
 	filler(buffer, ".", NULL, 0); // Current Directory
 	filler(buffer, "..", NULL, 0); // Parent Directory
 
 
+
 	string * listNames;
+	offset = 0;
 
 	root->getArray(listNames);
 
-		for(int i=0; i<listNames->length();i++)
-		{
+		for(int unsigned i=0; i<(listNames->length()); i++){
 		//convert from string to char. Do we need string?
 			char *name = new char[listNames[i].length() + 1];
 			strcpy(name, listNames[i].c_str());
 		//////////////////////////////////////////////////////////////////////
 
-		filler(buffer, name , NULL, 0);
-
-	    delete [] name;
+			filler(buffer, name , NULL, 0);
+			delete [] name;
 
 		}
 
@@ -475,6 +494,8 @@ int MyFS::fuseReleasedir(const char *path, struct fuse_file_info *fileInfo) {
     
     // TODO: Implement this!
     //temporeres Zeug loeschen
+
+    fileInfo->fh= NULL; // Julia: Sonst noch was loeschen?
 
     RETURN(0);
 }

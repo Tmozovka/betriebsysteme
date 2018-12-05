@@ -22,15 +22,18 @@ public:
 
 	~MyFile();
 	//get
-	time_t getLastMod(){return lastMod;}
-	off_t getSize(){return size;}
-	int getFirstBlock(){return firstBlock;}
-	string getName(){return name;}
+	time_t getLastMod();
+	off_t getSize();
+	int getFirstBlock();
+	string getName();
 
 	//set
-	void setLastMod(time_t t){ lastMod=t;}
-	void setSize(off_t s){ size=s;}
-	void  setName(string n){ name=n;}
-	void setLastAccess(time_t t){lastAccess=t;}
+	void setLastMod(time_t t);
+	void setSize(off_t s);
+	void  setName(string n);
+	void setLastAccess(time_t t);
+
+	//operatoren
+	bool operator==(MyFile f);
 
 };

@@ -41,3 +41,21 @@ MyFile::MyFile() {
 	lastStatusChange = time(NULL);//letzter Status�nderung (ctime)
 	firstBlock = -1;//Zeiger auf ersten Block (u_int32_t BlockNo)
 }
+
+bool MyFile::operator==(MyFile f)
+	{
+
+	    return (name==f.name && firstBlock==f.firstBlock);
+	}
+
+//get
+time_t  MyFile::getLastMod(){return lastMod;}
+off_t  MyFile::getSize(){return size;}
+int  MyFile::getFirstBlock(){return firstBlock;}
+string  MyFile::getName(){return name;}
+
+//set
+void  MyFile::setLastMod(time_t t){ lastMod=t;}
+void  MyFile::setSize(off_t s){ size=s;}
+void   MyFile::setName(string n){ name=n;}
+void  MyFile::setLastAccess(time_t t){lastAccess=t;}
