@@ -22,7 +22,11 @@
 #include "superBlock.h"
 #include "myfs.h"
 
-
+// fragen zur Folie 31
+//TODO Wie kann ich die anzahl geoefnete Dateien abrufen?
+// wann soll ich die Bloecke schliessen? Nach dem oeffnen oder nach dem Lesen auch
+// wie kann ich pruefen was in gepuffertem Block liegt?
+//in folie steht read (n, p), aber wir haben nur read()
 using namespace std;
 
 MyFS* MyFS::_instance = NULL;
@@ -109,12 +113,19 @@ int MyFS::readFile(const char *path, char *buf, size_t size, off_t offset, struc
 // int fuseCreate(const char *, mode_t, struct fuse_file_info *);
 int MyFS::addFile(const char * name, mode_t mode, off_t size, char * text)
 {
+
+
 	int blocksNumber = ceil(size / BD_BLOCK_SIZE);
 	int*  blocks = new int[blocksNumber+1];
 	blocks[blocksNumber + 1] = 0;
 	if (dmap->getFreeBlocks(blocksNumber, &blocks) == 0)
 	{
-		root->addFile(name, size, mode,blocks[0]);
+		if(root->addFile(name, size, mode,blocks[0])==-1)
+		{
+			printf("error in addFile in root->addFile(name, size, mode,blocks[0]");
+			return -1;
+		}
+
 		for (int i = 0; i <= blocksNumber; i++)
 		{
 			dmap->setUsed(i);
@@ -187,6 +198,10 @@ int MyFS::fuseGetattr(const char *path, struct stat *st) {
     //TODO
 	//printf("[getattr] Called\n");
 	//printf("\tAttributes of %s requested\n", path);
+
+    //Ist es hier genau so wie in Aufgabestellung?
+    //Dateinamen werden in path mit „/“ am Anfang übergeben – ggf. beachten
+    //beim Durchsuchen des Verzeichnisses!
 
 	MyFile fcopy;
 	if(root->getFile(path,&fcopy)==-1)

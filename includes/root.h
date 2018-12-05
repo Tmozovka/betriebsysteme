@@ -13,12 +13,10 @@ using namespace std;
 class MyRoot {
 private:
 	std::list<MyFile> files;
-	//MyFile files[BLOCK_NUMBER];
 	MyFile* addressRoot;
 
 public:
-	//TODO KONSTRUKTOR DESTRUKTOR
-	//MyRoot();
+	//bedeutet anzahl der Verzeichniseintraege : anzahr die Files in Root?
 
 	MyRoot(MyFile firstfile);
 	MyRoot();

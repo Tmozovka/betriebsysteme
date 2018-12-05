@@ -40,6 +40,7 @@ myFile ROOT::getFile(string name) {
 */
 
 #include "root.h"
+#include "myfs-structs.h"
 MyRoot::MyRoot(MyFile firstfile) {
 	*addressRoot=firstfile;
 	files.push_front(firstfile);
@@ -62,6 +63,12 @@ MyRoot::~MyRoot() {
 }
 
 int MyRoot::addFile(string name, off_t size, mode_t mode, int firstBlock) {
+
+		if(name.length()>NAME_LENGTH)
+		{
+			printf("File's %s name is too big", name);
+			return -1;
+		}
 
 	//Speichern von Name, Dateigroesse und Zugriffsrechte pro Datei
 	const MyFile * f = new MyFile(name, getuid(), getgid(), size, mode, time(NULL),time(NULL),time(NULL),firstBlock);
