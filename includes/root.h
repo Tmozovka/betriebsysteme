@@ -24,13 +24,14 @@ public:
 	MyRoot(string name, off_t size, mode_t mode,int firstBlock);
 	~MyRoot();
 
-	int addFile(string name, off_t size, mode_t mode,int firstBlock);
-	int deleteFile(string name);
-	int getFile(string name, MyFile* file);
+			int addFile(string name, off_t size, mode_t mode,int firstBlock);
+			int deleteFile(string name);
+			int getFile(string name, MyFile* file);
 
-	/*int getFileTry(int number);
-	MyFile getFile(int number);*/
-	void getArray(string * ar);
+			/*int getFileTry(int number);
+			MyFile getFile(int number);*/
+			void getArray(string * ar);
+
 };
 
 

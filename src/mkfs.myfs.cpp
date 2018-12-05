@@ -18,11 +18,17 @@ int main(int argc, char *argv[]) {
 	//We can try to test first hier
 	printf("start \n");
 
+	argc=4;
+	argv[1]="container.bin";
+	argv[2]="text1.txt";
+	argv[3]="text2.txt";
 
 	char * nameCont = argv [1];
 	printf("container: %s \n",nameCont);
 	MyFS * fs = new MyFS(nameCont);
 
+
+//write files
 	for(int i=2;i<argc;i++)
 	{
 
@@ -38,9 +44,27 @@ int main(int argc, char *argv[]) {
 		fread(puffer, size, 1, fin);
 		fs->addFile(argv[i],st.st_mode,size,puffer);
 		}
-		  fclose(fin);
+//	wieso funktioniert es nicht	  fclose(fin);
 	}
 
+//read files
+	for(int i=2;i<argc;i++)
+		{
+
+			FILE *fin;
+			fin = fopen(argv[i], "rwb");
+			if(fin)
+			{
+			struct stat st;
+			stat(argv[i], &st);
+			off_t size=st.st_size;
+			char * puffer;
+			puffer = new char(size);
+	fs->readFile(argv[i], puffer,size,0,new fuse_file_info);
+		printf("%s \n",puffer);
+			}
+					  fclose(fin);
+				}
 	//printf("%i", fs);
 	/*char * buf;
 	fs->addFile("file 1",S_IFDIR | 0444,7,"file 1");

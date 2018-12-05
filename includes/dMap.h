@@ -1,4 +1,4 @@
-﻿
+﻿#pragma once
 #include "blockdevice.h"
 
 class dMap{
