@@ -108,7 +108,7 @@ int MyFS::readFile(const char *path, char *buf, size_t size, off_t offset, struc
 
 		while (currentBlock != -1&&blocksNumber!=0)
 		{
-			if( blocks->read(currentBlock, buffer)==0)
+			if( blocks->read(currentBlock, buffer)==0) //error
 			{
 				LOGF("buffer in currentBlock %i is : %s \n",currentBlock,buffer);
 				while (*buffer != '\n')

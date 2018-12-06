@@ -17,12 +17,13 @@ dMap::~dMap() {
 	printf("Destruktor von dMap ist beendet \n");
 }
 
-int dMap::getFreeBlocks(int neededBlocks,  int* returnArray[]) {
+int dMap::getFreeBlocks(int neededBlocks,  int** returnArray) {
 
+	int * array = *returnArray;
 	for (int i = firstFreeBlock; i < BLOCK_NUMBER; i++) {
 
 		if (dmap[i] == 0) {
-			*returnArray[neededBlocks - 1] = i; //Fehler hier
+			array[neededBlocks - 1] = i; //Fehler hier
 			neededBlocks--;
 		}
 		//Still more blocks needed?
