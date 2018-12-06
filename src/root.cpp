@@ -65,7 +65,7 @@ MyRoot::~MyRoot() {
 	files.clear();
 }
 
-int MyRoot::addFile(string name, off_t size, mode_t mode, int firstBlock) {
+int MyRoot::addFile(string name, off_t size, mode_t mode,time_t st_mtime, int firstBlock) {
 
 		if(name.length()>NAME_LENGTH)
 		{
@@ -73,25 +73,56 @@ int MyRoot::addFile(string name, off_t size, mode_t mode, int firstBlock) {
 			return -1;
 		}
 
+		if(existName(name))
+		{
+			printf("File's %s name is already exist \n", name);
+			return -1;
+		}
 	//Speichern von Name, Dateigroesse und Zugriffsrechte pro Datei
-	const MyFile * f = new MyFile(name, getuid(), getgid(), size, mode, time(NULL),time(NULL),time(NULL),firstBlock);
+	const MyFile * f = new MyFile(name, getuid(), getgid(), size, mode, time(NULL),st_mtime,time(NULL),firstBlock);
 	files.push_back(*f);
 	return 0;
 }
 
 
+bool MyRoot::existName(string name)
+{
+	std::list<MyFile>::iterator it = files.begin();
+
+	while (it != files.end() )
+	{
+			if((it++)->getName()==name)
+				return true;
+	}
+
+	return false;
+}
+
+void MyRoot::showRoot()
+{
+
+	std::list<MyFile>::iterator it = files.begin();
+
+		while (it != files.end()){
+			(it)->showFile();
+			it++;
+		}
+		//(it)->showFile();
+}
+
 int MyRoot::getFile(string name, MyFile * f) {
 
 	std::list<MyFile>::iterator it = files.begin();
 
-	while (it != files.end() || it->getName()!=name){
+	while (it->getName()!=name){
 		it++;
+		if(it==files.end()){
+				printf("no such file in root \n");
+				return -1;
+				}
 	}
 
-	if(it==files.end()){
-		printf("no such file in root \n");
-		return -1;
-		}
+
 
 	*f=*it;
 	return 0;

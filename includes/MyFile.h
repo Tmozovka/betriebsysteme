@@ -33,6 +33,7 @@ public:
 	void  setName(string n);
 	void setLastAccess(time_t t);
 
+	void showFile();
 	//operatoren
 	bool operator==(MyFile f);
 

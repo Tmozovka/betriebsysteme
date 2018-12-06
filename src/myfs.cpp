@@ -72,15 +72,19 @@ MyFS::~MyFS() {
 //int fuseRead(const char *path, char *buf, size_t size, off_t offset, struct fuse_file_info *fileInfo);
 int MyFS::readFile(const char *path, char *buf, size_t size, off_t offset, struct fuse_file_info *fileInfo)
 {
-	// TODO: Implement this!
-		if (offset > size) // not possible
-			RETURN(-1);
 
-		if(fuseOpen(path,fileInfo)==-1)
+	// TODO: Implement this!
+	printf("readFile start \n"); //funktioniert nicht
+	LOG("readFile start ");
+	LOGF("offset: %i, size: %i", offset, size);
+		/*if (offset > size) // not possible
+			RETURN(-1);*/
+
+		/*if(fuseOpen(path,fileInfo)==-1)
 		{
-			printf("error in fuseOpen");
+			printf("error in fuseOpen \n");
 					RETURN(-EPERM);
-		}
+		}*/
 
 
 		char * buffer;
@@ -89,60 +93,76 @@ int MyFS::readFile(const char *path, char *buf, size_t size, off_t offset, struc
 		if(root->getFile(path, &fcopy)==-1)
 		{
 
-				printf("can't get file from root root.getFile(path, &fcopy)");
+				printf("can't get file from root root.getFile(path, &fcopy) \n");
 				RETURN(-ENOENT);
 		}
 
-		int blocksNumber = ceil(fcopy.getSize() / BD_BLOCK_SIZE);
+		//int blocksNumber = ceil(fcopy.getSize() / BD_BLOCK_SIZE);
+		if(fcopy.getSize()%BD_BLOCK_SIZE!=0)
+		{
+			printf("File's size is false  fcopy.getSize() mod D_BLOCK_SIZE!=0 \n");
+			RETURN(-ENOENT);
+		}
+		int blocksNumber = fcopy.getSize() / BD_BLOCK_SIZE;
 		int currentBlock = fcopy.getFirstBlock();
 
 		while (currentBlock != -1&&blocksNumber!=0)
 		{
 			if( blocks->read(currentBlock, buffer)==0)
 			{
+				LOGF("buffer in currentBlock %i is : %s \n",currentBlock,buffer);
 				while (*buffer != '\n')
 					*(++buf) = *(buffer++);
+
 			}
 			else
 			{
-				printf("error in fuseREAD blocks.read(currentBlock, buffer) ");
+				printf("error in fuseREAD blocks.read(currentBlock, buffer) \n");
 				RETURN(-EPERM);
 			}
 
 			if(fat->getNext(currentBlock,&currentBlock)==-1)
 			{
-				printf("error in fuseREAD fat.getNext(currentBlock,&currentBlock)");
+				printf("error in fuseREAD fat.getNext(currentBlock,&currentBlock) \n");
 			RETURN(-ENOENT);
 			}
 
 			blocksNumber--;
 		}
 
+		LOGF("all buf is  : %s \n",buf);
+LOG("readFile success \n");
 		RETURN(0);
 	//return fuseRead(name, buffer,  size,  offset, fi);
 }
 // int fuseCreate(const char *, mode_t, struct fuse_file_info *);
-int MyFS::addFile(const char * name, mode_t mode, off_t size, char * text)
+int MyFS::addFile(const char * name, mode_t mode, time_t mtime , off_t size, char * text)
 {
+
+
+	LOGF("add file with name : %s \n", name);
+	//printf("add file with name : %s \n", name); //hier error
 	off_t newSize=size;
+
 	while(newSize%BD_BLOCK_SIZE!=0)
-	{
-		*(text++)=' ';
-		newSize++;
-	}
+		{
+			*(text++)=' ';
+			newSize++;
+		}
 	//int blocksNumber = ceil(size / BD_BLOCK_SIZE);
 	int blocksNumber = newSize / BD_BLOCK_SIZE;
+	printf("blocksNumber : %i", blocksNumber);
 	int*  blocks = new int[blocksNumber+1];
 	blocks[blocksNumber + 1] = 0;
 	if (dmap->getFreeBlocks(blocksNumber, &blocks) == 0)
 	{
-		if(root->addFile(name, size, mode,blocks[0])==-1)
+		if(root->addFile(name, newSize, mode,mtime,blocks[0])==-1)
 		{
-			printf("error in addFile in root->addFile(name, size, mode,blocks[0] \n");
+			printf("error in addFile in root->addFile(name, size, mode,st_mtime,blocks[0] \n");
 			return -1;
 		}
 
-		for (int i = 0; i <= blocksNumber; i++)
+		for (int i = 0; i < blocksNumber; i++)
 		{
 			dmap->setUsed(i);
 			if(fat->link(blocks[i], &blocks[i+1])==-1)
@@ -278,7 +298,7 @@ int MyFS::fuseMknod(const char *path, mode_t mode, dev_t dev) { //??? wir brauch
     	RETURN(-1);
     }
 
-	if(root->addFile(path, 512,mode, (*blocks)[0])==-1)
+	if(root->addFile(path, 512,mode,time(NULL), (*blocks)[0])==-1)
 		{
 		printf("can't add file in root root.addFile(path, 512, S_IFREG | 0444)");
 		RETURN(-EPERM);
@@ -526,7 +546,7 @@ int MyFS::fuseCreate(const char *path, mode_t mode, struct fuse_file_info *fileI
     // TODO: Implement this!
    //add empty File
     char * c;
-    RETURN(addFile(path,mode,0, c));
+    RETURN(addFile(path,mode,time(NULL),0, c));
 
 }
 

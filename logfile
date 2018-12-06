@@ -1,0 +1,6 @@
+	Starting logging...
+
+src/myfs.cpp:558:fuseInit()
+	Container file name: /home/tanya/Documents/Betriebsysteme/Aufgaben/Teil1/bs-uebung-template-v0.5/container.bin
+fuseInit() returned 0
+src/myfs.cpp:229:fuseGetattr()

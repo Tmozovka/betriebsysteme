@@ -42,6 +42,11 @@ MyFile::MyFile() {
 	firstBlock = -1;//Zeiger auf ersten Block (u_int32_t BlockNo)
 }
 
+void MyFile::showFile()
+{
+	printf("File's name: %s, user id: %i, group id: %i, size: %i , firstBlock: %i \n \n", name, user, group, size, firstBlock);
+}
+
 bool MyFile::operator==(MyFile f)
 	{
 
