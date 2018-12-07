@@ -141,14 +141,29 @@ int MyFS::addFile(const char * name, mode_t mode, time_t mtime , off_t size, cha
 
 
 	LOGF("add file with name : %s \n", name);
-	//printf("add file with name : %s \n", name); //hier error
+	printf("add file with name : %s \n", name);
+
+
+	printf("text before: %s \n", text);
 	off_t newSize=size;
+	char * textTemp=text;
+	textTemp+=size;
+	*textTemp=2;
+	*(textTemp-2)='2';
+	*(textTemp-1)='2';
+	if(newSize%BD_BLOCK_SIZE!=0)
+	{
 
 	while(newSize%BD_BLOCK_SIZE!=0)
 		{
-			*(text++)=' ';
+			*(textTemp++)='2';
 			newSize++;
 		}
+	*(textTemp-1)='\0';
+	}
+	printf("text after: %s \n", text);
+	printf("*(textTemp-512): %s \n", *(textTemp-512));
+	printf("text after size: %i, newSize: %i \n", sizeof(text),newSize);
 	//int blocksNumber = ceil(size / BD_BLOCK_SIZE);
 	int blocksNumber = newSize / BD_BLOCK_SIZE;
 	printf("blocksNumber : %i", blocksNumber);

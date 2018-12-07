@@ -48,17 +48,18 @@ int main(int argc, char *argv[]) {
 		char * puffer;
 		puffer = new char(size);
 		fread(puffer, size, 1, fin);
-		printf("File: %s , puffer: %s  \n",argv[i], puffer );
+		printf("Fileeee: %s , puffer: %s  \n",argv[i], puffer );
 		fs->addFile(argv[i],st.st_mode,st.st_mtime,size,puffer);
 		}
 		else{
 			printf("can't open File: %s \n", argv[i]);
 			//LOG("can't open File: %s \n", argv[i]);
 		}
-//	wieso funktioniert es nicht	  fclose(fin);
+//	wieso funktioniert es nicht
+		fclose(fin);
 	}
 		 printf("all files are in container.bin \n");
-	//	 fs->root->showRoot(); //wiso funktioniert nicht
+		 fs->root->showRoot();
 //read files
 	for(int i=2;i<argc;i++)
 		{
@@ -75,7 +76,8 @@ int main(int argc, char *argv[]) {
 	fs->readFile(argv[i], puffer,size,0,new fuse_file_info);
 		printf("read File %s : %s \n",argv[i],puffer);
 			}
-					//  fclose(fin);
+					//
+			fclose(fin);
 				}
 	//printf("%i", fs);
 	/*char * buf;
