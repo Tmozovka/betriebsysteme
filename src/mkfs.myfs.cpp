@@ -24,12 +24,15 @@ int main(int argc, char *argv[]) {
 	argv[1]="container.bin";
 	argv[2]="text1.txt";
 	argv[3]="text2.txt";
+	argv[4]="text1 (copy).txt";
 
 	char * nameCont = argv [1];
 	LOGF("container: %s \n",nameCont);
 
 	MyFS * fs = new MyFS(nameCont);
 
+	char * pufferAdd;
+	char * pufferRead;
 
 
 //write files
@@ -46,11 +49,12 @@ int main(int argc, char *argv[]) {
 		struct stat st;
 		stat(argv[i], &st);
 		off_t size=ceil((double)st.st_size/BD_BLOCK_SIZE)*BD_BLOCK_SIZE;
-		char * puffer;
-		puffer = new char(size);
-		fread(puffer, size, 1, fin);
-		LOGF("File: %s ,size: %i, puffer: %s  \n",argv[i],size, puffer );
-		fs->addFile(argv[i],st.st_mode,st.st_mtime,size,puffer);
+		pufferAdd = new char(size);
+		fread(pufferAdd, size, 1, fin);
+		fs->resize(pufferAdd,st.st_size,size);
+		LOGF("File: %s ,size: %i, puffer: %s  \n",argv[i],size, pufferAdd );
+		fs->addFile(argv[i],st.st_mode,st.st_mtime,size,pufferAdd);
+
 		}
 		else{
 			//printf("can't open File: %s \n", argv[i]);
@@ -59,8 +63,11 @@ int main(int argc, char *argv[]) {
 //	wieso funktioniert es nicht
 //		fclose(fin);
 	}
+
 		 LOG("all files are in container.bin \n");
 		 fs->root->showRoot();
+		 fs->fat->showFat();
+		 fs->dmap->showDmap();
 //read files
 	for(int i=2;i<argc;i++)
 		{
@@ -73,15 +80,60 @@ int main(int argc, char *argv[]) {
 			stat(argv[i], &st);
 			off_t size=ceil((double)st.st_size/BD_BLOCK_SIZE)*BD_BLOCK_SIZE;
 			//off_t size=st.st_size;
-			char * puffer;
-			puffer = new char(size);
-	fs->readFile(argv[i], puffer,size,0,new fuse_file_info);
-		LOGF("read File %s : %s \n",argv[i],puffer);
-		printf("read File %s : %s \n",argv[i],puffer);
+
+			pufferRead = new char(size);
+	fs->readFile(argv[i], pufferRead,size,0,new fuse_file_info);
+		LOGF("read File %s : %s \n",argv[i],pufferRead);
+		printf("read File %s : %s \n",argv[i],pufferRead);
+
 			}
-					//
+				//
 			//fclose(fin);
 				}
+
+	//delete Files
+printf("deleteFile: %s \n", argv[3]);
+fs->deleteFile(argv[3]);
+
+fs->root->showRoot();
+		 fs->fat->showFat();
+		 fs->dmap->showDmap();
+///////////////////////////////////////////////////////////////////////////////////
+/*
+printf("addFile : %s \n", argv[4]);
+FILE *fin;
+		LOGF("open File: %s \n", argv[4]);
+		fin = fopen(argv[4], "rwb");
+		if(fin)
+		{
+			LOGF("successful open File: %s \n", argv[4]);
+		struct stat st;
+		stat(argv[4], &st);
+		off_t size=ceil((double)st.st_size/BD_BLOCK_SIZE)*BD_BLOCK_SIZE;
+		pufferAdd = new char(size);
+		fread(pufferAdd, size, 1, fin);
+		LOGF("File: %s ,size: %i, puffer: %s  \n",argv[4],size, puffer );
+		fs->addFile(argv[4],st.st_mode,st.st_mtime,size,pufferAdd);
+
+
+		printf("readFile : %s \n", argv[4]);
+		pufferRead = new char(size);
+		fs->readFile(argv[4], pufferRead,size,0,new fuse_file_info);
+				LOGF("read File %s : %s \n",argv[4],pufferRead);
+				printf("read File %s : %s \n",argv[4],pufferRead);
+		}
+		else{
+					//printf("can't open File: %s \n", argv[i]);
+					LOGF("can't open File: %s \n", argv[4]);
+				}
+
+
+
+fs->root->showRoot();
+		 fs->fat->showFat();
+		 fs->dmap->showDmap();
+*/
+//////////////////////////////////////////////////////////////////////////////////////////
 	//printf("%i", fs);
 	/*char * buf;
 	fs->addFile("file 1",S_IFDIR | 0444,7,"file 1");

@@ -68,7 +68,20 @@ MyFS::~MyFS() {
 }
 
 //TODOs:
+void MyFS::resize(char * text,int oldSize, int newSize)
+{
 
+	int i=newSize-oldSize;
+	text+=oldSize;
+	while(i!=0)
+	{
+		*(text++)=' ';
+		i--;
+	}
+	*(text-1)='\0';
+	text-=newSize;
+
+}
 //int fuseRead(const char *path, char *buf, size_t size, off_t offset, struct fuse_file_info *fileInfo);
 int MyFS::readFile(const char *path, char *buf, size_t size, off_t offset, struct fuse_file_info *fileInfo)
 {
@@ -88,7 +101,7 @@ int MyFS::readFile(const char *path, char *buf, size_t size, off_t offset, struc
 		}
 
 
-		char * buffer = new char(size);
+		char * buffer = new char(BD_BLOCK_SIZE);
 
 		MyFile fcopy;
 		if(root->getFile(path, &fcopy)==-1)
@@ -106,19 +119,20 @@ int MyFS::readFile(const char *path, char *buf, size_t size, off_t offset, struc
 			RETURN(-ENOENT);
 		}
 		int blocksNumber = fcopy.getSize() / BD_BLOCK_SIZE;
+
 		int currentBlock = fcopy.getFirstBlock();
 		int count=0;
 		while (currentBlock != -1&&blocksNumber!=0)
 		{
-			if( blocks->read(currentBlock, buffer)==0) //error
+			if( blocks->read(currentBlock, buffer)==0)
 			{
 				LOGF("buffer in currentBlock %i is : %s \n",currentBlock,buffer);
-				while (*buffer != '\0')
+				while (*buffer != '\0' )
 					{
 					*(buf++) = *(buffer++);
 					count++;
 					}
-					buf-=count;
+
 			}
 			else
 			{
@@ -134,7 +148,7 @@ int MyFS::readFile(const char *path, char *buf, size_t size, off_t offset, struc
 
 			blocksNumber--;
 		}
-
+		buf-=count;
 		LOGF("all buf is  : %s \n",buf);
 LOG("readFile success \n");
 		RETURN(0);
@@ -168,7 +182,7 @@ int MyFS::addFile(const char * name, mode_t mode, time_t mtime , off_t size, cha
 
 		for (int i = 0; i < blocksNumber; i++)
 		{
-			dmap->setUsed(i);
+			dmap->setUsed(blocks[i]);
 
 			if(i+1!=blocksNumber)
 			{
@@ -216,22 +230,40 @@ int MyFS::deleteFile(const char *name)
 			RETURN(-ENOENT);
 	}
 
-	int blocksNumber = ceil(fcopy.getSize() / BD_BLOCK_SIZE);
+	int blocksNumber = fcopy.getSize() / BD_BLOCK_SIZE;
 	int currentBlock = fcopy.getFirstBlock();
-
+	//////////////////////////////////////
+	char * text = new char(fcopy.getSize());
+	for(int i=0;i<fcopy.getSize();i++)
+		*(text++)=' ';
+	text-=fcopy.getSize();
+	//////////////////////////////////////
 	while (blocksNumber!=0&&currentBlock!=-1)
 	{
+		 if( this->blocks->write(currentBlock, text)==-1)
+				    {
+				    	printf("error in addFile in this->blocks.write(i,    ) \n");
+				    }
+
 		if(dmap->setUnused(currentBlock)==-1)
 		{
 			printf("error in deleteFile in dmap.setUnused(currentBlock)");
 			RETURN(-EPERM);
 		}
 
+		int blockBefore=currentBlock;
 		if(fat->getNext(currentBlock, &currentBlock)==-1)
 		{
 			printf("error in deleteFeil in fat.getNext(currentBlock, &currentBlock");
 			RETURN(-EPERM);
 		}
+
+		if(fat->unLink(blockBefore)==-1)
+		{
+			printf("error in deleteFeil in fat.unLink(blockBefore)");
+			RETURN(-EPERM);
+		}
+
 
 		blocksNumber--;
 	}

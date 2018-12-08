@@ -1,4 +1,16 @@
 #include "fat.h"
+
+void MyFAT::showFat()
+{
+	printf("****************************************************************\n");
+			printf("FAT: \n");
+	for(int i=0;i!=50;i++)
+	{
+
+		printf("%i -> %i \n", i,table[i]);
+	}
+}
+
 int  MyFAT::unLink ( int current){ //todo fehle behandeln + header bearbeiten
 	if(current>=size||current<0)
 	return-1;

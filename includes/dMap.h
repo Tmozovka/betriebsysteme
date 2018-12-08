@@ -20,4 +20,6 @@ public:
 	int setUsed(int blockNumber);
 	int setUnused(int blockNumber);
 
+	void showDmap();
+
 };

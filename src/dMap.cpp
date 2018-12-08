@@ -1,5 +1,17 @@
 ﻿#include "dMap.h"
 //#include "blockdevice.h"
+
+void dMap::showDmap()
+{
+	printf("****************************************************************\n");
+				printf("DMAP: \n");
+	for(int i=0;i!=50;i++)
+		{
+
+			printf("%i -> %i \n", i, dmap[i]);
+		}
+}
+
 dMap::dMap() {
 
 
@@ -20,17 +32,22 @@ dMap::~dMap() {
 int dMap::getFreeBlocks(int neededBlocks,  int** returnArray) {
 
 	int * array = *returnArray;
+	int j=0;
 	for (int i = firstFreeBlock; i < BLOCK_NUMBER; i++) {
 
 		if (dmap[i] == 0) {
-			array[neededBlocks - 1] = i; //Fehler hier
+			array[j++] = i; //Fehler hier
 			neededBlocks--;
 		}
+
 		//Still more blocks needed?
-		if (neededBlocks == 0) {
+		if (neededBlocks == 0)
+		{
 			return 0;
-		}
+			}
+
 	}
+
 
 	// Blockdevice full, no free blocks found
 	return -1;

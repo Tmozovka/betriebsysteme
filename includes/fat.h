@@ -14,6 +14,7 @@ class MyFAT {
       int getNext(int current, int* next);
       int getSize(){return size;};
 
+      void showFat();
       /*int firstBlock:
       int nextBlock;
       int currentBlock;

@@ -89,7 +89,7 @@ public:
     int fuseCreate(const char *, mode_t, struct fuse_file_info *); //implement
     void fuseDestroy();
     
-		
+		void resize(char * text,int oldSize, int newSize);
 		// int fuseCreate(const char *, mode_t, struct fuse_file_info *);
     	int addFile(const char * name, mode_t mode,time_t mtime, off_t size, char * text);
 		

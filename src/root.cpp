@@ -92,7 +92,10 @@ bool MyRoot::existName(string name)
 	while (it != files.end() )
 	{
 			if((it++)->getName()==name)
+				{
+				if((it++)->getName().length()==name.length())
 				return true;
+				}
 	}
 
 	return false;
