@@ -15,6 +15,8 @@
 
 int main(int argc, char *argv[]) {
 
+
+
     // TODO: Implement file system generation & copying of files here
 	//We can try to test first hier
 	printf("start \n");
