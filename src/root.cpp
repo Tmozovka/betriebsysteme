@@ -100,14 +100,14 @@ bool MyRoot::existName(string name)
 
 void MyRoot::showRoot()
 {
-
+printf("************************************************************ \nRoot: \n");
 	std::list<MyFile>::iterator it = files.begin();
 
 		while (it != files.end()){
 			(it)->showFile();
 			it++;
 		}
-		//(it)->showFile();
+		printf("************************************************************ \n");
 }
 
 int MyRoot::getFile(string name, MyFile * f) {

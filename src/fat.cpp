@@ -21,7 +21,7 @@ int  MyFAT::unLink ( int current){ //todo fehle behandeln + header bearbeiten
  	 if(*next>=size||*next<0||current>=size||current<0)
  		 return-1;
  	 else
- 		 *next=current;
+ 		 *next=table[current];
  	 return 0;
  }
 

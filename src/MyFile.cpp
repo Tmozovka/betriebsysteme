@@ -44,7 +44,7 @@ MyFile::MyFile() {
 
 void MyFile::showFile()
 {
-	printf("File's name: %s, user id: %i, group id: %i, size: %i , firstBlock: %i \n \n", name, user, group, size, firstBlock);
+	printf("File's name: %s, user id: %i, group id: %i, size: %i , firstBlock: %i \n \n", name.c_str(), user, group, (int)size, firstBlock);
 }
 
 bool MyFile::operator==(MyFile f)

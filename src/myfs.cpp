@@ -42,7 +42,7 @@ MyFS::MyFS() {
     this->logFile= stderr;
 
 
-    printf("Konstruktor von MyFS ist beendet \n");
+   // printf("Konstruktor von MyFS ist beendet \n");
     LOG("Konstruktor von MyFS ist beendet \n");
 }
 
@@ -56,7 +56,7 @@ MyFS::MyFS(char * nameCont) {
     blocks = new BlockDevice();
     blocks->create(nameCont);
 
-    printf("Konstruktor von MyFS ist beendet \n");
+   // printf("Konstruktor von MyFS ist beendet \n");
     LOG("Konstruktor von MyFS ist beendet \n");
 }
 
@@ -74,26 +74,28 @@ int MyFS::readFile(const char *path, char *buf, size_t size, off_t offset, struc
 {
 
 	// TODO: Implement this!
-	printf("readFile start \n"); //funktioniert nicht
+	//printf("readFile start \n"); //funktioniert nicht
+	LOG("********************************************************************************************** ");
 	LOG("readFile start ");
 	LOGF("offset: %i, size: %i", offset, size);
 		/*if (offset > size) // not possible
 			RETURN(-1);*/
 
-		/*if(fuseOpen(path,fileInfo)==-1)
+		if(fuseOpen(path,fileInfo)==-1)
 		{
 			printf("error in fuseOpen \n");
 					RETURN(-EPERM);
-		}*/
+		}
 
 
-		char * buffer;
+		char * buffer = new char(size);
 
 		MyFile fcopy;
 		if(root->getFile(path, &fcopy)==-1)
 		{
 
-				printf("can't get file from root root.getFile(path, &fcopy) \n");
+				//printf("can't get file from root root.getFile(path, &fcopy) \n");
+			LOG("can't get file from root root.getFile(path, &fcopy) \n");
 				RETURN(-ENOENT);
 		}
 
@@ -105,15 +107,18 @@ int MyFS::readFile(const char *path, char *buf, size_t size, off_t offset, struc
 		}
 		int blocksNumber = fcopy.getSize() / BD_BLOCK_SIZE;
 		int currentBlock = fcopy.getFirstBlock();
-
+		int count=0;
 		while (currentBlock != -1&&blocksNumber!=0)
 		{
 			if( blocks->read(currentBlock, buffer)==0) //error
 			{
 				LOGF("buffer in currentBlock %i is : %s \n",currentBlock,buffer);
-				while (*buffer != '\n')
-					*(++buf) = *(buffer++);
-
+				while (*buffer != '\0')
+					{
+					*(buf++) = *(buffer++);
+					count++;
+					}
+					buf-=count;
 			}
 			else
 			{
@@ -138,40 +143,24 @@ LOG("readFile success \n");
 // int fuseCreate(const char *, mode_t, struct fuse_file_info *);
 int MyFS::addFile(const char * name, mode_t mode, time_t mtime , off_t size, char * text)
 {
+	LOG("********************************************************************************************** ");
+	LOG("addFile start");
+	if(size%BD_BLOCK_SIZE!=0)
+	{
+		LOGF("Die Datei %s wurde falsh hinzugefuegt \n", name);
+		RETURN(-1);
 
+	}
 
 	LOGF("add file with name : %s \n", name);
-	printf("add file with name : %s \n", name);
 
-
-	printf("text before: %s \n", text);
-	off_t newSize=size;
-	char * textTemp=text;
-	textTemp+=size;
-	*textTemp=2;
-	*(textTemp-2)='2';
-	*(textTemp-1)='2';
-	if(newSize%BD_BLOCK_SIZE!=0)
-	{
-
-	while(newSize%BD_BLOCK_SIZE!=0)
-		{
-			*(textTemp++)='2';
-			newSize++;
-		}
-	*(textTemp-1)='\0';
-	}
-	printf("text after: %s \n", text);
-	printf("*(textTemp-512): %s \n", *(textTemp-512));
-	printf("text after size: %i, newSize: %i \n", sizeof(text),newSize);
-	//int blocksNumber = ceil(size / BD_BLOCK_SIZE);
-	int blocksNumber = newSize / BD_BLOCK_SIZE;
-	printf("blocksNumber : %i", blocksNumber);
+	int blocksNumber = size / BD_BLOCK_SIZE;
+	LOGF("blocksNumber : %i \n", blocksNumber);
 	int*  blocks = new int[blocksNumber+1];
 	blocks[blocksNumber + 1] = 0;
 	if (dmap->getFreeBlocks(blocksNumber, &blocks) == 0)
 	{
-		if(root->addFile(name, newSize, mode,mtime,blocks[0])==-1)
+		if(root->addFile(name, size, mode,mtime,blocks[0])==-1)
 		{
 			printf("error in addFile in root->addFile(name, size, mode,st_mtime,blocks[0] \n");
 			return -1;
@@ -180,14 +169,17 @@ int MyFS::addFile(const char * name, mode_t mode, time_t mtime , off_t size, cha
 		for (int i = 0; i < blocksNumber; i++)
 		{
 			dmap->setUsed(i);
-			if(fat->link(blocks[i], &blocks[i+1])==-1)
+
+			if(i+1!=blocksNumber)
+			{
+					if(fat->link(blocks[i], &blocks[i+1])==-1)
 				{
 				RETURN(-1);
 				printf("error in addFile in fat.link(blocks[i], &blocks[i+1] \n");
 				}
+			}
 
-			//char *buffer; // wofuer brauchen wir buffer hier
-		    if( this->blocks->write(i, text)==-1)
+		    if( this->blocks->write(blocks[i], text)==-1)
 		    {
 		    	printf("error in addFile in this->blocks.write(i, \"try\") \n");
 		    }
@@ -201,7 +193,7 @@ int MyFS::addFile(const char * name, mode_t mode, time_t mtime , off_t size, cha
 		//no more place
 	}
 	LOG("addFile succes");
-	printf("addFile succes \n");
+	//printf("addFile succes \n");
 	RETURN(0);
 }
 
@@ -294,13 +286,7 @@ int MyFS::fuseMknod(const char *path, mode_t mode, dev_t dev) { //??? wir brauch
     LOGM();
     
     // TODO: Implement this!
-	// Tanja's comments:
-    // Inode contains : number of blocks, file's name, mode, userId, groupId, size, number of links, ctime, atime, mtime
-    // get Inode's attributes with  MyFS::fuseGetattr(const char *path, struct stat *st)
-	// How to create file?
-	// change Inode
-	// change D-Map
-	// describe new Block(s)
+
 	// How to create Inode?
 	// add new file to the Root
 	// Information about the file is saved in the objekt File 
@@ -363,13 +349,13 @@ int MyFS::fuseOpen(const char *path, struct fuse_file_info *fileInfo) { // How t
     //falls zu viele datein schon geöffnet-> fehler
 
 //fuseInit()
-	if(blocks->open(path)==-1)
+	/*if(blocks->open(path)==-1) //wenn ich das mache, kann ich danach nich read machen
 		{
 		fileInfo->fh=1;
 		printf("error in fuseOpen in blocks.open(path)");
 		RETURN(-EPERM);
 
-		}
+		}*/
 
 	RETURN(0);
 }

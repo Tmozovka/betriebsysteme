@@ -11,21 +11,22 @@
 #include "macros.h"
 #include <stdio.h>
 #include <fstream>
+#include <math.h>
 
 int main(int argc, char *argv[]) {
 
     // TODO: Implement file system generation & copying of files here
 	//We can try to test first hier
 	printf("start \n");
-
+	//off_t try1=4;
+	//printf("ceil(1200/512): %i",(int)ceil((double)try1/512));
 	argc=4;
 	argv[1]="container.bin";
 	argv[2]="text1.txt";
 	argv[3]="text2.txt";
-	char * nameFile = argv [2];
-	printf("open File: %s \n", nameFile);
+
 	char * nameCont = argv [1];
-	printf("container: %s \n",nameCont);
+	LOGF("container: %s \n",nameCont);
 
 	MyFS * fs = new MyFS(nameCont);
 
@@ -36,29 +37,29 @@ int main(int argc, char *argv[]) {
 	{
 
 		FILE *fin;
-		printf("open File: %s \n", argv[i]);
+		LOGF("open File: %s \n", argv[i]);
 		fin = fopen(argv[i], "rwb");
 		if(fin)
 		{
-			printf("successful open File: %s \n", argv[i]);
-			//LOG("successful open File: %s \n", argv[i]);
+			LOGF("successful open File: %s \n", argv[i]);
+			LOGF("successful open File: %s \n", argv[i]);
 		struct stat st;
 		stat(argv[i], &st);
-		off_t size=st.st_size;
+		off_t size=ceil((double)st.st_size/BD_BLOCK_SIZE)*BD_BLOCK_SIZE;
 		char * puffer;
 		puffer = new char(size);
 		fread(puffer, size, 1, fin);
-		printf("Fileeee: %s , puffer: %s  \n",argv[i], puffer );
+		LOGF("File: %s ,size: %i, puffer: %s  \n",argv[i],size, puffer );
 		fs->addFile(argv[i],st.st_mode,st.st_mtime,size,puffer);
 		}
 		else{
-			printf("can't open File: %s \n", argv[i]);
-			//LOG("can't open File: %s \n", argv[i]);
+			//printf("can't open File: %s \n", argv[i]);
+			LOGF("can't open File: %s \n", argv[i]);
 		}
 //	wieso funktioniert es nicht
-		fclose(fin);
+//		fclose(fin);
 	}
-		 printf("all files are in container.bin \n");
+		 LOG("all files are in container.bin \n");
 		 fs->root->showRoot();
 //read files
 	for(int i=2;i<argc;i++)
@@ -70,14 +71,16 @@ int main(int argc, char *argv[]) {
 			{
 			struct stat st;
 			stat(argv[i], &st);
-			off_t size=st.st_size;
+			off_t size=ceil((double)st.st_size/BD_BLOCK_SIZE)*BD_BLOCK_SIZE;
+			//off_t size=st.st_size;
 			char * puffer;
 			puffer = new char(size);
 	fs->readFile(argv[i], puffer,size,0,new fuse_file_info);
+		LOGF("read File %s : %s \n",argv[i],puffer);
 		printf("read File %s : %s \n",argv[i],puffer);
 			}
 					//
-			fclose(fin);
+			//fclose(fin);
 				}
 	//printf("%i", fs);
 	/*char * buf;
