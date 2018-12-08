@@ -43,11 +43,13 @@ myFile ROOT::getFile(string name) {
 #include "myfs-structs.h"
 
 MyRoot::MyRoot(MyFile firstfile) {
+	 size=1;
 	addressRoot = new MyFile(firstfile);
 	files.push_front(firstfile);
 }
 
 MyRoot::MyRoot() {
+	 size=0;
 	addressRoot=NULL;
 }
 
@@ -56,17 +58,25 @@ MyRoot::MyRoot() {
 
 MyRoot::MyRoot(string name, off_t size, mode_t mode,int firstBlock) {
 	//firstfile -> first block
+	 size=1;
 	MyFile * firstfile = new MyFile(name, getuid(), getgid(), size, mode, time(NULL),time(NULL),time(NULL), firstBlock);
 	addressRoot = firstfile;
 	files.push_front(*firstfile);
 }
 
 MyRoot::~MyRoot() {
+	size=0;
 	files.clear();
 }
 
 int MyRoot::addFile(string name, off_t size, mode_t mode,time_t st_mtime, int firstBlock) {
+if(size>NUM_DIR_ENTRIES)
+{
+	printf("too many files in Root \n");
+				return -1;
+}
 
+	size++;
 		if(name.length()>NAME_LENGTH)
 		{
 			printf("File's %s name is too big \n", name);
@@ -142,7 +152,7 @@ int MyRoot::deleteFile(string name) {
 			return-1;
 		}
 		files.remove(filetodelete);
-
+size--;
 		return 0;
 	}
 	return -1;

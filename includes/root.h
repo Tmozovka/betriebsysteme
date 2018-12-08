@@ -14,6 +14,7 @@ class MyRoot {
 private:
 	std::list<MyFile> files;
 	MyFile* addressRoot;
+	int size;
 
 public:
 
