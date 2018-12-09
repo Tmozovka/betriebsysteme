@@ -33,6 +33,9 @@ MyRoot::~MyRoot() {
 }
 
 int MyRoot::addFile(string name, off_t size, mode_t mode,time_t st_mtime, int firstBlock) {
+//Wird das uebergebene Size abgefragt oder das des Roots?
+//Es sollte ja das des roots angesprochen werden
+//Und muesste es nicht >= heissen?
 if(size>NUM_DIR_ENTRIES)
 {
 	printf("too many files in Root \n");
