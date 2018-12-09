@@ -76,6 +76,7 @@ if(size>NUM_DIR_ENTRIES)
 				return -1;
 }
 
+
 	size++;
 		if(name.length()>NAME_LENGTH)
 		{
@@ -88,8 +89,14 @@ if(size>NUM_DIR_ENTRIES)
 			printf("File's %s name is already exist \n", name);
 			return -1;
 		}
+
 	//Speichern von Name, Dateigroesse und Zugriffsrechte pro Datei
 	const MyFile * f = new MyFile(name, getuid(), getgid(), size, mode, time(NULL),st_mtime,time(NULL),firstBlock);
+	
+	//Wenn erstes File
+	if(size==1){
+	addressRoot = new MyFile(f);}
+	
 	files.push_back(*f);
 	return 0;
 }
