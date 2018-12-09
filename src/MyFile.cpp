@@ -17,15 +17,7 @@ MyFile::MyFile(string cname, uid_t cuser, gid_t cgroup, off_t csize, mode_t cmod
 	firstBlock = cfirstBlock;//Zeiger auf ersten Block (u_int32_t BlockNo)
 }
 MyFile::~MyFile() {//
-	/*delete[] name;//Dateiname
-	delete[] user;//Benutzer
-	delete[] group;//Gruppen-ID
-	delete[] size;//Dateigroesse
-	delete[] mode;//Zugriffsberechtigung
-	delete[] lastAccess;//Zeitpunkt letzter Zugriff (atime)
-	delete[] lastMod;//letzte Ver�nderung (mtime)
-	delete[] lastStatusChange;//letzter Status�nderung (ctime)
-	delete[] firstBlock;//Zeiger auf ersten Block*/
+
 }
 
 //Define the constructor
@@ -54,10 +46,14 @@ bool MyFile::operator==(MyFile f)
 	}
 
 //get
+//Als Parameter fuer addFile verwendbar
+mode_t MyFile::getMode() {return mode;}
+
 time_t  MyFile::getLastMod(){return lastMod;}
 off_t  MyFile::getSize(){return size;}
 int  MyFile::getFirstBlock(){return firstBlock;}
 string  MyFile::getName(){return name;}
+
 
 //set
 void  MyFile::setLastMod(time_t t){ lastMod=t;}
