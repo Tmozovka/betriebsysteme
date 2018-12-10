@@ -55,16 +55,15 @@
 		<buildTargets>
 			<target name="all" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
 				<buildCommand>make</buildCommand>
-				<buildArguments/>
 				<buildTarget>all</buildTarget>
 				<stopOnError>true</stopOnError>
 				<useDefaultCommand>false</useDefaultCommand>
 				<runAllBuilders>true</runAllBuilders>
 			</target>
-			<target name="unittests" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+			<target name="unittest" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
 				<buildCommand>make</buildCommand>
 				<buildArguments/>
-				<buildTarget>unittests</buildTarget>
+				<buildTarget>unittest</buildTarget>
 				<stopOnError>true</stopOnError>
 				<useDefaultCommand>false</useDefaultCommand>
 				<runAllBuilders>true</runAllBuilders>

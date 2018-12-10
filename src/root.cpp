@@ -61,7 +61,11 @@ if(size>NUM_DIR_ENTRIES)
 	
 	//Wenn erstes File
 	if(size==1){
-	addressRoot = new MyFile(f);}
+		//todo: ich(julia) habe hier folgendes entfernt:
+		//addressRoot = new MyFile(f); weil so ein konstruktor nicht existiert
+		//Macht es noch das richtige? Bitte Überprüfen
+
+	addressRoot = new MyFile(name, getuid(), getgid(), size, mode, time(NULL),st_mtime,time(NULL),firstBlock);}
 	
 	files.push_back(*f);
 	return 0;

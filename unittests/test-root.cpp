@@ -20,7 +20,8 @@ TEST_CASE( "Add/get/delete File", "[root]" ) {
         //string name, off_t size, mode_t mode,time_t st_mtime, int firstBlock
         //off_t size=ceil((double)st.st_size/BD_BLOCK_SIZE)*BD_BLOCK_SIZE;
         //fs->addFile(argv[i],size,st.st_mode,st.st_mtime,pufferAdd);
-        myroot->getFile(firstfile->getName(), MyFile* mf);
+        MyFile* mf = new MyFile();
+        myroot->getFile(firstfile->getName(), mf);
 		 REQUIRE( result == 0);
          REQUIRE( myroot->size == 1);
 		 REQUIRE( mf == firstfile);
@@ -30,7 +31,7 @@ TEST_CASE( "Add/get/delete File", "[root]" ) {
         MyFile * f = new MyFile();
         myroot->size = NUM_DIR_ENTRIES+1;
         //int result oder result?
-        result = myroot->addFile(f->getName(),f->getSize(),f->getMode(),f->getLastMod(),f->getFirstBlock());
+        int result = myroot->addFile(f->getName(),f->getSize(),f->getMode(),f->getLastMod(),f->getFirstBlock());
         REQUIRE(result=-1);
         delete f;
     }
@@ -38,11 +39,11 @@ TEST_CASE( "Add/get/delete File", "[root]" ) {
         MyFile * f = new MyFile();
         myroot->size=0;
         MyFile * fileSimilarName = new MyFile();
-        file->setName("similarName.txt");
+        fileSimilarName->setName("similarName.txt");
         fileSimilarName->setName("similarName.txt");
         myroot->addFile(fileSimilarName->getName(),fileSimilarName->getSize(),fileSimilarName->getMode(),fileSimilarName->getLastMod(),fileSimilarName->getFirstBlock());
         //int result oder result?
-        result = myroot->addFile(f->getName(),f->getSize(),f->getMode(),f->getLastMod(),f->getFirstBlock());
+        int result = myroot->addFile(f->getName(),f->getSize(),f->getMode(),f->getLastMod(),f->getFirstBlock());
         REQUIRE(result=-1);
         delete f;
     }

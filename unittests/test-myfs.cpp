@@ -13,3 +13,8 @@
 #include "myfs.h"
 
 // TODO: Implement your helper functions here!
+TEST_CASE( "fuseAddFile", "[myfs]" ) {
+
+
+
+}
