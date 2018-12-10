@@ -18,10 +18,9 @@ int main(int argc, char *argv[]) {
 
 
     // TODO: Implement file system generation & copying of files here
-	//We can try to test first hier
+
 	printf("start \n");
-	//off_t try1=4;
-	//printf("ceil(1200/512): %i",(int)ceil((double)try1/512));
+
 	argc=4;
 	argv[1]="container.bin";
 	argv[2]="text1.txt";
@@ -36,7 +35,8 @@ int main(int argc, char *argv[]) {
 	char * pufferAdd;
 	char * pufferRead;
 
-
+	int count=0;
+START:
 //write files
 	for(int i=2;i<argc;i++)
 	{
@@ -68,8 +68,9 @@ int main(int argc, char *argv[]) {
 
 		 LOG("all files are in container.bin \n");
 		 fs->root->showRoot();
-		 fs->fat->showFat();
-		 fs->dmap->showDmap();
+		// fs->fat->showFat();
+		// fs->dmap->showDmap();
+/*
 //read files
 	for(int i=2;i<argc;i++)
 		{
@@ -98,43 +99,26 @@ printf("deleteFile: %s \n", argv[3]);
 fs->deleteFile(argv[3]);
 
 fs->root->showRoot();
-		 fs->fat->showFat();
-		 fs->dmap->showDmap();
-///////////////////////////////////////////////////////////////////////////////////
-/*
-printf("addFile : %s \n", argv[4]);
-FILE *fin;
-		LOGF("open File: %s \n", argv[4]);
-		fin = fopen(argv[4], "rwb");
-		if(fin)
-		{
-			LOGF("successful open File: %s \n", argv[4]);
-		struct stat st;
-		stat(argv[4], &st);
-		off_t size=ceil((double)st.st_size/BD_BLOCK_SIZE)*BD_BLOCK_SIZE;
-		pufferAdd = new char(size);
-		fread(pufferAdd, size, 1, fin);
-		LOGF("File: %s ,size: %i, puffer: %s  \n",argv[4],size, puffer );
-		fs->addFile(argv[4],st.st_mode,st.st_mtime,size,pufferAdd);
+fs->fat->showFat();
+fs->dmap->showDmap();
 
-
-		printf("readFile : %s \n", argv[4]);
-		pufferRead = new char(size);
-		fs->readFile(argv[4], pufferRead,size,0,new fuse_file_info);
-				LOGF("read File %s : %s \n",argv[4],pufferRead);
-				printf("read File %s : %s \n",argv[4],pufferRead);
-		}
-		else{
-					//printf("can't open File: %s \n", argv[i]);
-					LOGF("can't open File: %s \n", argv[4]);
-				}
-
-
+printf("deleteFile: %s \n", argv[2]);
+fs->deleteFile(argv[2]);
 
 fs->root->showRoot();
-		 fs->fat->showFat();
-		 fs->dmap->showDmap();
-*/
+fs->fat->showFat();
+fs->dmap->showDmap();
+
+count++;
+
+if(count!=2)
+{
+	argv[3]="text1.txt";
+	argv[2]="text2.txt";
+	goto START;
+
+}*/
+
 //////////////////////////////////////////////////////////////////////////////////////////
 	//printf("%i", fs);
 	/*char * buf;

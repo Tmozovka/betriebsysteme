@@ -6,13 +6,13 @@
 #include <string>
 
 MyRoot::MyRoot(MyFile firstfile) {
-	 size=1;
+	 sizeRoot=1;
 	addressRoot = new MyFile(firstfile);
 	files.push_front(firstfile);
 }
 
 MyRoot::MyRoot() {
-	 size=0;
+	 sizeRoot=0;
 	addressRoot=NULL;
 }
 
@@ -28,7 +28,7 @@ MyRoot::MyRoot(string name, off_t size, mode_t mode,int firstBlock) {
 }
 
 MyRoot::~MyRoot() {
-	size=0;
+	sizeRoot=0;
 	files.clear();
 }
 
@@ -36,14 +36,14 @@ int MyRoot::addFile(string name, off_t size, mode_t mode,time_t st_mtime, int fi
 //Wird das uebergebene Size abgefragt oder das des Roots?
 //Es sollte ja das des roots angesprochen werden
 //Und muesste es nicht >= heissen?
-if(size>NUM_DIR_ENTRIES)
+if(sizeRoot>NUM_DIR_ENTRIES)
 {
 	printf("too many files in Root \n");
 				return -1;
 }
 
 
-	size++;
+	sizeRoot++;
 		if(name.length()>NAME_LENGTH)
 		{
 			printf("File's %s name is too big \n", name);
@@ -60,12 +60,14 @@ if(size>NUM_DIR_ENTRIES)
 	const MyFile * f = new MyFile(name, getuid(), getgid(), size, mode, time(NULL),st_mtime,time(NULL),firstBlock);
 	
 	//Wenn erstes File
-	if(size==1){
+	if(sizeRoot==1){
 		//todo: ich(julia) habe hier folgendes entfernt:
 		//addressRoot = new MyFile(f); weil so ein konstruktor nicht existiert
 		//Macht es noch das richtige? Bitte Überprüfen
 
-	addressRoot = new MyFile(name, getuid(), getgid(), size, mode, time(NULL),st_mtime,time(NULL),firstBlock);}
+
+	addressRoot = new MyFile(name, getuid(), getgid(), size, mode, time(NULL),st_mtime,time(NULL),firstBlock);
+	}
 	
 	files.push_back(*f);
 	return 0;
@@ -129,7 +131,7 @@ int MyRoot::deleteFile(string name) {
 			return-1;
 		}
 		files.remove(filetodelete);
-size--;
+sizeRoot--;
 		return 0;
 	}
 	return -1;
@@ -146,18 +148,4 @@ void MyRoot::getArray(string * arr)
 
 }
 
-//Tanja add: i need it to have a list from all files
-/*MyFile MyRoot::getFile(int n) {
 
-	return files[n];
-}
-
-int MyRoot::getFileTry(int n) {
-
-	if(n<0||n>files.size())
-		return -1;
-
-	return 0;
-
-}
-*/

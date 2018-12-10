@@ -601,10 +601,10 @@ void* MyFS::fuseInit(struct fuse_conn_info *conn) { // What schould we do hier? 
         LOGF("Container file name: %s", ((MyFsInfo *) fuse_get_context()->private_data)->contFile);
         
         // TODO: Implement your initialization methods here!
-        // Konstruktor hier (vermuetlich) schreiben
+        // Konstruktor hier (vermuetlich) schreiben . Es wird schon in mkfs.myfs gemacht
         //Wieso muessen wir Konstruktor schreiben? Er wird automatisch aufgerufen
         // Falls wir das von Terminal aufrufen dann? was passiert dann? Muessen wir so was schreiben MyFs mf = new MyFs()?;
-        MyFS();
+        //MyFS();
     }
     
     RETURN(0);
