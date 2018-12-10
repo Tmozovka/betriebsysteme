@@ -22,6 +22,7 @@ public:
 
 	~MyFile();
 	//get
+	mode_t getMode();
 	time_t getLastMod();
 	off_t getSize();
 	int getFirstBlock();

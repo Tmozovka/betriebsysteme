@@ -21,13 +21,12 @@ TEST_CASE( "Set/unset/find Blocks", "[dMap]" ) {
 		 int * result  = new int [3];
 
 		 dmap->getFreeBlocks(3,&result);
-		 REQUIRE( result[0] == 3);
+		 REQUIRE( result[0] == 0);
 		 REQUIRE( result[1] == 2);
-		 REQUIRE( result[2] == 0);
+		 REQUIRE( result[2] == 3);
 		 delete[] result;
 
 	 }
-
 
 
 	 delete dmap;

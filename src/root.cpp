@@ -1,46 +1,9 @@
 // TODO LinkedList, bibliotheken anschauen
-/*void MyRoot::addFile(string name, off_t size, mode_t mode) {
-	myFile copyfile[sizeof(files) + 1];
-	int z = 0;
-	for (int k = 0; k < (sizeof(files) + 1); k++, z++) {
-		copyfile[z] = files[k];
-	}
-	//Speichern von Name, Dateigroesse und Zugriffsrechte pro Datei
-	myFile f = new myFile(name, size, mode);
-	copyfile[i] = f;
-	files = copyfile.clone();
-}
 
-int MyRoot::deleteFile(string name) {
-	myFile filetodelete = getFile(name);
-	//In Root Verzeichnis Datei loeschen
-	int i = 0;
-	while (filetodelete.name != files[i].name && filetodelete.size != files[i].size && filetodelete.mode != files[i].mode) {
-		i++;
-	}
-	//Nachfolgende Elemente um eine Stelle nach hinten kopieren und ueberschreiben und
-	//dabei in ein anderes Array kopieren um anschlie�end die Laenge von Files zu verkuerzen
-	int indexfiles = i;
-	myFile array[sizeof(files) - 1];
-	for (int indexarray = 0; index < sizeof(files - 1) && indexarray < sizeof(array - 1); index++, indexarray++) {
-		files[index] = files[index + 1];
-		array[indexarray] = files[indexarray];
-	}
-	//Laenge von Files um eins verkuerzen --- Falls Blockanzahl nicht konstant
-	//std::array<myFile,> a = { 1,2,3 };	
-return 0;
-}
-myFile ROOT::getFile(string name) {
-	int i = 0;
-	while (!(strcmp(name, files[i].name))) {
-		i++;
-	}
-	return files[i];
-}
-*/
 
 #include "root.h"
 #include "myfs-structs.h"
+#include <string>
 
 MyRoot::MyRoot(MyFile firstfile) {
 	 size=1;
@@ -70,11 +33,15 @@ MyRoot::~MyRoot() {
 }
 
 int MyRoot::addFile(string name, off_t size, mode_t mode,time_t st_mtime, int firstBlock) {
+//Wird das uebergebene Size abgefragt oder das des Roots?
+//Es sollte ja das des roots angesprochen werden
+//Und muesste es nicht >= heissen?
 if(size>NUM_DIR_ENTRIES)
 {
 	printf("too many files in Root \n");
 				return -1;
 }
+
 
 	size++;
 		if(name.length()>NAME_LENGTH)
@@ -88,8 +55,18 @@ if(size>NUM_DIR_ENTRIES)
 			printf("File's %s name is already exist \n", name);
 			return -1;
 		}
+
 	//Speichern von Name, Dateigroesse und Zugriffsrechte pro Datei
 	const MyFile * f = new MyFile(name, getuid(), getgid(), size, mode, time(NULL),st_mtime,time(NULL),firstBlock);
+	
+	//Wenn erstes File
+	if(size==1){
+		//todo: ich(julia) habe hier folgendes entfernt:
+		//addressRoot = new MyFile(f); weil so ein konstruktor nicht existiert
+		//Macht es noch das richtige? Bitte Überprüfen
+
+	addressRoot = new MyFile(name, getuid(), getgid(), size, mode, time(NULL),st_mtime,time(NULL),firstBlock);}
+	
 	files.push_back(*f);
 	return 0;
 }
