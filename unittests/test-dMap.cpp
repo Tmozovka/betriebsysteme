@@ -31,7 +31,6 @@ TEST_CASE( "Set/unset/find Blocks", "[dMap]" ) {
 
 		 	dmap->setUsed(1);
 		 	dmap->setUnused(1);
-
 		 int * result  = new int [3];
 
 		 dmap->getFreeBlocks(3,&result);
@@ -69,12 +68,6 @@ TEST_CASE( "Set/unset/find Blocks", "[dMap]" ) {
 		 delete[] result;
 
 	 }
-
-
-
-
-
-
 
 	 delete dmap;
 }

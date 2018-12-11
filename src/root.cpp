@@ -4,6 +4,7 @@
 #include "root.h"
 #include "myfs-structs.h"
 #include <string>
+#include "macros.h"
 
 MyRoot::MyRoot(MyFile firstfile) {
 	 sizeRoot=1;
@@ -104,9 +105,11 @@ printf("************************************************************ \nRoot: \n"
 
 int MyRoot::getFile(string name, MyFile * f) {
 
+	LOGF("Starting to look for file in root");
 	std::list<MyFile>::iterator it = files.begin();
 
 	while (it->getName()!=name){
+		LOGF("Found this file:%s",it->getName());
 		it++;
 		if(it==files.end()){
 				printf("no such file in root \n");

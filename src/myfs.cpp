@@ -22,6 +22,7 @@
 #include "superBlock.h"
 #include "myfs.h"
 
+
 // fragen zur Folie 31
 //TODO Wie kann ich die anzahl geoefnete Dateien abrufen?
 // wann soll ich die Bloecke schliessen? Nach dem oeffnen oder nach dem Lesen auch
@@ -281,13 +282,18 @@ int MyFS::fuseGetattr(const char *path, struct stat *st) {
     //Dateinamen werden in path mit „/“ am Anfang übergeben – ggf. beachten
     //beim Durchsuchen des Verzeichnisses!
 
+    LOGF("Requested path = %s ",path);
+
+
+
 	MyFile fcopy;
 	if(root->getFile(path,&fcopy)==-1)
-		{//Wieso funktioniert LOGM nicht?
-		LOG("can't get file from root root.getFile(path, &fcopy)");
+	{
+		LOGF("Cant find a file with path: %s",path);
 		RETURN(-ENOENT);
 		}
 
+	LOG("Now starting to set attributes");
 	st->st_uid = getuid(); // The owner of the file/directory is the user who mounted the filesystem
 	st->st_gid = getgid(); // The group of the file/directory is the same as the group of the user who mounted the filesystem
 	st->st_atime = time(NULL); // The last "a"ccess of the file/directory is right now
@@ -296,20 +302,22 @@ int MyFS::fuseGetattr(const char *path, struct stat *st) {
 
 	if (strcmp(path, "/") == 0)
 	{
+		LOG("Path == /");
+
 		st->st_mode = S_IFDIR | 0555;
 		st->st_nlink = 2; // Why "two" hardlinks instead of "one"? The answer is here: http://unix.stackexchange.com/a/101536
 		//size = sum size all files in dir
 	}
 	else
 	{
-
+		LOG("Anderere Path als \"/\" wurde abgefragt");
 		st->st_mode = S_IFREG | 0444;
 		st->st_nlink = 1;
 		st->st_size = fcopy.getSize();
 
 	}
 
-
+	LOG("fuseGetattr erfolgreich beendet");
     RETURN(0);
 
 }
