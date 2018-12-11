@@ -53,3 +53,5 @@ TEST_CASE( "Add/get/delete File", "[root]" ) {
 // Next TEST_CASE: existName
 // Next TEST_CASE: showRoot
 // Next TEST_CASE: getArray
+// Next TEST_CASE: delete File
+// Next TEST_CASE: get Array

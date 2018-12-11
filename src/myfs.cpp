@@ -375,7 +375,7 @@ int MyFS::fuseUnlink(const char *path) {
 int MyFS::fuseOpen(const char *path, struct fuse_file_info *fileInfo) { // How to open file from hier?
     LOGM();
 
-    if(this->sp->getOpen()>NUM_OPEN_FILES)
+    if(sp->getOpen()>NUM_OPEN_FILES)
     {
     	LOG("too many files are opened");
     	RETURN(-EPERM);

@@ -14,9 +14,6 @@ TEST_CASE( " Set/unset/find Blocks", "[dMap]" ) {
 
 	dMap* dmap = new dMap();
 
-//Tanja's komment:
-//test : was passiert , wenn alle Bloecke voll sind?
-// Kann man alle Bloecke befuellen?
 
 
 	 SECTION("get 3 Blocks") {

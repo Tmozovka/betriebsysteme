@@ -89,6 +89,7 @@ UNITTEST_OBJS = $(OBJDIR)/main.o \
 	$(OBJDIR)/test-root.o \
 	$(OBJDIR)/helper.o \
 	$(OBJDIR)/fat.o \
+	$(OBJDIR)/superBlock.o \
 	$(OBJDIR)/root.o \
 	$(OBJDIR)/MyFile.o \
 	$(OBJDIR)/dMap.o

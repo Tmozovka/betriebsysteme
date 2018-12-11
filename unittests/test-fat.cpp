@@ -7,6 +7,13 @@ TEST_CASE( "Set/get/delete Allocated Blocks", "[fat]" ) {
 
 	MyFAT* fat = new MyFAT();
 	// Was passiert wenn, alle Bloecke gelinkt sind? Und fat voll ist?
+	/*
+	 * noch zu testen :
+	 *  int unLink ( int currentNo);
+      int getNext(int current, int* next);
+      int getSize(){return size;};
+      */
+
 	 SECTION("delete") {
 
 		 int * table  = new int [10];
