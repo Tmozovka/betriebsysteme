@@ -1,6 +1,6 @@
 // TODO LinkedList, bibliotheken anschauen
 
-
+#include <iostream>
 #include "root.h"
 #include "myfs-structs.h"
 #include <string>
@@ -21,7 +21,7 @@ MyRoot::MyRoot() {
 
 MyRoot::MyRoot(string name, off_t size, mode_t mode,int firstBlock) {
 	//firstfile -> first block
-	 size=1;
+	sizeRoot=1;
 	MyFile * firstfile = new MyFile(name, getuid(), getgid(), size, mode, time(NULL),time(NULL),time(NULL), firstBlock);
 	addressRoot = firstfile;
 	files.push_front(*firstfile);
@@ -46,13 +46,13 @@ if(sizeRoot>NUM_DIR_ENTRIES)
 	sizeRoot++;
 		if(name.length()>NAME_LENGTH)
 		{
-			printf("File's %s name is too big \n", name);
+			printf("File's %s name is too big \n", name.c_str());
 			return -1;
 		}
 
 		if(existName(name))
 		{
-			printf("File's %s name is already exist \n", name);
+			printf("File's %s name is already exist \n", name.c_str());
 			return -1;
 		}
 
