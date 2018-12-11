@@ -62,6 +62,11 @@ MyFS::MyFS(char * nameCont) {
 
 MyFS::~MyFS() {
 
+	delete sp;
+	delete dmap;
+	delete fat;
+	delete root;
+	delete blocks;
 	printf("Destruktor von MyFS ist beendet \n");
 	LOG("Destruktor von MyFS ist beendet \n");
     
@@ -282,8 +287,17 @@ int MyFS::fuseGetattr(const char *path, struct stat *st) {
     //beim Durchsuchen des Verzeichnisses!
 
 	MyFile fcopy;
+
+	if(*path!='/')
+	{
+		LOG("can't get file from root. File's should start with /");
+		RETURN(-ENOENT);
+	}
+
+	path++;
+
 	if(root->getFile(path,&fcopy)==-1)
-		{//Wieso funktioniert LOGM nicht?
+		{
 		LOG("can't get file from root root.getFile(path, &fcopy)");
 		RETURN(-ENOENT);
 		}
@@ -291,7 +305,8 @@ int MyFS::fuseGetattr(const char *path, struct stat *st) {
 	st->st_uid = getuid(); // The owner of the file/directory is the user who mounted the filesystem
 	st->st_gid = getgid(); // The group of the file/directory is the same as the group of the user who mounted the filesystem
 	st->st_atime = time(NULL); // The last "a"ccess of the file/directory is right now
-	st->st_mtime = fcopy.getLastMod(); // The last "m"odification of the file/directory is right now
+	//st->st_mtime = fcopy.getLastMod(); ??? Should be here the current time?
+	st->st_mtime = time(NULL); // The last "m"odification of the file/directory is right now
 	st->st_ctime = time(NULL);
 
 	if (strcmp(path, "/") == 0)
@@ -327,15 +342,16 @@ int MyFS::fuseMknod(const char *path, mode_t mode, dev_t dev) { //??? wir brauch
     int * blocks[1];
     if(dmap->getFreeBlocks(1,blocks)==-1)
     {
-    	printf("can't add file in root dmap is full dmap.getFreeBlocks(1,blocks)");
+    	LOG("can't add file in root dmap is full. Error in dmap.getFreeBlocks(1,blocks)");
     	RETURN(-1);
     }
 
-	if(root->addFile(path, 512,mode,time(NULL), (*blocks)[0])==-1)
+	if(root->addFile(path, 512,mode,time(NULL), *blocks[0]))
 		{
-		printf("can't add file in root root.addFile(path, 512, S_IFREG | 0444)");
+		LOG("can't add file in root. Error in root.addFile(path, 512, S_IFREG | 0444)");
 		RETURN(-EPERM);
 		}
+//dmap? fat?
 
 	RETURN(0);
 }
@@ -350,29 +366,15 @@ int MyFS::fuseUnlink(const char *path) {
 int MyFS::fuseOpen(const char *path, struct fuse_file_info *fileInfo) { // How to open file from hier?
     LOGM();
 
-    // Wofuer braucht man  fuse_file_info *fileInfo
-    // TODO: Implement this!
-	/*string line;
-	ifstream myfile(path);
-	if (myfile.is_open())
-	{
-		while (getline(myfile, line))
-		{
-			cout << line << '\n';
-		}
-		myfile.close();
-		RETURN(0);
-	}
-
-	else cout << "Unable to open file";*/
-
-
-    //TODO auf der bestimmte Stelle nach dem blocks.open oder blocks.read,blocks.write noch blocks.close() einfuegen (Einleitung in BSUe-Teil1 Folie 31)
-
+    if(this->sp->getOpen()>NUM_OPEN_FILES)
+    {
+    	LOG("too many files are opened");
+    	RETURN(-EPERM);
+    }
 
     if(root->getFile(path,new MyFile())==-1)
     {
-    	printf("File not found");
+    	LOG("File not found");
     	RETURN(-ENOENT);
     }
     //TOdo etwas tun, wenn path existiert
@@ -513,7 +515,7 @@ int MyFS::fuseOpendir(const char *path, struct fuse_file_info *fileInfo) { // Is
     	return 0;
     }
 
-    if (strcmp(path, "/") == 0){ // es existieren keine anderen Directories, daher fehler
+    if (strcmp(path, "/") != 0){ // es existieren keine anderen Directories, daher fehler
     	printf("This directory doesnt exist, try opening the root directory");
     	return -ENOENT ;//Datei oder Verzeichnis existiert nicht
     }

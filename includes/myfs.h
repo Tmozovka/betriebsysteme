@@ -42,6 +42,7 @@ public:
     	MyFAT  *fat ;
     	MyRoot * root ;
     	BlockDevice * blocks ;
+
 		
     
     MyFS(char * nameCont);

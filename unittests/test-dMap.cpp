@@ -9,13 +9,16 @@
 #include "dMap.h"
 
 
-TEST_CASE( "Set/unset/find Blocks", "[dMap]" ) {
+TEST_CASE( " Set/unset/find Blocks", "[dMap]" ) {
 
 
 	dMap* dmap = new dMap();
 
+//Tanja's komment:
+//test : was passiert , wenn alle Bloecke voll sind?
+// Kann man alle Bloecke befuellen?
 
-	 SECTION("get 3 Blocks") {
+	 SECTION(" get 3 Blocks") {
 		 	dmap->setUsed(1);
 
 		 int * result  = new int [3];

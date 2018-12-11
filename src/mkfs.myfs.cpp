@@ -49,6 +49,7 @@ START:
 			LOGF("successful open File: %s \n", argv[i]);
 			LOGF("successful open File: %s \n", argv[i]);
 		struct stat st;
+		st.st_mode = S_IFREG | 0444;
 		stat(argv[i], &st);
 		off_t size=ceil((double)st.st_size/BD_BLOCK_SIZE)*BD_BLOCK_SIZE;
 		pufferAdd = new char(size);
@@ -67,10 +68,10 @@ START:
 	}
 
 		 LOG("all files are in container.bin \n");
-		 fs->root->showRoot();
+/*		 fs->root->showRoot();
 		// fs->fat->showFat();
 		// fs->dmap->showDmap();
-/*
+
 //read files
 	for(int i=2;i<argc;i++)
 		{
@@ -117,8 +118,8 @@ if(count!=2)
 	argv[2]="text2.txt";
 	goto START;
 
-}*/
-
+}
+*/
 //////////////////////////////////////////////////////////////////////////////////////////
 	//printf("%i", fs);
 	/*char * buf;

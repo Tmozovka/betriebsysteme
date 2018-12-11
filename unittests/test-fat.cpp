@@ -6,9 +6,11 @@
 TEST_CASE( "Set/get/delete Allocated Blocks", "[fat]" ) {
 
 	MyFAT* fat = new MyFAT();
-
+	// Was passiert wenn, alle Bloecke gelinkt sind? Und fat voll ist?
 	 SECTION("delete") {
+
 		 int table  = new int [];
+		 //Womit ist Block davor verlinkt?
 		 fat->unLink(5);
 		 //REQUIRE(table[5] == -1);
 		 delete[] table;
