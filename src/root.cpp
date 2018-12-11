@@ -1,9 +1,10 @@
 // TODO LinkedList, bibliotheken anschauen
 
-
+#include <iostream>
 #include "root.h"
 #include "myfs-structs.h"
 #include <string>
+#include "macros.h"
 
 MyRoot::MyRoot(MyFile firstfile) {
 	 sizeRoot=1;
@@ -21,7 +22,7 @@ MyRoot::MyRoot() {
 
 MyRoot::MyRoot(string name, off_t size, mode_t mode,int firstBlock) {
 	//firstfile -> first block
-	 size=1;
+	sizeRoot=1;
 	MyFile * firstfile = new MyFile(name, getuid(), getgid(), size, mode, time(NULL),time(NULL),time(NULL), firstBlock);
 	addressRoot = firstfile;
 	files.push_front(*firstfile);
@@ -46,13 +47,13 @@ if(sizeRoot>NUM_DIR_ENTRIES)
 	sizeRoot++;
 		if(name.length()>NAME_LENGTH)
 		{
-			printf("File's %s name is too big \n", name);
+			printf("File's %s name is too big \n", name.c_str());
 			return -1;
 		}
 
 		if(existName(name))
 		{
-			printf("File's %s name is already exist \n", name);
+			printf("File's %s name is already exist \n", name.c_str());
 			return -1;
 		}
 
@@ -104,9 +105,11 @@ printf("************************************************************ \nRoot: \n"
 
 int MyRoot::getFile(string name, MyFile * f) {
 
+	LOGF("Starting to look for file in root");
 	std::list<MyFile>::iterator it = files.begin();
 
 	while (it->getName()!=name){
+		LOGF("Found this file:%s",it->getName());
 		it++;
 		if(it==files.end()){
 				printf("no such file in root \n");

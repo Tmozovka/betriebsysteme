@@ -22,7 +22,7 @@ TEST_CASE( "Compare File// Getter- and Settermethods", "[MyFile]" ) {
          REQUIRE( vergleich == true);
 		 
          delete similarFile;
-         delete vergleich;
+
 	 }
 
 	 delete myfile;

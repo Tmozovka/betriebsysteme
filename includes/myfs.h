@@ -94,9 +94,9 @@ public:
 		// int fuseCreate(const char *, mode_t, struct fuse_file_info *);
     	int addFile(const char * name, mode_t mode,time_t mtime, off_t size, char * text);
 		
-		//int fuseUnlink(const char *path);
-		int deleteFile(const char *path);
-		
+    	//int fuseUnlink(const char *path);
+    	int deleteFile(const char *name);
+
 		//int fuseRead(const char *path, char *buf, size_t size, off_t offset, struct fuse_file_info *fileInfo);
 		int readFile(const char *name, char *buffer, size_t size, off_t offset, struct fuse_file_info *fi);
 };
