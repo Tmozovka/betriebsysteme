@@ -31,11 +31,16 @@ public:
 
 			/*int getFileTry(int number);
 			MyFile getFile(int number);*/
-			void getArray(string * ar);
+			//void getArray(string ** ar);
+			string* getArray();
 
 			bool existName(string name);
 
 			void showRoot();
+
+			int getSize(){return sizeRoot;};
+
+
 
 };
 

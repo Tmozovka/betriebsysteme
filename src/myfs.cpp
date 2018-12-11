@@ -100,11 +100,11 @@ int MyFS::readFile(const char *path, char *buf, size_t size, off_t offset, struc
 		/*if (offset > size) // not possible
 			RETURN(-1);*/
 
-		if(fuseOpen(path,fileInfo)==-1)
+		/*if(fuseOpen(path,fileInfo)==-1)
 		{
 			printf("error in fuseOpen \n");
 					RETURN(-EPERM);
-		}
+		}*/
 
 
 		char * buffer = new char(BD_BLOCK_SIZE);
@@ -376,17 +376,20 @@ int MyFS::fuseUnlink(const char *path) {
 int MyFS::fuseOpen(const char *path, struct fuse_file_info *fileInfo) { // How to open file from hier?
     LOGM();
 
-    if(sp->getOpen()>NUM_OPEN_FILES)
+    //TODO funktioniert falsh
+    LOGF("Requested path in Fuse Open = %s ",path);
+
+   if(sp->getOpen()>NUM_OPEN_FILES)
     {
     	LOG("too many files are opened");
     	RETURN(-EPERM);
     }
-
-    if(root->getFile(path,new MyFile())==-1)
+    LOG("1");
+    if(root->existName(path)==0)
     {
-    	LOG("File not found");
-    	RETURN(-ENOENT);
+    	fileInfo->fh=1;
     }
+    LOG("2");
     //TOdo etwas tun, wenn path existiert
     //vermerken, dass datei geöffnet
     //Julia: als was merken? als int, ähnlich zu filedescriptor in liunx?
@@ -517,18 +520,19 @@ int MyFS::fuseOpendir(const char *path, struct fuse_file_info *fileInfo) { // Is
     LOGM();
     
     // TODO: Implement this!
-    if (strcmp(path, "/") != 0) // Root oeffnen
+    if (strcmp(path, "/") == 0) // Root oeffnen
     {
     	printf("Opening root directory");
     	fileInfo->fh=1; //Julia: gibt es etwas sinnvolleres als sich "1" zu merken?
-
-    	return 0;
+    	//return 0;
     }
 
-    if (strcmp(path, "/") != 0){ // es existieren keine anderen Directories, daher fehler
+  /*  if (strcmp(path, "/") != 0){ // es existieren keine anderen Directories, daher fehler
     	printf("This directory doesnt exist, try opening the root directory");
     	return -ENOENT ;//Datei oder Verzeichnis existiert nicht
-    }
+    }*/
+
+
 
     RETURN(0);
 }
@@ -556,7 +560,7 @@ int MyFS::fuseReaddir(const char *path, void *buffer, fuse_fill_dir_t filler, of
 	string * listNames;
 	offset = 0;
 
-	root->getArray(listNames);
+	listNames = root->getArray();
 
 		for(int unsigned i=0; i<(listNames->length()); i++){
 		//convert from string to char. Do we need string?
