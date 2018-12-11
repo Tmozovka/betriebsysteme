@@ -21,11 +21,11 @@ int main(int argc, char *argv[]) {
 
 	printf("start \n");
 
-	argc=4;
+	/*argc=4;
 	argv[1]="container.bin";
 	argv[2]="text1.txt";
 	argv[3]="text2.txt";
-	argv[4]="text1 (copy).txt";
+	argv[4]="text1 (copy).txt";*/
 
 	char * nameCont = argv [1];
 	LOGF("container: %s \n",nameCont);

@@ -292,21 +292,22 @@ int MyFS::fuseGetattr(const char *path, struct stat *st) {
 
 
 	MyFile fcopy;
-
-	if(*path!='/')
+	LOG("1");
+	if(*(path)!='/')
 	{
 		LOG("can't get file from root. File's should start with /");
 		RETURN(-ENOENT);
 	}
+	LOG("2");
 
-	path++;
 
-	if(root->getFile(path,&fcopy)==-1)
+	/*if(strcmp(path, "./") != 0)
+	if(root->getFile(path+2,&fcopy)==-1)
 		{
 
 		LOGF("Cant find a file with path: %s",path);
 		RETURN(-ENOENT);
-		}
+		}*/
 
 	LOG("Now starting to set attributes");
 	st->st_uid = getuid(); // The owner of the file/directory is the user who mounted the filesystem
@@ -594,7 +595,7 @@ int MyFS::fuseCreate(const char *path, mode_t mode, struct fuse_file_info *fileI
 
 }
 
-void* MyFS::fuseInit(struct fuse_conn_info *conn) { // What schould we do hier? What is the different between fuseCreate
+void* MyFS::fuseInit(struct fuse_conn_info *conn) {
     // Open logfile
     this->logFile= fopen(((MyFsInfo *) fuse_get_context()->private_data)->logFile, "w+");
     if(this->logFile == NULL) {
