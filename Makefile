@@ -84,6 +84,9 @@ UNITTEST_OBJS = $(OBJDIR)/main.o \
 	$(OBJDIR)/myfs.o \
 	$(OBJDIR)/test-myfs.o \
 	$(OBJDIR)/test-dMap.o \
+	$(OBJDIR)/test-myfile.o \
+	$(OBJDIR)/test-fat.o \
+	$(OBJDIR)/test-root.o \
 	$(OBJDIR)/helper.o \
 	$(OBJDIR)/fat.o \
 	$(OBJDIR)/root.o \
