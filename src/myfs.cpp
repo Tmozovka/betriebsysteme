@@ -294,11 +294,12 @@ int MyFS::fuseGetattr(const char *path, struct stat *st) {
     LOGF("Requested path = %s ",path);
 
 
-
 	MyFile fcopy;
 	LOG("1");
-	if(*(path)!='/')
-	{
+
+
+	if(strcmp(path,"/")){
+		//Path ist ungleich "/"
 		LOG("can't get file from root. File's should start with /");
 		RETURN(-ENOENT);
 	}
@@ -388,6 +389,7 @@ int MyFS::fuseOpen(const char *path, struct fuse_file_info *fileInfo) { // How t
     	LOG("too many files are opened");
     	RETURN(-EPERM);
     }
+
     LOG("1");
     if(root->existName(path)==0)
     {
@@ -523,6 +525,12 @@ int MyFS::fuseRelease(const char *path, struct fuse_file_info *fileInfo) {
 int MyFS::fuseOpendir(const char *path, struct fuse_file_info *fileInfo) { // Is it not the same as fuseReaddir?
     LOGM();
     
+    LOGF("Requested path in Fuse Open dir = %s ",path);
+
+    int templog = (strcmp(path,"/"));
+
+    LOGF("strcmp(path, \"/\") returns: %d", templog);
+
     // TODO: Implement this!
     if (strcmp(path, "/") == 0) // Root oeffnen
     {
