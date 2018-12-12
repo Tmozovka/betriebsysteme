@@ -176,7 +176,7 @@ int MyFS::addFile(const char * name, mode_t mode, time_t mtime , off_t size, cha
 
 	int blocksNumber = size / BD_BLOCK_SIZE;
 	LOGF("blocksNumber : %i \n", blocksNumber);
-	int*  blocks = new int[blocksNumber+1];
+	int * blocks = new int[blocksNumber+1];
 	blocks[blocksNumber + 1] = 0;
 	if (dmap->getFreeBlocks(blocksNumber, &blocks) == 0)
 	{
@@ -205,6 +205,7 @@ int MyFS::addFile(const char * name, mode_t mode, time_t mtime , off_t size, cha
 		    }
 		    text+=BD_BLOCK_SIZE;
 		}
+		//delete [] blocks;
 	}
 	else
 	{
