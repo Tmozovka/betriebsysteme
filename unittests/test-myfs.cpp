@@ -24,7 +24,7 @@ TEST_CASE( "my Funktionen in myfs testen", "[myfs]" ) {
 			 char *argv[5];
 			 int argc;
 			 	argc=4;
-			 	argv[1]="container.bin";
+			 	argv[1]="containerTest.bin";
 			 	argv[2]="text1.txt";
 			 	argv[3]="text2.txt";
 			 	argv[4]="text1 (copy).txt";

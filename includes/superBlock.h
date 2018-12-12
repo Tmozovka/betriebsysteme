@@ -7,5 +7,7 @@ private:
 public:
 	int getOpen();
 	void setOpen(int o);
+	void addOpen();
+	void closeOpen();
 
 };

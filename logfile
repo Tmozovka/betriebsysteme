@@ -1,6 +1,42 @@
 	Starting logging...
 
-src/myfs.cpp:618:fuseInit()
+src/myfs.cpp:626:fuseInit()
 	Container file name: /home/tanya/Documents/Betriebsysteme/Aufgaben/Teil1/bs-uebung-template-v0.5/container.bin
-	container: /home/tanya/Documents/Betriebsysteme/Aufgaben/Teil1/bs-uebung-template-v0.5/container.bin 
+	try blocks->open(nameCont) 
 
+	sucess blocks->open(nameCont) 
+
+fuseInit() returned 0
+src/myfs.cpp:285:fuseGetattr()
+	Requested path = /.Trash 
+	1
+	can't get file from root. File's should start with /
+fuseGetattr() returned -2
+src/myfs.cpp:285:fuseGetattr()
+	Requested path = /.Trash-1000 
+	1
+	can't get file from root. File's should start with /
+fuseGetattr() returned -2
+src/myfs.cpp:285:fuseGetattr()
+	Requested path = /.xdg-volume-info 
+	1
+	can't get file from root. File's should start with /
+fuseGetattr() returned -2
+src/myfs.cpp:526:fuseOpendir()
+	Requested path in Fuse Open dir = / 
+	strcmp(path, "/") returns: 0
+src/myfs.cpp:285:fuseGetattr()
+	Requested path = /autorun.inf 
+	1
+fuseOpendir() returned 0
+	can't get file from root. File's should start with /
+fuseGetattr() returned -2
+src/myfs.cpp:285:fuseGetattr()
+	Requested path = / 
+	1
+	2
+	Now starting to set attributes
+	Path == /
+	fuseGetattr erfolgreich beendet
+fuseGetattr() returned 0
+src/myfs.cpp:553:fuseReaddir()

@@ -51,7 +51,8 @@ START:
 		struct stat st;
 		st.st_mode = S_IFREG | 0444;
 		stat(argv[i], &st);
-		off_t size=ceil((double)st.st_size/BD_BLOCK_SIZE)*BD_BLOCK_SIZE;
+		off_t size=ceil((double)st.st_size/BD_BLOCK_SIZE) //ceil(2/512)=1  ceil(513/512)=2
+				*BD_BLOCK_SIZE;
 		pufferAdd = new char[size];
 		fread(pufferAdd, size, 1, fin);
 		fs->resize(pufferAdd,st.st_size,size);

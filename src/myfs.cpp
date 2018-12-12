@@ -201,7 +201,7 @@ int MyFS::addFile(const char * name, mode_t mode, time_t mtime , off_t size, cha
 				}
 			}
 
-		    if( this->blocks->write(blocksUse[i], text)==-1) //error
+		    if( this->blocks->write(blocksUse[i], text)==-1)
 		    {
 		    	printf("error in addFile in this->blocks.write(i, \"try\") \n");
 		    }
@@ -389,7 +389,8 @@ int MyFS::fuseOpen(const char *path, struct fuse_file_info *fileInfo) { // How t
     	LOG("too many files are opened");
     	RETURN(-EPERM);
     }
-
+//sp
+   sp->addOpen();
     LOG("1");
     if(root->existName(path)==0)
     {
@@ -517,6 +518,7 @@ int MyFS::fuseRelease(const char *path, struct fuse_file_info *fileInfo) {
     // TODO: Implement this!
     //temporeres Zeug loeschen
     fileInfo->fh=NULL;
+    sp->closeOpen();
     //sonst noch was?
     
     RETURN(0);
@@ -633,10 +635,11 @@ void* MyFS::fuseInit(struct fuse_conn_info *conn) {
         //Wieso muessen wir Konstruktor schreiben? Er wird automatisch aufgerufen
         // Falls wir das von Terminal aufrufen dann? was passiert dann? Muessen wir so was schreiben MyFs mf = new MyFs()?;
         //MyFS();
-       /* char * nameCont = ((MyFsInfo *) fuse_get_context()->private_data)->contFile;
-        LOGF("container: %s \n",nameCont);
-
-        MyFS * fs = new MyFS(nameCont);*/
+        char * nameCont = ((MyFsInfo *) fuse_get_context()->private_data)->contFile;
+        LOG("try blocks->open(nameCont) \n");
+        BlockDevice * blocks = new BlockDevice();
+        blocks->open(nameCont);
+        LOG("sucess blocks->open(nameCont) \n");
     }
     
     RETURN(0);
