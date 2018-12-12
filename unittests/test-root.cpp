@@ -121,8 +121,4 @@ TEST_CASE( "Add/get/delete File", "[root]" ) {
 
        delete myroot;
 }
-// Next TEST_CASE: existName
-// Next TEST_CASE: showRoot
-// Next TEST_CASE: getFile
-// Next TEST_CASE: delete File
-// Next TEST_CASE: getArray
+
