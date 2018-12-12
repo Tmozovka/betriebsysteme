@@ -8,3 +8,8 @@ git config --global user.email "your_email@domainname.com"
 4) git clone https://github.com/Tmozovka/betriebsysteme.git
 5)https://jameschambers.co/writing/git-team-workflow-cheatsheet/
 
+Fehle beim Speicher Allockeren anschauen :
+1)sudo apt-get install valgrind
+2)valgrind ./mkfs.myfs container.bin text1.txt text2.txt
+
+

@@ -21,11 +21,11 @@ int main(int argc, char *argv[]) {
 
 	printf("start \n");
 
-	argc=4;
+	/*argc=4;
 	argv[1]="container.bin";
 	argv[2]="text1.txt";
 	argv[3]="text2.txt";
-	argv[4]="text1 (copy).txt";
+	argv[4]="text1 (copy).txt";*/
 
 	char * nameCont = argv [1];
 	LOGF("container: %s \n",nameCont);
@@ -52,7 +52,7 @@ START:
 		st.st_mode = S_IFREG | 0444;
 		stat(argv[i], &st);
 		off_t size=ceil((double)st.st_size/BD_BLOCK_SIZE)*BD_BLOCK_SIZE;
-		pufferAdd = new char(size);
+		pufferAdd = new char[size];
 		fread(pufferAdd, size, 1, fin);
 		fs->resize(pufferAdd,st.st_size,size);
 		LOGF("File: %s ,size: %i, puffer: %s  \n",argv[i],size, pufferAdd );
