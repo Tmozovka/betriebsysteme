@@ -24,7 +24,7 @@ TEST_CASE( "Add/get/delete File", "[root]" ) {
         myroot->getFile(firstfile->getName(), mf);
 		 REQUIRE( result == 0);
          //REQUIRE( myroot->sizeRoot == 1);
-		 REQUIRE( mf == firstfile);
+		 REQUIRE( *mf == *firstfile);
 
 	 }
     SECTION("No addition possible: too many files in Root"){

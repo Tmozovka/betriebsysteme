@@ -70,12 +70,12 @@ START:
 		 LOG("all files are in container.bin \n");
 		 fs->root->showRoot();
 
-/*		 string * ar ;
+		 string * ar ;
 		 ar = new string[fs->root->getSize()];
 		 ar = fs->root->getArray();
 		 printf("FIRST NAME: %s", ar[0].c_str());
 
-		 fs->fat->showFat();
+	/*	 fs->fat->showFat();
 		 fs->dmap->showDmap();
 
 //read files

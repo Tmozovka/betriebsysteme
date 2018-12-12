@@ -1,5 +1,5 @@
 #include "MyFile.h"
-#include <string>
+#include <string.h>
 #include <stdlib.h>
 using namespace std;
 //Define the constructor
@@ -39,10 +39,10 @@ void MyFile::showFile()
 	printf("File's name: %s, user id: %i, group id: %i, size: %i , firstBlock: %i \n \n", name.c_str(), user, group, (int)size, firstBlock);
 }
 
-bool MyFile::operator==(MyFile f)
-	{
+	bool operator == ( MyFile const &f, MyFile const &f2)
+			{
+		return ((f2.name==f.name) && f2.firstBlock==f.firstBlock);
 
-	    return (name==f.name && firstBlock==f.firstBlock);
 	}
 
 //get

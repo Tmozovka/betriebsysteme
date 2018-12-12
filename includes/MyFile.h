@@ -35,7 +35,7 @@ public:
 	void setLastAccess(time_t t);
 
 	void showFile();
-	//operatoren
-	bool operator==(MyFile f);
 
+	friend bool operator == ( MyFile const &f, MyFile const& f2);
 };
+
