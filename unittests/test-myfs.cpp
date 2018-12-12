@@ -18,7 +18,7 @@ using namespace std;
 // TODO: Implement your helper functions here!
 TEST_CASE( "my Funktionen in myfs testen", "[myfs]" ) {
 
-	/*	 SECTION("addFile") {
+		 SECTION("addFile") {
 
 			 printf("start \n");
 			 char *argv[5];
@@ -78,6 +78,7 @@ printf("1 \n");
 			 		string comp = argv[i+2];
 			 		REQUIRE( ar[0].compare(comp));
 			 	}*/
+		 }
 
 }
 

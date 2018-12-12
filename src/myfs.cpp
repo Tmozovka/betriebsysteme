@@ -176,11 +176,13 @@ int MyFS::addFile(const char * name, mode_t mode, time_t mtime , off_t size, cha
 
 	int blocksNumber = size / BD_BLOCK_SIZE;
 	LOGF("blocksNumber : %i \n", blocksNumber);
-	int * blocks = new int[blocksNumber+1];
-	blocks[blocksNumber + 1] = 0;
-	if (dmap->getFreeBlocks(blocksNumber, &blocks) == 0)
+
+	int * blocksUse = new int[blocksNumber+1];
+
+	blocksUse[blocksNumber + 1] = 0;
+	if (dmap->getFreeBlocks(blocksNumber, &blocksUse) == 0)
 	{
-		if(root->addFile(name, size, mode,mtime,blocks[0])==-1)
+		if(root->addFile(name, size, mode,mtime,blocksUse[0])==-1)
 		{
 			printf("error in addFile in root->addFile(name, size, mode,st_mtime,blocks[0] \n");
 			return -1;
@@ -188,24 +190,24 @@ int MyFS::addFile(const char * name, mode_t mode, time_t mtime , off_t size, cha
 
 		for (int i = 0; i < blocksNumber; i++)
 		{
-			dmap->setUsed(blocks[i]);
+			dmap->setUsed(blocksUse[i]);
 
 			if(i+1!=blocksNumber)
 			{
-					if(fat->link(blocks[i], &blocks[i+1])==-1)
+					if(fat->link(blocksUse[i], &blocksUse[i+1])==-1)
 				{
 				RETURN(-1);
 				printf("error in addFile in fat.link(blocks[i], &blocks[i+1] \n");
 				}
 			}
 
-		    if( this->blocks->write(blocks[i], text)==-1)
+		    if( this->blocks->write(blocksUse[i], text)==-1)
 		    {
 		    	printf("error in addFile in this->blocks.write(i, \"try\") \n");
 		    }
 		    text+=BD_BLOCK_SIZE;
 		}
-		//delete [] blocks;
+		delete []  blocksUse;
 	}
 	else
 	{
@@ -302,13 +304,13 @@ int MyFS::fuseGetattr(const char *path, struct stat *st) {
 	LOG("2");
 
 
-	/*if(strcmp(path, "./") != 0)
+	if(strcmp(path, "./") != 0)
 	if(root->getFile(path+2,&fcopy)==-1)
 		{
 
 		LOGF("Cant find a file with path: %s",path);
 		RETURN(-ENOENT);
-		}*/
+		}
 
 	LOG("Now starting to set attributes");
 	st->st_uid = getuid(); // The owner of the file/directory is the user who mounted the filesystem
