@@ -54,7 +54,7 @@ printf("1 \n");
 			 		st.st_mode = S_IFREG | 0444;
 			 		stat(argv[i], &st);
 			 		off_t size=ceil((double)st.st_size/BD_BLOCK_SIZE)*BD_BLOCK_SIZE;
-			 		pufferAdd = new char(size);
+			 		pufferAdd = new char[size];
 			 		fread(pufferAdd, size, 1, fin);
 			 		printf("try to resize \n");
 			 		fs->resize(pufferAdd,st.st_size,size);
@@ -73,11 +73,13 @@ printf("1 \n");
 			 	string * ar = new string[fs->root->getSize()];
 			 	ar = fs->root->getArray();
 
-			 	/*for(int i=0;i<fs->root->getSize();i++)
+			 	for(int i=0;i<fs->root->getSize();i++)
 			 	{
 			 		string comp = argv[i+2];
-			 		REQUIRE( ar[0].compare(comp));
-			 	}*/
+			 		string comp2 = ar[i];
+			 		REQUIRE( comp2.compare(comp)==0);
+			 	}
+
 		 }
 
 }

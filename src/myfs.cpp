@@ -179,7 +179,7 @@ int MyFS::addFile(const char * name, mode_t mode, time_t mtime , off_t size, cha
 
 	int * blocksUse = new int[blocksNumber+1];
 
-	blocksUse[blocksNumber + 1] = 0;
+	blocksUse[blocksNumber] = 0;
 	if (dmap->getFreeBlocks(blocksNumber, &blocksUse) == 0)
 	{
 		if(root->addFile(name, size, mode,mtime,blocksUse[0])==-1)
@@ -201,13 +201,13 @@ int MyFS::addFile(const char * name, mode_t mode, time_t mtime , off_t size, cha
 				}
 			}
 
-		    if( this->blocks->write(blocksUse[i], text)==-1)
+		    if( this->blocks->write(blocksUse[i], text)==-1) //error
 		    {
 		    	printf("error in addFile in this->blocks.write(i, \"try\") \n");
 		    }
 		    text+=BD_BLOCK_SIZE;
 		}
-		delete []  blocksUse;
+
 	}
 	else
 	{
@@ -215,6 +215,7 @@ int MyFS::addFile(const char * name, mode_t mode, time_t mtime , off_t size, cha
 		RETURN(-EPERM);
 		//no more place
 	}
+	delete []  blocksUse;
 	LOG("addFile succes");
 	//printf("addFile succes \n");
 	RETURN(0);
@@ -304,7 +305,7 @@ int MyFS::fuseGetattr(const char *path, struct stat *st) {
 	LOG("2");
 
 
-	if(strcmp(path, "./") != 0)
+	if(strcmp(path, "/") != 0)
 	if(root->getFile(path+2,&fcopy)==-1)
 		{
 
@@ -545,9 +546,9 @@ int MyFS::fuseReaddir(const char *path, void *buffer, fuse_fill_dir_t filler, of
     
     // TODO: Implement this!
 
-    if(fileInfo->fh == NULL){ //fh durch fuseopendir gesetzt-> bestaetigt existenz
+   /* if(fileInfo->fh == NULL){ //fh durch fuseopendir gesetzt-> bestaetigt existenz
     	return -ENOENT ;//Datei oder Verzeichnis existiert nicht
-    }
+    }*/
 
 	printf("--> Getting The List of Files of %s\n", path);
 
@@ -624,6 +625,10 @@ void* MyFS::fuseInit(struct fuse_conn_info *conn) {
         //Wieso muessen wir Konstruktor schreiben? Er wird automatisch aufgerufen
         // Falls wir das von Terminal aufrufen dann? was passiert dann? Muessen wir so was schreiben MyFs mf = new MyFs()?;
         //MyFS();
+       /* char * nameCont = ((MyFsInfo *) fuse_get_context()->private_data)->contFile;
+        LOGF("container: %s \n",nameCont);
+
+        MyFS * fs = new MyFS(nameCont);*/
     }
     
     RETURN(0);

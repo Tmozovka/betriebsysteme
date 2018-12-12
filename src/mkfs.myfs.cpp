@@ -63,6 +63,8 @@ START:
 			//printf("can't open File: %s \n", argv[i]);
 			LOGF("can't open File: %s \n", argv[i]);
 		}
+
+		delete[] pufferAdd;
 //	wieso funktioniert es nicht
 //		fclose(fin);
 	}

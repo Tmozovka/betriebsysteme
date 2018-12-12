@@ -153,10 +153,9 @@ sizeRoot--;
 }*/
 string * MyRoot::getArray()
 {
-	string *arr ;
+	string *arr =new string[sizeRoot];
 	std::list<MyFile>::iterator it = files.begin();
 
-	arr = new string[sizeRoot];
 		int k = 0;
 		while (it != files.end()){
 			arr[k++] = it->getName();

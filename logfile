@@ -1,36 +1,6 @@
 	Starting logging...
 
-src/myfs.cpp:614:fuseInit()
+src/myfs.cpp:618:fuseInit()
 	Container file name: /home/tanya/Documents/Betriebsysteme/Aufgaben/Teil1/bs-uebung-template-v0.5/container.bin
-fuseInit() returned 0
-src/myfs.cpp:281:fuseGetattr()
-	Requested path = /.Trash 
-	1
-	2
-	Now starting to set attributes
-	Anderere Path als "/" wurde abgefragt
-	fuseGetattr erfolgreich beendet
-fuseGetattr() returned 0
-src/myfs.cpp:281:fuseGetattr()
-	Requested path = /.Trash-1000 
-	1
-	2
-	Now starting to set attributes
-	Anderere Path als "/" wurde abgefragt
-	fuseGetattr erfolgreich beendet
-fuseGetattr() returned 0
-src/myfs.cpp:281:fuseGetattr()
-	Requested path = /.xdg-volume-info 
-	1
-	2
-	Now starting to set attributes
-	Anderere Path als "/" wurde abgefragt
-	fuseGetattr erfolgreich beendet
-fuseGetattr() returned 0
-src/myfs.cpp:520:fuseOpendir()
-fuseOpendir() returned 0
-src/myfs.cpp:377:fuseOpen()
-	Requested path in Fuse Open = /.xdg-volume-info 
-src/myfs.cpp:281:fuseGetattr()
-	Requested path = /autorun.inf 
-	1
+	container: /home/tanya/Documents/Betriebsysteme/Aufgaben/Teil1/bs-uebung-template-v0.5/container.bin 
+
