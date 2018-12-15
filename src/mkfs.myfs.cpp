@@ -36,7 +36,7 @@ int main(int argc, char *argv[]) {
 	char * pufferRead;
 
 	int count=0;
-START:
+//START:
 //write files
 	for(int i=2;i<argc;i++)
 	{

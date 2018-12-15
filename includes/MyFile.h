@@ -37,5 +37,6 @@ public:
 	void showFile();
 
 	friend bool operator == ( MyFile const &f, MyFile const& f2);
+	MyFile& operator = (const MyFile &f);
 };
 

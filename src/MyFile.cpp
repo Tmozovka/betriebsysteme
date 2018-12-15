@@ -49,6 +49,22 @@ void MyFile::showFile()
 
 	}
 
+
+	MyFile& MyFile::operator = (const MyFile &f)
+		{
+
+		name = f.name;//Dateiname
+			user = f.user;//Benutzer
+			group = f.group;//Gruppen-ID
+			size = f.size;//Dateigroesse
+			mode = f.mode;//Zugriffsberechtigung
+			lastAccess = f.lastAccess;//Zeitpunkt letzter Zugriff (atime)
+			lastMod = f.lastMod;//letzte Ver�nderung (mtime)
+			lastStatusChange = f.lastStatusChange;//letzter Status�nderung (ctime)
+			firstBlock = f.firstBlock;//Zeiger auf ersten Block (u_int32_t BlockNo)
+			return *this;
+		}
+
 //get
 //Als Parameter fuer addFile verwendbar
 mode_t MyFile::getMode() {return mode;}

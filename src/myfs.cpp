@@ -63,11 +63,11 @@ MyFS::MyFS(char * nameCont) {
 
 MyFS::~MyFS() {
 
-	delete sp;
-	delete dmap;
-	delete fat;
-	delete root;
-	delete blocks;
+	delete  sp;
+	delete  dmap;
+	delete  fat;
+	delete  root;
+	delete  blocks;
 	printf("Destruktor von MyFS ist beendet \n");
 	LOG("Destruktor von MyFS ist beendet \n");
     
@@ -78,13 +78,13 @@ void MyFS::resize(char * text,int oldSize, int newSize)
 {
 
 	int i=newSize-oldSize;
-	text+=oldSize;
+	text+=oldSize-1;
 	while(i!=0)
 	{
-		*(text++)=' ';
+		*(text++)=char(0);
 		i--;
 	}
-	*(text-1)='\0';
+	//*(text-1)='\0';
 	text-=newSize;
 
 }
@@ -107,10 +107,10 @@ int MyFS::readFile(const char *path, char *buf, size_t size, off_t offset, struc
 		}*/
 
 
-		char * buffer = new char(BD_BLOCK_SIZE);
+		char * buffer1 = new char[BD_BLOCK_SIZE];
 
-		MyFile fcopy;
-		if(root->getFile(path, &fcopy)==-1)
+		MyFile * fcopy = new MyFile();
+		if(root->getFile(path, fcopy)==-1)
 		{
 
 				//printf("can't get file from root root.getFile(path, &fcopy) \n");
@@ -119,25 +119,26 @@ int MyFS::readFile(const char *path, char *buf, size_t size, off_t offset, struc
 		}
 
 		//int blocksNumber = ceil(fcopy.getSize() / BD_BLOCK_SIZE);
-		if(fcopy.getSize()%BD_BLOCK_SIZE!=0)
+		if(fcopy->getSize()%BD_BLOCK_SIZE!=0)
 		{
 			printf("File's size is false  fcopy.getSize() mod D_BLOCK_SIZE!=0 \n");
 			RETURN(-ENOENT);
 		}
-		int blocksNumber = fcopy.getSize() / BD_BLOCK_SIZE;
+		int blocksNumber = fcopy->getSize() / BD_BLOCK_SIZE;
 
-		int currentBlock = fcopy.getFirstBlock();
+		int currentBlock = fcopy->getFirstBlock();
 		int count=0;
 		while (currentBlock != -1&&blocksNumber!=0)
 		{
-			if( blocks->read(currentBlock, buffer)==0)
+			if( blocks->read(currentBlock, buffer1)==0)
 			{
-				LOGF("buffer in currentBlock %i is : %s \n",currentBlock,buffer);
-				while (*buffer != '\0' )
+				LOGF("buffer in currentBlock %i is : %s \n",currentBlock, buffer1);
+				while (*(buffer1) != '\0')
 					{
-					*(buf++) = *(buffer++);
+					*(buf++) = *(buffer1++);
 					count++;
 					}
+					*buf='\0';
 
 			}
 			else
@@ -155,8 +156,12 @@ int MyFS::readFile(const char *path, char *buf, size_t size, off_t offset, struc
 			blocksNumber--;
 		}
 		buf-=count;
+
 		LOGF("all buf is  : %s \n",buf);
-LOG("readFile success \n");
+		LOG("readFile success \n");
+		buffer1-=count;
+        delete [] buffer1; //error
+		delete  fcopy;
 		RETURN(0);
 	//return fuseRead(name, buffer,  size,  offset, fi);
 }
