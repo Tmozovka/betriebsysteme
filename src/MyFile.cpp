@@ -67,7 +67,7 @@ MyFile& MyFile::operator =(const MyFile &f) {
 
 //to Blocks
 
-int MyFile::writeBlock()
+char * MyFile::writeBlock(int i)
 {
 
 	const char * name = new char [FILE_NAME_SIZE];
@@ -119,7 +119,10 @@ int MyFile::writeBlock()
 	printf ("write to block : %s \n ", block);
 
 	resize(block, MAX_FILE_SIZE ,BLOCK_SIZE);
+
+
 	return block;
+
 }
 
 
