@@ -9,34 +9,28 @@ TEST_CASE( "Set/get/delete Allocated Blocks", "[fat]" ) {
 
 	// Was passiert wenn, alle Bloecke gelinkt sind? Und fat voll ist?
 
+	SECTION("unLink"){
 
-	 SECTION("unLink") {
+	int next=4;
+	REQUIRE(fat->link(5,&next)==0);
 
-		 int next=4;
-		 REQUIRE(fat->link(5,&next)==0);
+	REQUIRE(fat->getNext(5,&next)==0);
+	REQUIRE(next == 4);
 
-		 REQUIRE(fat->getNext(5,&next)==0);
-		 REQUIRE(next == 4);
+	fat->unLink(5);
+	REQUIRE(fat->getNext(5,&next)==0);
+	REQUIRE(next == -1);
 
-		 fat->unLink(5);
-		 REQUIRE(fat->getNext(5,&next)==0);
-		 REQUIRE(next == -1);
+}
 
+	SECTION("link"){
 
+	int next=4;
+	REQUIRE(fat->link(5, &next)==0);
+	REQUIRE(fat->getNext(5,&next) == 0);
+	REQUIRE(next == 4);
 
-	 }
+}
 
-	 SECTION("link") {
-
-		 int next=4;
-		 REQUIRE(fat->link(5, &next)==0);
-		 REQUIRE(fat->getNext(5,&next) == 0);
-		 REQUIRE(next == 4);
-
-
-		 }
-
-
-
-	 delete fat;
+	delete fat;
 }

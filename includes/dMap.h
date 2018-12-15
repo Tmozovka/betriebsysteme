@@ -1,22 +1,20 @@
 ﻿#pragma once
 #include "blockdevice.h"
 
-class dMap{
-
+class dMap {
 
 private:
 
-	 int dmap[BLOCK_NUMBER];
-	 int firstFreeBlock;
+	int dmap[BLOCK_NUMBER];
+	int firstFreeBlock;
 
 public:
 
 	~dMap();
 	dMap();
 
-
 	//returns -1 if no more blocks available
-	int getFreeBlocks(int neededBlocks,  int** returnArray);
+	int getFreeBlocks(int neededBlocks, int** returnArray);
 	int setUsed(int blockNumber);
 	int setUnused(int blockNumber);
 

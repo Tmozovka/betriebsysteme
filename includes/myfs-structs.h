@@ -24,6 +24,19 @@
 #define ROOT_SIZE 64
 #define BLOCKS_START 301
 
+//for MyFile
+#define MAX_FILE_SIZE 345
+#define FILE_NAME_SIZE 255
+#define FILE_USER_SIZE 10
+#define FILE_GROUP_SIZE 10
+#define FILE_SIZE_SIZE 10
+#define FILE_MODE_SIZE 10
+#define FILE_ACCESS_SIZE 15
+#define FILE_MOD_SIZE 15
+#define FILE_STATUS_SIZE 10
+#define FILE_BLOCK_SIZE 5
+
+
 
 // TODO: Add structures of your file system here
 

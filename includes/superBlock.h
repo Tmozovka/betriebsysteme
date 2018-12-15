@@ -1,7 +1,6 @@
 #pragma once
 
-class SuperBlock
-{
+class SuperBlock {
 private:
 	int open;
 public:
