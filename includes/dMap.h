@@ -11,6 +11,8 @@ private:
 	std::bitset<BLOCK_NUMBER> dmap;
 	int firstFreeBlock;
 
+
+
 public:
 
 	~dMap();
@@ -20,12 +22,16 @@ public:
 	int getFreeBlocks(int neededBlocks, int** returnArray);
 	int setUsed(int blockNumber);
 	int setUnused(int blockNumber);
-
+	int getBlock(int blockNumber);
 	void showDmap();
 
 
 	//returns next free block to continue to initialize
 	//returns -1 if error occurred
 	int init(int startingBlock, BlockDevice* blocks);
+
+	//return next Block to read
+	int read(int startingBlock, BlockDevice* blocks);
+
 
 };

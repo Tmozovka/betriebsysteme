@@ -71,23 +71,114 @@ int dMap::setUnused(int blockNumber) {
 	return 0;
 }
 
+int dMap::getBlock(int blockNumber){
+	return dmap.test(blockNumber);
+}
+
 int dMap::init(int startingBlock,BlockDevice *blocks){
 
 
-	//Da bitset verwendet entspricht BLOCK_SIZE der Anzahl an Benötigter BITS
-	// BLOCK_NUMBER/8 == Anzahl an Benötigten Bytes
+	//Da bitset verwendet, entspricht BLOCK_SIZE der Anzahl an Benötigter BITS
+	// BLOCK_NUMBER/8 == Anzahl an Benötigten Bytes, entspricht Anzahl benötigter Chars
+
 	//Anzahl an Benötigten Bytes / 512 = Anzahl an Benötigten Blöcken
 
-	//TODO:
-	//Puffer erstellen und dmap in 512 Byte große stücke unterteilen
-	// char * puffer = new char[8*BD_BLOCK_SIZE];
-	 //blocks->write(startingBlock,puffer);
+
+	 int pufferLength = BD_BLOCK_SIZE; //512
+	 char * puffer = new char[pufferLength];
+
+	 int bitsLeft = BLOCK_NUMBER;
+
+
+	 while(bitsLeft>=pufferLength*8){ // Puffer voller Länge auffüllen
+
+		for(int charNumber = 0; charNumber< pufferLength;charNumber++){ //Puffergröße in Bytes zerteilt durchlaufen
+			char c = 'a';
+
+			for(int charBit = 0; charBit<8; charBit++){ //Char mit 8 Bits befüllen
+				if(dmap.test(charNumber*8+charBit)){
+					c|= 1 << charBit;
+				}
+				else{
+					c&= ~(1 << charBit);
+				}
+			}
+			puffer[charNumber]= c; // Char in Puffer schreiben
+
+		 }
+		 blocks->write(startingBlock++,puffer); //Puffer schreiben
+
+		 bitsLeft-= pufferLength*8;
+	 }
+
+	 
+	 
+	 if(bitsLeft!=0){ //Puffer mit Rest auffüllen
+
+		 for(int charNumber = 0; charNumber< pufferLength; charNumber ++){
+			 char c = 'a';
+
+			 if(bitsLeft == 0){ //Rest noch auffüllen
+				 c = char(0);
+			 }
+			 else{
+				 for(int charBit = 0; charBit<8; charBit++){ //Char mit 8 Bits befüllen
+					if(bitsLeft==0){ //Restliche Bits von Char ignorieren
+						break;
+					}
+					if(dmap.test(charNumber+charBit)){
+						c|= 1 << charBit;
+					}
+					else{
+						c&= ~(1 << charBit);
+					}
+					bitsLeft--;
+				 }
+			 }
+			 puffer[charNumber]= c; // Char in Puffer schreiben
+
+
+		 }
+		 blocks->write(startingBlock++,puffer);
+	 }
+
+	delete[] puffer;
+	return startingBlock;
+}
 
 
 
-	//while(noch teile übrig)
-	//	blockdevice.write(startingBlock++, puffer);
-	//return startingBlock;
+
+
+int dMap::read(int startingBlock, BlockDevice* blocks){
+
+	int currentBlock = startingBlock;
+	int currentDmapIndex = 0;
+	char * puffer = new char[BD_BLOCK_SIZE];
+
+	while(currentDmapIndex<BLOCK_NUMBER){
+
+
+
+		blocks->read(currentBlock++,puffer);//currentBlock auslesen
+
+		 	for(int charNumber =0 ; charNumber<BD_BLOCK_SIZE; charNumber++){ //charbit auslesen
+		 		char c = puffer[charNumber];
+
+		 		for(int charBit =0; charBit<8; charBit++){
+		 			if(currentDmapIndex==BLOCK_NUMBER){
+		 				delete[] puffer;
+		 				return  currentBlock;
+		 			}
+		 			if((c >> charBit)&1){
+		 				dmap[currentDmapIndex++]=1;
+		 			}else{
+		 				dmap[currentDmapIndex++]=0;
+		 			}
+		 		}
+		 	 }
+	}
+
 
 	return -1;
 }
