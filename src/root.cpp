@@ -163,3 +163,21 @@ string * MyRoot::getArray() {
 	return arr;
 }
 
+char** MyRoot::writeBlocks()
+{
+	char ** block;//[sizeRoot][BLOCK_SIZE];
+	block = new char * [sizeRoot];
+
+	std::list<MyFile>::iterator it = files.begin();
+
+	while (it != files.end()) {
+			*block= new char[BLOCK_SIZE];
+			*block=it->writeBlock();
+			block++;
+			it++;
+		}
+
+	return block;
+
+}
+

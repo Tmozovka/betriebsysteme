@@ -28,6 +28,7 @@ public:
 	MyFile();
 
 	~MyFile();
+	MyFile(char *);
 	//get
 	mode_t getMode();
 	time_t getLastMod();
@@ -46,8 +47,12 @@ public:
 	friend bool operator ==(MyFile const &f, MyFile const& f2);
 	MyFile& operator =(const MyFile &f);
 
-	int writeBlock(int i);
-	int readBlock(int t);
+	char * writeBlock();
+
+	void writeVar(string * var, char * buf, int size, int * count );
+	void writeVar(int * var, char * buf, int size, int * count );
+
+
 
 	void resize(char * text, int oldSize, int newSize);
 };

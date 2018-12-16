@@ -31,15 +31,26 @@ TEST_CASE( "Add/get/delete File", "[root]" ) {
 
 	SECTION("No addition possible: Name is too big"){
 	MyFile * f = new MyFile();
-	f->setSize(NAME_LENGTH+1);
-	int result =myroot->addFile(f->getName(),f->getSize(),f->getMode(),f->getLastMod(),f->getFirstBlock());
+	//f->setSize(NAME_LENGTH+1);
+
+	char * nameBig = new char [NAME_LENGTH+1];
+
+	for(int i=0; i<NAME_LENGTH+1;i++)
+	{
+		*(nameBig++)='a';
+	}
+
+	*nameBig='\0';
+	nameBig-=(NAME_LENGTH+1);
+
+	int result =myroot->addFile(nameBig,f->getSize(),f->getMode(),f->getLastMod(),f->getFirstBlock());
 	REQUIRE(result==-1);
 	delete f;
 }
 	SECTION("No addition possible: Name already exists"){
 	MyFile * f = new MyFile();
 	MyFile * fileSimilarName = new MyFile();
-	fileSimilarName->setName("similarName.txt");
+	f->setName("similarName.txt");
 	fileSimilarName->setName("similarName.txt");
 	myroot->addFile(fileSimilarName->getName(),fileSimilarName->getSize(),fileSimilarName->getMode(),fileSimilarName->getLastMod(),fileSimilarName->getFirstBlock());
 	int result = myroot->addFile(f->getName(),f->getSize(),f->getMode(),f->getLastMod(),f->getFirstBlock());

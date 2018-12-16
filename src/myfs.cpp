@@ -223,9 +223,9 @@ int MyFS::deleteFile(const char *name) {
 	int blocksNumber = fcopy.getSize() / BD_BLOCK_SIZE;
 	int currentBlock = fcopy.getFirstBlock();
 	//////////////////////////////////////
-	char * text = new char(fcopy.getSize());
+	char * text = new char[fcopy.getSize()];
 	for (int i = 0; i < fcopy.getSize(); i++)
-		*(text++) = ' ';
+		*(text++) = char(0);
 	text -= fcopy.getSize();
 	//////////////////////////////////////
 	while (blocksNumber != 0 && currentBlock != -1) {
@@ -252,7 +252,7 @@ int MyFS::deleteFile(const char *name) {
 
 		blocksNumber--;
 	}
-
+delete [] text;
 	RETURN(0);
 }
 

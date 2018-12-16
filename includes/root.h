@@ -16,7 +16,7 @@ private:
 	MyFile* addressRoot;
 	int sizeRoot;
 
-public:
+public  :
 
 	//Julia: warum hat diese klasse 3 Konstruktoren, wenn in myfs.cpp nur MyRoot() aufgerufen wird?
 	MyRoot(MyFile firstfile);
@@ -40,7 +40,9 @@ public:
 	int getSize() {
 		return sizeRoot;
 	}
-	;
+
+	char** writeBlocks();
+	char** readBlocks();
 
 };
 

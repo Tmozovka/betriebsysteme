@@ -15,10 +15,7 @@
 
 int main(int argc, char *argv[]) {
 
-	time_t seconds;
 
-	seconds = time(NULL);
-	printf("Seconds since January 1, 1970 = %ld\n", seconds);
 
 	// TODO: Implement file system generation & copying of files here
 
@@ -76,6 +73,8 @@ int main(int argc, char *argv[]) {
 	ar = new string[fs->root->getSize()];
 	ar = fs->root->getArray();
 	printf("FIRST NAME: %s", ar[0].c_str());
+
+
 
 	/*	 fs->fat->showFat();
 	 fs->dmap->showDmap();
