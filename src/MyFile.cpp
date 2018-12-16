@@ -425,7 +425,7 @@ MyFile::MyFile(char * buf) {
 
 	delete[] userT;
 	delete[] groupT;
-//	delete[] nameT;
+	delete[] nameT;
 	delete[] sizeT;
 	delete[] modeT;
 	delete[] laT;
