@@ -5,7 +5,16 @@ void dMap::showDmap() {
 	printf(
 			"****************************************************************\n");
 	printf("DMAP: \n");
-	for (int i = 0; i != 50; i++) {
+
+	for (int i = 0; i != 30; i++) {
+
+			printf("%i -> %c \n", i, dmap.test(i));
+	}
+
+
+
+
+	for (int i = BLOCK_NUMBER-20; i != BLOCK_NUMBER; i++) {
 
 		printf("%i -> %c \n", i, dmap.test(i));
 	}
@@ -71,7 +80,7 @@ int dMap::setUnused(int blockNumber) {
 	return 0;
 }
 
-int dMap::getBlock(int blockNumber){
+int dMap::isSet(int blockNumber){
 	return dmap.test(blockNumber);
 }
 
@@ -88,7 +97,7 @@ int dMap::init(int startingBlock,BlockDevice *blocks){
 	 char * puffer = new char[pufferLength];
 
 	 int bitsLeft = BLOCK_NUMBER;
-
+	 int CurrentStartOfPufferInDmap = 0;
 
 	 while(bitsLeft>=pufferLength*8){ // Puffer voller Länge auffüllen
 
@@ -96,23 +105,28 @@ int dMap::init(int startingBlock,BlockDevice *blocks){
 			char c = 'a';
 
 			for(int charBit = 0; charBit<8; charBit++){ //Char mit 8 Bits befüllen
-				if(dmap.test(charNumber*8+charBit)){
+				if(dmap.test(CurrentStartOfPufferInDmap+charNumber*8+charBit)){
 					c|= 1 << charBit;
 				}
 				else{
 					c&= ~(1 << charBit);
 				}
+				//if(charNumber ==pufferLength-1)
+				//printf("eintragnummer in Char geschrieben: %d\n",CurrentStartOfPufferInDmap+charNumber*8+charBit);
 			}
 			puffer[charNumber]= c; // Char in Puffer schreiben
 
 		 }
-		 blocks->write(startingBlock++,puffer); //Puffer schreiben
+		CurrentStartOfPufferInDmap+=4096;
+		blocks->write(startingBlock++,puffer); //Puffer schreiben
+		bitsLeft-= pufferLength*8;
+		printf("In Block %d geschrieben. Letzter geschriebener Dmapeintrag: %d \n",startingBlock-1,BLOCK_NUMBER-bitsLeft-1);
 
-		 bitsLeft-= pufferLength*8;
 	 }
 
 	 
-	 
+	 printf("Alle ganzen Blöcke geschrieben. Jetzt noch %d Bits Übrig\n",bitsLeft);
+
 	 if(bitsLeft!=0){ //Puffer mit Rest auffüllen
 
 		 for(int charNumber = 0; charNumber< pufferLength; charNumber ++){
@@ -126,7 +140,7 @@ int dMap::init(int startingBlock,BlockDevice *blocks){
 					if(bitsLeft==0){ //Restliche Bits von Char ignorieren
 						break;
 					}
-					if(dmap.test(charNumber+charBit)){
+					if(dmap.test(CurrentStartOfPufferInDmap+charNumber+charBit)){
 						c|= 1 << charBit;
 					}
 					else{
@@ -140,6 +154,7 @@ int dMap::init(int startingBlock,BlockDevice *blocks){
 
 		 }
 		 blocks->write(startingBlock++,puffer);
+		 printf("In Block %d geschrieben. Letzter geschriebener Dmapeintrag: %d \n",startingBlock-1,BLOCK_NUMBER-bitsLeft-1);
 	 }
 
 	delete[] puffer;
@@ -161,7 +176,7 @@ int dMap::read(int startingBlock, BlockDevice* blocks){
 
 
 		blocks->read(currentBlock++,puffer);//currentBlock auslesen
-
+		printf("Aus Block %d gelesen \n",currentBlock-1);
 		 	for(int charNumber =0 ; charNumber<BD_BLOCK_SIZE; charNumber++){ //charbit auslesen
 		 		char c = puffer[charNumber];
 

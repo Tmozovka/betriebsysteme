@@ -22,7 +22,9 @@ public:
 	int getFreeBlocks(int neededBlocks, int** returnArray);
 	int setUsed(int blockNumber);
 	int setUnused(int blockNumber);
-	int getBlock(int blockNumber);
+
+	int isSet(int blockNumber);
+
 	void showDmap();
 
 
