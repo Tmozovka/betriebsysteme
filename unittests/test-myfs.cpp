@@ -15,7 +15,7 @@
 using namespace std;
 
 // TODO: Implement your helper functions here!
-/*TEST_CASE( "my Funktionen in myfs testen", "[myfs]" ) {
+TEST_CASE( "my Funktionen in myfs testen", "[myfs]" ) {
 	FILE *fin;
 
 	printf("start \n");
@@ -125,9 +125,9 @@ using namespace std;
 
 	//printf("deleteFile: %s \n", argv[2]);
 	//REQUIRE(fs->deleteFile(argv[2])==0); //error
-	/*temp= argv[2];
+	temp= argv[2];
 	REQUIRE(fs->deleteFile(temp)==0); //error
-	REQUIRE(fs->root->getSize()==0);*/
+	REQUIRE(fs->root->getSize()==0);
 
 
 	delete [] ar;
@@ -139,5 +139,5 @@ using namespace std;
 
 
 }
-*/
+
 
