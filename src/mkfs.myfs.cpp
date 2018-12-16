@@ -75,6 +75,28 @@ int main(int argc, char *argv[]) {
 	printf("FIRST NAME: %s", ar[0].c_str());
 
 
+	//////////////////////// Hinzufügen der Datenstrukturen//////////////////
+
+	int nextBlockToWrite = 5; //TODO: Sinnvollen Wert nehmen
+							  //Julia: Ich weiß noch nicht welcher block der richtige ist
+							  // Deshalb teste ich es mit 5
+
+	//Superblock hinzufügen
+	nextBlockToWrite = fs->sp->init(nextBlockToWrite, fs->blocks);
+	if(nextBlockToWrite==-1){
+		LOG("Error occured while trying to add Superblock to Blockdevice");
+		return -1;
+		}
+
+	//Dmap hinzufügen
+	nextBlockToWrite = fs->dmap->init(nextBlockToWrite, fs->blocks);
+	if(nextBlockToWrite==-1){
+		LOG("Error occured while trying to add dmap to Blockdevice");
+		return -1;
+	}
+
+
+
 
 	/*	 fs->fat->showFat();
 	 fs->dmap->showDmap();

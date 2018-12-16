@@ -2,6 +2,7 @@
 
 #include "helper.hpp"
 #include "myfs.h"
+#include "blockdevice.h"
 
 #include "dMap.h"
 
@@ -22,6 +23,24 @@ TEST_CASE( " Set/unset/find Blocks", "[dMap]" ) {
 
 }
 
+
+	SECTION("isSet()"){
+
+	dmap->setUsed(1);
+	dmap->setUsed(7);
+	dmap->setUsed(59);
+	REQUIRE(dmap->isSet(1)!=0);
+	REQUIRE(dmap->isSet(7)!=0);
+	REQUIRE(dmap->isSet(59)!=0);
+
+	REQUIRE(dmap->isSet(0)==0);
+	REQUIRE(dmap->isSet(2)==0);
+	REQUIRE(dmap->isSet(60)==0);
+
+
+
+
+}
 	SECTION("get 3 Blocks after block is set free"){
 
 	dmap->setUsed(1);
@@ -62,6 +81,101 @@ TEST_CASE( " Set/unset/find Blocks", "[dMap]" ) {
 	delete[] result;
 
 }
+
+
+
+
+
+SECTION("write on blockdevice with every 7th block set"){
+	//dmap mit irgendwelchen werten belegen
+	for(int i = 0; i<BLOCK_NUMBER;i++) {
+		if(i%7==0) {
+			dmap->setUsed(i);
+		}
+	}
+
+	//dmap->showDmap();
+	remove("testdmap.bin");
+	BlockDevice bd;
+	bd.create("testdmap.bin");
+
+	dmap->init(0,&bd);
+
+	//dmap mit anderen werten überschreiben
+	for(int i = 0; i<BLOCK_NUMBER;i++) {
+
+		if(dmap->isSet(i)==0){
+			dmap->setUsed(i);
+		}else{
+			dmap->setUnused(i);
+		}
+
+	}
+
+	dmap->read(0,&bd);
+	//dmap->showDmap();
+	for(int i = 0; i<BLOCK_NUMBER;i++) {
+		if(i%7==0) {
+			REQUIRE(!(dmap->isSet(i)==0));
+		} else {
+			REQUIRE(dmap->isSet(i)==0);
+		}
+	}
+
+
+}
+SECTION("write on blockdevice "){
+	//dmap mit irgendwelchen werten belegen
+	int j = 3;
+	for(int i = 0; i<BLOCK_NUMBER;i++) {
+		if(i==j) {
+			dmap->setUsed(i);
+			j*=3;
+		}
+	}
+
+	dmap->showDmap();
+
+
+
+
+	remove("testdmap.bin");
+	BlockDevice bd;
+	bd.create("testdmap.bin");
+
+	dmap->init(0,&bd);
+
+	//dmap mit anderen werten überschreiben
+	for(int i = 0; i<BLOCK_NUMBER;i++) {
+		dmap->setUsed(i);
+
+	}
+
+	dmap->read(0,&bd);
+	dmap->showDmap();
+	j=3;
+	for(int i = 0; i<BLOCK_NUMBER;i++) {
+
+		if(i==j){
+			j*=3;
+			if(dmap->isSet(i)==0)
+			printf("Nicht gesetzter Block bei %d",i);
+
+			REQUIRE(dmap->isSet(i)!=0);
+		}else{
+
+			if(dmap->isSet(i)!=0)
+			printf("Block zu viel gesetzt bei %d",i);
+
+			REQUIRE(dmap->isSet(i)==0);
+		}
+	}
+
+
+
+}
+
+
 
 	delete dmap;
 }

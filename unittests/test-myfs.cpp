@@ -15,7 +15,7 @@
 using namespace std;
 
 // TODO: Implement your helper functions here!
-TEST_CASE( "my Funktionen in myfs testen", "[myfs]" ) {
+/*TEST_CASE( "my Funktionen in myfs testen", "[myfs]" ) {
 	FILE *fin;
 
 	printf("start \n");
@@ -135,5 +135,9 @@ TEST_CASE( "my Funktionen in myfs testen", "[myfs]" ) {
 	delete fs;
 }
 
+
+
+
 }
+*/
 

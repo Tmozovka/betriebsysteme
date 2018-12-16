@@ -16,3 +16,11 @@ void SuperBlock::closeOpen() {
 	open--;
 }
 
+int SuperBlock::init(int startingBlock,BlockDevice* blocks){
+
+	//todo
+	//open in blockdevice speichern
+
+	return -1;
+}
+

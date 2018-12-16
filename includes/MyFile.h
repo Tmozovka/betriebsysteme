@@ -53,6 +53,7 @@ public:
 	void writeVar(int * var, char * buf, int size, int * count );
 
 
+	int readBlock(int t);
 
 	void resize(char * text, int oldSize, int newSize);
 };

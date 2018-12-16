@@ -1,12 +1,17 @@
 ﻿#pragma once
 #include "blockdevice.h"
+#include <bitset>
+#include "blockdevice.h"
 
 class dMap {
 
 private:
 
-	int dmap[BLOCK_NUMBER];
+
+	std::bitset<BLOCK_NUMBER> dmap;
 	int firstFreeBlock;
+
+
 
 public:
 
@@ -18,6 +23,17 @@ public:
 	int setUsed(int blockNumber);
 	int setUnused(int blockNumber);
 
+	int isSet(int blockNumber);
+
 	void showDmap();
+
+
+	//returns next free block to continue to initialize
+	//returns -1 if error occurred
+	int init(int startingBlock, BlockDevice* blocks);
+
+	//return next Block to read
+	int read(int startingBlock, BlockDevice* blocks);
+
 
 };
