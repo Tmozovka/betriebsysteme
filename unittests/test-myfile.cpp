@@ -33,11 +33,12 @@ TEST_CASE( "Compare File// Getter- and Settermethods", "[MyFile]" ) {
 		printf("buf mit tryFile: %s \n", buf);
 		printf("write to block \n");
 
-		BlockDevice * blocks = new BlockDevice();
-		//remove("containerFileTest.bin");
-		blocks->create("containerFileTest.bin");
-		blocks->write(0,buf);
-		blocks->read(0,readBuf);
+		BlockDevice  blocks ;
+
+		remove("containerFileTest.bin");
+		blocks.create("containerFileTest.bin");
+		blocks.write(0,buf);
+		blocks.read(0,readBuf);
 
 		REQUIRE(strcmp(buf, readBuf)==0);
 		MyFile * newFile = new MyFile(readBuf);
@@ -46,7 +47,7 @@ TEST_CASE( "Compare File// Getter- and Settermethods", "[MyFile]" ) {
 
 		delete tryFile;
 		delete newFile;
-		delete blocks;
+	//	delete blocks;
 		delete [] readBuf;
 		delete [] buf;
 

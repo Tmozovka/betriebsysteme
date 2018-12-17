@@ -49,8 +49,12 @@ public:
 
 	char * writeBlock();
 
-	void writeVar(string * var, char * buf, int size, int * count );
-	void writeVar(int * var, char * buf, int size, int * count );
+
+	char * writeVar( char * buf, int size, int & count );
+	//void writeVar(int * var, char * buf, int size, int & count );
+	void convertS(string & var, char * varT);
+	template<class T>
+	void convertI(T & var, char * varT);
 
 
 	int readBlock(int t);
