@@ -33,7 +33,7 @@ void BlockDevice::resize(u_int32_t blockSize) {
 }
 
 int BlockDevice::create(const char *path) {
-    
+
     // Open Container file
     contFile = ::open(path, O_EXCL | O_RDWR | O_CREAT | O_TRUNC, 0666);
     if (contFile < 0) {

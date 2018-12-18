@@ -67,7 +67,6 @@ MyFile& MyFile::operator =(const MyFile &f) {
 
 //to Blocks
 
-
 char * MyFile::writeBlock() {
 
 	char * name = new char[FILE_NAME_SIZE];
@@ -128,12 +127,11 @@ char * MyFile::writeBlock() {
 	resize(block, MAX_FILE_SIZE, BLOCK_SIZE);
 	printf("write to block : %s \n ", block);
 
-
 	return block;
 
 }
 
-void MyFile::writeVar(string * var, char * buf, int size, int * count) {
+char * MyFile::writeVar(char * buf, int size, int &count) {
 
 	char * varT = new char[size];
 	int sizeVar = 0;
@@ -142,7 +140,7 @@ void MyFile::writeVar(string * var, char * buf, int size, int * count) {
 		while (*(buf) != '_') {
 			*(varT++) = *(buf++);
 			sizeVar++;
-			*(count)++;
+			(count)++;
 
 			if (sizeVar == size)
 				break;
@@ -151,287 +149,77 @@ void MyFile::writeVar(string * var, char * buf, int size, int * count) {
 
 		if (*(buf) == '_') {
 			buf++;
-			*(count)++;
+			(count)++;
 		}
 
 		if (*(buf) != '_')
 			break;
 
 	}
+
 	*varT = char(0);
 	varT -= sizeVar;
-	*var = varT;
+
+	return varT;
+
+}
+
+void MyFile::convertS(string & var, char * varT) {
+	var = varT;
+}
+
+template<class T>
+void MyFile::convertI(T & var, char * varT) {
+	var = atoi(varT);
 }
 
 MyFile::MyFile(char * buf) {
-	int * count = new int(0) ;
+	int count = 0;
 
-	//writeVar(&(this->name), buf, FILE_NAME_SIZE, count);
-	//buf+=*count;
 	//name
-	char * nameT = new char[FILE_NAME_SIZE]; //soll ich hier die Groesse angeben?
-	 int sizeName = 0;
-	 while (sizeName != FILE_NAME_SIZE - 1) {
-
-	 while (*(buf) != '_') {
-	 *(nameT++) = *(buf++);
-	 sizeName++;
-	 count++;
-
-	 if (sizeName == FILE_NAME_SIZE)
-	 break;
-
-	 }
-
-	 if (*(buf) == '_') {
-	 buf++;
-	 count++;
-	 }
-
-	 if (*(buf) != '_')
-	 break;
-
-	 }
-	 *nameT = char(0);
-	 nameT -= sizeName;
-	 this->name = nameT;
+	convertS(this->name, writeVar(buf, FILE_NAME_SIZE, count));
+	buf += count;
+	count = 0;
 
 	//user
-	char * userT = new char[FILE_USER_SIZE]; //soll ich hier die Groesse angeben?
-	int userSize = 0;
-	while (userSize != FILE_USER_SIZE - 1) {
-
-		while (*(buf) != '_') {
-			*(userT++) = *(buf++);
-			userSize++;
-			count++;
-
-			if (userSize == FILE_USER_SIZE)
-				break;
-
-		}
-
-		if (*(buf) == '_') {
-			buf++;
-			count++;
-		}
-
-		if (*(buf) != '_')
-			break;
-
-	}
-	*userT = char(0);
-	userT -= userSize;
-	this->user = atoi(userT);
+	convertI(this->user, writeVar(buf, FILE_USER_SIZE, count));
+	buf += count;
+	count = 0;
 
 	//group
-
-	char * groupT = new char[FILE_GROUP_SIZE]; //soll ich hier die Groesse angeben?
-	int groupSize = 0;
-	while (groupSize != FILE_GROUP_SIZE - 1) {
-
-		while (*(buf) != '_') {
-			*(groupT++) = *(buf++);
-			groupSize++;
-			count++;
-
-			if (groupSize == FILE_GROUP_SIZE)
-				break;
-
-		}
-
-		if (*(buf) == '_') {
-			buf++;
-			count++;
-		}
-
-		if (*(buf) != '_')
-			break;
-
-	}
-	*groupT = char(0);
-	groupT -= groupSize;
-	this->group = atoi(groupT);
+	convertI(this->group, writeVar(buf, FILE_GROUP_SIZE, count));
+	buf += count;
+	count = 0;
 
 	//size
-	char * sizeT = new char[FILE_SIZE_SIZE]; //soll ich hier die Groesse angeben?
-	int sizeSize = 0;
-	while (sizeSize != FILE_SIZE_SIZE - 1) {
-
-		while (*(buf) != '_') {
-			*(sizeT++) = *(buf++);
-			sizeSize++;
-			count++;
-
-			if (sizeSize == FILE_SIZE_SIZE)
-				break;
-
-		}
-
-		if (*(buf) == '_') {
-			buf++;
-			count++;
-		}
-
-		if (*(buf) != '_')
-			break;
-
-	}
-	*sizeT = char(0);
-	sizeT -= sizeSize;
-	this->size = atoi(sizeT);
+	convertI(this->size, writeVar(buf, FILE_SIZE_SIZE, count));
+	buf += count;
+	count = 0;
 
 	//mode
-
-	char * modeT = new char[FILE_MODE_SIZE]; //soll ich hier die Groesse angeben?
-	int modeSize = 0;
-	while (modeSize != FILE_MODE_SIZE - 1) {
-
-		while (*(buf) != '_') {
-			*(modeT++) = *(buf++);
-			modeSize++;
-			count++;
-
-			if (modeSize == FILE_MODE_SIZE)
-				break;
-
-		}
-
-		if (*(buf) == '_') {
-			buf++;
-			count++;
-		}
-
-		if (*(buf) != '_')
-			break;
-
-	}
-	*modeT = char(0);
-	modeT -= modeSize;
-	this->mode = atoi(modeT);
+	convertI(this->mode, writeVar(buf, FILE_MODE_SIZE, count));
+	buf += count;
+	count = 0;
 
 	//lastAccess
-
-	char * laT = new char[FILE_ACCESS_SIZE]; //soll ich hier die Groesse angeben?
-	int laSize = 0;
-	while (laSize != FILE_ACCESS_SIZE - 1) {
-
-		while (*(buf) != '_') {
-			*(laT++) = *(buf++);
-			laSize++;
-			count++;
-
-			if (laSize == FILE_ACCESS_SIZE)
-				break;
-		}
-
-		if (*(buf) == '_') {
-			buf++;
-			count++;
-		}
-
-		if (*(buf) != '_')
-			break;
-
-	}
-	*laT = char(0);
-	laT -= laSize;
-	this->lastAccess = atoi(laT);
+	convertI(this->lastAccess, writeVar(buf, FILE_ACCESS_SIZE, count));
+	buf += count;
+	count = 0;
 
 	//lastMod
-	char * lmT = new char[FILE_MOD_SIZE]; //soll ich hier die Groesse angeben?
-	int lmSize = 0;
-	while (lmSize != FILE_MOD_SIZE - 1) {
-
-		while (*(buf) != '_') {
-			*(lmT++) = *(buf++);
-			lmSize++;
-			count++;
-
-			if (lmSize == FILE_MOD_SIZE)
-				break;
-
-		}
-		if (*(buf) == '_') {
-			buf++;
-			count++;
-		}
-
-		if (*(buf) != '_')
-			break;
-
-	}
-	*lmT = char(0);
-	lmT -= lmSize;
-	this->lastMod = atoi(lmT);
+	convertI(this->lastMod, writeVar(buf, FILE_MOD_SIZE, count));
+	buf += count;
+	count = 0;
 
 	//lastStatusChange
-
-	char * lsT = new char[FILE_STATUS_SIZE]; //soll ich hier die Groesse angeben?
-	int lsSize = 0;
-	while (lsSize != FILE_STATUS_SIZE - 1) {
-
-		while (*(buf) != '_') {
-			*(lsT++) = *(buf++);
-			lsSize++;
-			count++;
-
-			if (lsSize == FILE_STATUS_SIZE)
-				break;
-
-		}
-
-		if (*(buf) == '_') {
-			buf++;
-			count++;
-		}
-
-		if (*(buf) != '_')
-			break;
-
-	}
-	*lsT = char(0);
-	lsT -= lsSize;
-	this->lastStatusChange = atoi(lsT);
+	convertI(this->lastStatusChange, writeVar(buf, FILE_STATUS_SIZE, count));
+	buf += count;
+	count = 0;
 
 	//firstBlock
-
-	char * fbT = new char[FILE_BLOCK_SIZE]; //soll ich hier die Groesse angeben?
-	int fbSize = 0;
-	while (fbSize != FILE_BLOCK_SIZE - 1) {
-
-		while (*(buf) != '_') {
-			*(fbT++) = *(buf++);
-			fbSize++;
-			count++;
-
-			if (fbSize == FILE_BLOCK_SIZE)
-				break;
-
-		}
-
-		if (*(buf) == '_') {
-			buf++;
-			count++;
-		}
-
-		if (*(buf) != '_')
-			break;
-
-	}
-	*fbT = char(0);
-	fbT -= fbSize;
-	this->firstBlock = atoi(fbT);
-
-	delete[] userT;
-	delete[] groupT;
-	delete[] nameT;
-	delete[] sizeT;
-	delete[] modeT;
-	delete[] laT;
-	delete[] lmT;
-	delete[] lsT;
-	delete[] fbT;
+	convertI(this->firstBlock, writeVar(buf, FILE_BLOCK_SIZE, count));
+	buf += count;
+	count = 0;
 
 }
 //get
