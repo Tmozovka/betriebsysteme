@@ -11,7 +11,10 @@ void dMap::showDmap() {
 			printf("%i -> %c \n", i, dmap.test(i));
 	}
 
+	for (int i = 59049 -5; i != 59049+5; i++) {
 
+		printf("%i -> %c \n", i, dmap.test(i));
+	}
 
 
 	for (int i = BLOCK_NUMBER-20; i != BLOCK_NUMBER; i++) {
@@ -137,10 +140,12 @@ int dMap::init(int startingBlock,BlockDevice *blocks){
 			 }
 			 else{
 				 for(int charBit = 0; charBit<8; charBit++){ //Char mit 8 Bits befüllen
+
 					if(bitsLeft==0){ //Restliche Bits von Char ignorieren
 						break;
 					}
-					if(dmap.test(CurrentStartOfPufferInDmap+charNumber+charBit)){
+
+					if(dmap.test(CurrentStartOfPufferInDmap+charNumber*8+charBit)){
 						c|= 1 << charBit;
 					}
 					else{
