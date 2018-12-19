@@ -1,5 +1,7 @@
 #pragma once
 #include "blockdevice.h"
+#include "myfs-structs.h"
+
 class MyFAT {
 
 private:
@@ -7,6 +9,7 @@ private:
 	int size = BLOCK_NUMBER;
 public:
 	MyFAT();
+	MyFAT(char * b);
 	~MyFAT();
 
 	int link(int currentNo, int* nextNo);
@@ -18,6 +21,10 @@ public:
 	;
 
 	void showFat();
+
+	char * writeBlock();
+	friend int compare(MyFAT f1, MyFAT f2);
+
 	/*int firstBlock:
 	 int nextBlock;
 	 int currentBlock;

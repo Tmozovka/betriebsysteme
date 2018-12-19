@@ -108,11 +108,6 @@ char * MyFile::writeBlock() {
 	strcpy(firstBlock, to_string(this->firstBlock).c_str());
 	resize(firstBlock, to_string(this->firstBlock).length(), FILE_BLOCK_SIZE);
 
-	/*char* name_with_extension;
-	 name_with_extension = malloc(strlen(name)+1+4); // make space for the new string (should check the return value ...)
-	 strcpy(name_with_extension, name); // copy name into the new var
-	 strcat(name_with_extension, extension);*/
-
 	char * block = new char[BLOCK_SIZE];
 	strcpy(block, name);
 	strcat(block, user);
