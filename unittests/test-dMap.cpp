@@ -86,45 +86,7 @@ TEST_CASE( " Set/unset/find Blocks", "[dMap]" ) {
 
 
 
-SECTION("write on blockdevice with every 7th block set"){
-	//dmap mit irgendwelchen werten belegen
-	for(int i = 0; i<BLOCK_NUMBER;i++) {
-		if(i%7==0) {
-			dmap->setUsed(i);
-		}
-	}
-
-	//dmap->showDmap();
-	remove("testdmap.bin");
-	BlockDevice bd;
-	bd.create("testdmap.bin");
-
-	dmap->init(0,&bd);
-
-	//dmap mit anderen werten überschreiben
-	for(int i = 0; i<BLOCK_NUMBER;i++) {
-
-		if(dmap->isSet(i)==0){
-			dmap->setUsed(i);
-		}else{
-			dmap->setUnused(i);
-		}
-
-	}
-
-	dmap->read(0,&bd);
-	//dmap->showDmap();
-	for(int i = 0; i<BLOCK_NUMBER;i++) {
-		if(i%7==0) {
-			REQUIRE(!(dmap->isSet(i)==0));
-		} else {
-			REQUIRE(dmap->isSet(i)==0);
-		}
-	}
-
-
-}
-SECTION("write on blockdevice "){
+SECTION("write on blockdevice with every 3^n block set  "){
 	//dmap mit irgendwelchen werten belegen
 	int j = 3;
 	for(int i = 0; i<BLOCK_NUMBER;i++) {
@@ -133,12 +95,58 @@ SECTION("write on blockdevice "){
 			j*=3;
 		}
 	}
+	//dmap->showDmap();
+	remove("testdmap.bin");
+	BlockDevice bd;
+	bd.create("testdmap.bin");
 
-	dmap->showDmap();
+	dmap->init(0,&bd);
+
+	/*//Lesen ob etwas in bd geschrieben wurde
+	char * buf= new char[BD_BLOCK_SIZE];
+	bd.read(0,buf);
+	for(int i = 0; i<BD_BLOCK_SIZE;i++)
+		printf("Char nr %d lautet %c\n",i,buf[i]);
+	 */
+
+	//dmap mit anderen werten überschreiben
+	for(int i = 0; i<BLOCK_NUMBER;i++) {
+		dmap->setUsed(i);
+	}
+
+	dmap->read(0,&bd);
+	//dmap->showDmap();
+	j=3;
+	for(int i = 0; i<BLOCK_NUMBER;i++) {
+
+		if(i==j){
+			j*=3;
+			if(dmap->isSet(i)==0)
+			printf("Nicht gesetzter Block bei %d\n",i);
+
+			REQUIRE(dmap->isSet(i)!=0);
+		}else{
+
+			if(dmap->isSet(i)!=0)
+			printf("Block zu viel gesetzt bei %d\n",i);
+
+			REQUIRE(dmap->isSet(i)==0);
+		}
+	}
+}
 
 
 
 
+SECTION("write on blockdevice with every 5000th block set"){
+	//dmap mit irgendwelchen werten belegen
+	for(int i = 0; i<BLOCK_NUMBER;i++) {
+		if(i%5000==0) {
+			dmap->setUsed(i);
+		}
+	}
+
+	//dmap->showDmap();
 	remove("testdmap.bin");
 	BlockDevice bd;
 	bd.create("testdmap.bin");
@@ -147,34 +155,83 @@ SECTION("write on blockdevice "){
 
 	//dmap mit anderen werten überschreiben
 	for(int i = 0; i<BLOCK_NUMBER;i++) {
-		dmap->setUsed(i);
+
+		if(dmap->isSet(i)){
+			dmap->setUnused(i);
+		}else{
+			dmap->setUsed(i);
+		}
 
 	}
 
 	dmap->read(0,&bd);
-	dmap->showDmap();
-	j=3;
+	//dmap->showDmap();
 	for(int i = 0; i<BLOCK_NUMBER;i++) {
-
-		if(i==j){
-			j*=3;
+		if(i%5000==0) {
 			if(dmap->isSet(i)==0)
-			printf("Nicht gesetzter Block bei %d",i);
+				printf("Nicht gesetzter Block bei %d\n",i);
 
-			REQUIRE(dmap->isSet(i)!=0);
-		}else{
-
-			if(dmap->isSet(i)!=0)
-			printf("Block zu viel gesetzt bei %d",i);
+			REQUIRE(dmap->isSet(i));
+		} else {
+			if(dmap->isSet(i))
+							printf("Zu viel gesetzter Block bei %d\n",i);
 
 			REQUIRE(dmap->isSet(i)==0);
 		}
 	}
 
 
-
 }
+SECTION("write on blockdevice with random bits"){
 
+	//dmap mit zufallswerten belegn
+	int * randomArray = new int[BLOCK_NUMBER];
+
+	for(int i = 0; i<BLOCK_NUMBER; i++){
+		randomArray[i]=  rand() % 2;
+		if(randomArray[i]){
+			dmap->setUsed(i);
+		}
+	}
+
+
+
+	//dmap->showDmap();
+	remove("testdmap.bin");
+	BlockDevice bd;
+	bd.create("testdmap.bin");
+
+	dmap->init(0,&bd);
+
+	//dmap mit anderen werten überschreiben
+	for(int i = 0; i<BLOCK_NUMBER;i++) {
+		if(dmap->isSet(i)){
+			dmap->setUnused(i);
+		}else{
+			dmap->setUsed(i);
+		}
+
+	}
+
+	dmap->read(0,&bd);
+	dmap->showDmap();
+
+	for(int i = 0; i<BLOCK_NUMBER;i++) {
+		if(randomArray[i]) {
+			if(dmap->isSet(i)==0)
+				printf("Nicht gesetzter Block bei %d\n",i);
+
+			REQUIRE(dmap->isSet(i));
+		} else {
+			if(dmap->isSet(i))
+							printf("Zu viel gesetzter Block bei %d\n",i);
+
+			REQUIRE(dmap->isSet(i)==0);
+		}
+	}
+
+delete[] randomArray;
+}
 
 
 	delete dmap;
