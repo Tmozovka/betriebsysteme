@@ -214,7 +214,7 @@ SECTION("write on blockdevice with random bits"){
 	}
 
 	dmap->read(0,&bd);
-	dmap->showDmap();
+	//dmap->showDmap();
 
 	for(int i = 0; i<BLOCK_NUMBER;i++) {
 		if(randomArray[i]) {

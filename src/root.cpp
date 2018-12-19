@@ -84,8 +84,8 @@ bool MyRoot::existName(string name) {
 
 	while (it != files.end()) {
 		if ((it++)->getName() == name) {
-			if ((it++)->getName().length() == name.length())
-				return true;
+			printf("Dateiname existiert bereits\n");
+			return true;
 		}
 	}
 

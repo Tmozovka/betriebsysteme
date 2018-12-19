@@ -95,6 +95,7 @@ int dMap::init(int startingBlock,BlockDevice *blocks){
 
 	//Anzahl an Benötigten Bytes / 512 = Anzahl an Benötigten Blöcken
 
+	//TODO in den ersten block von 15 die variable firstFreeBlock speichern
 
 	 int pufferLength = BD_BLOCK_SIZE; //512
 	 char * puffer = new char[pufferLength];
@@ -123,7 +124,7 @@ int dMap::init(int startingBlock,BlockDevice *blocks){
 		CurrentStartOfPufferInDmap+=4096;
 		blocks->write(startingBlock++,puffer); //Puffer schreiben
 		bitsLeft-= pufferLength*8;
-		printf("In Block %d geschrieben. Letzter geschriebener Dmapeintrag: %d \n",startingBlock-1,BLOCK_NUMBER-bitsLeft-1);
+		//printf("In Block %d geschrieben. Letzter geschriebener Dmapeintrag: %d \n",startingBlock-1,BLOCK_NUMBER-bitsLeft-1);
 
 	 }
 
@@ -176,18 +177,18 @@ int dMap::read(int startingBlock, BlockDevice* blocks){
 	int currentDmapIndex = 0;
 	char * puffer = new char[BD_BLOCK_SIZE];
 
+	//todo aus erstem block firstFreeBlock auslesen
 	while(currentDmapIndex<BLOCK_NUMBER){
 
-
-
 		blocks->read(currentBlock++,puffer);//currentBlock auslesen
-		printf("Aus Block %d gelesen \n",currentBlock-1);
+		//printf("Aus Block %d gelesen \n",currentBlock-1);
 		 	for(int charNumber =0 ; charNumber<BD_BLOCK_SIZE; charNumber++){ //charbit auslesen
 		 		char c = puffer[charNumber];
 
 		 		for(int charBit =0; charBit<8; charBit++){
 		 			if(currentDmapIndex==BLOCK_NUMBER){
 		 				delete[] puffer;
+		 				printf("Letzter für dmap ausgelesener Block: %d \n",currentBlock-1);
 		 				return  currentBlock;
 		 			}
 		 			if((c >> charBit)&1){
