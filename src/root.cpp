@@ -181,3 +181,22 @@ char** MyRoot::writeBlocks()
 
 }
 
+char** readBlocks(){
+	//Sollen mehrere ausgelesen werden?
+	//Wenn ja, welche?
+
+	char ** block;
+	block = new char * [sizeRoot];
+
+	std::list<MyFile>::iterator it = files.begin();
+
+	for(int i=0;it != files.end(); it++, i++) {
+			*block= new char[BLOCK_SIZE];
+			*block= it_>readBlock();
+			//TODO readBlock implementieren
+	}
+
+	return block;
+
+}
+

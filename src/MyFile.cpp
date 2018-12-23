@@ -125,6 +125,9 @@ char * MyFile::writeBlock() {
 	return block;
 
 }
+int readBlock(int t){
+//Wofuer steht t? Was wird damit uebergeben?
+}
 
 char * MyFile::writeVar(char * buf, int size, int &count) {
 
