@@ -22,6 +22,7 @@ public  :
 	MyRoot(MyFile firstfile);
 	MyRoot();
 	MyRoot(string name, off_t size, mode_t mode, int firstBlock);
+	MyRoot(char** array);
 	~MyRoot();
 
 	int addFile(string name, off_t size, mode_t mode, time_t t, int firstBlock);
@@ -40,6 +41,7 @@ public  :
 	int getSize() {
 		return sizeRoot;
 	}
+	char** createCharArray(char** array);
 
 	char** writeBlocks();
 	char** readBlocks();

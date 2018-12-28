@@ -34,6 +34,44 @@ MyRoot::MyRoot(string name, off_t size, mode_t mode, int firstBlock) {
 	printf("Konstruktor von MyRoot ist beendet \n");
 }
 
+MyRoot::MyRoot(char** array){
+//Files mit allen Werten aus array fuellen
+	sizeRoot = array[0];
+	MyFile * firstfile = new MyFile(array[1]);
+	addressRoot = firstfile;
+
+		for (int k=1; k <= sizeRoot;) {
+				files.push_front(array[k]);
+		}
+
+}
+char** MyRoot::createCharArray(char** array){
+//Array mit allen chars (Files) aus files fuellen
+	*array = new char[sizeRoot+2];
+	char * buf = new char [512];
+
+	sprintf (array[0], "%d", sizeRoot);
+	array[1]=addressRoot->writeBlock();
+	//Steht in array[2] das gleiche?
+	int k = 2;
+
+	std::list<MyFile>::iterator it = files.begin();
+
+		while (it != files.end()) {
+		buf = it->writeBlock();
+		array[k] = buf;
+		it++;
+		k++;
+		}
+
+	//Am Anfang werden addressRoot und sizeRoot
+	//im Array gespeichert
+	//Alle Files werden darauffolgend als char* hinterlegt
+
+	return *array;
+}
+
+
 MyRoot::~MyRoot() {
 	sizeRoot = 0;
 	files.clear();
