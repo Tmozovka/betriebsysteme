@@ -103,3 +103,28 @@ int compare(MyFAT f1, MyFAT f2) {
 
 	return 0;
 }
+/*char * MyFAT::BlockIntoBuffer(BlockDevice fatBlocks) {
+
+	for (int i = 0; i < size; i++) {
+		for (int j = 0; j < size; j++) {
+			* buf[i]= * *fatBlocks[i];
+			i++;
+			j++;
+		}
+	}
+	return * buf;
+	}
+
+ MyFAT::pufferIntoBlock(char * buf) {
+
+	BlockDevice fatBlocks = new BlockDevice;
+
+	for (int i = 0; i < size; i++) {
+		for (int j = 0; j < size; j++) {
+			*fatBlocks[i]= * buf[j];
+			i++;
+			j++;
+		}
+	}
+	return fatBlocks;
+	}*/
