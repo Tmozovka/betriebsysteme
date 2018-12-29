@@ -55,22 +55,41 @@ TEST_CASE( "Add/get/delete File", "[root]" ) {
 	delete f;
 }
 
-/*
-	//todo Julia: noch mehr tests für gleichen namen schreiben, vielleicht ist da ein fehler
-	SECTION("No addition possible: Name already exists"){
+	SECTION("No addition possible: Name already exists - Test 1"){
 	MyFile * f = new MyFile();
 	MyFile * fileSimilarName = new MyFile();
 
 	f->setName("similarName.txt");
-	fileSimilarName->setName("similarName.txt");
+	fileSimilarName->setName(f->getName());
 
-	myroot->addFile(fileSimilarName->getName(),fileSimilarName->getSize(),fileSimilarName->getMode(),fileSimilarName->getLastMod(),fileSimilarName->getFirstBlock());
-	int result = myroot->addFile(f->getName(),f->getSize(),f->getMode(),f->getLastMod(),f->getFirstBlock());
+	MyRoot* twinsRoot = new MyRoot();
+	twinsRoot->addFile(f->getName(),12345,12,1000000,50009);
+	int result = twinsRoot->addFile(fileSimilarName->getName(),2345,13,1000001,50000);
 	REQUIRE(result==-1);
 	delete f;
+	delete fileSimilarName;
+	delete twinsRoot;
+}
+	SECTION("No addition possible: Name already exists - Test 2"){
+	MyFile * f = new MyFile();
+
+	f->setName("testzwei.txt");
+
+	MyRoot* rootTwins = new MyRoot();
+	rootTwins->addFile(f->getName(),12245,11,1000011,50005);
+	int result = rootTwins->addFile("testzwei.txt",2445,14,1000101,40000);
+	REQUIRE(result==-1);
+	delete f;
+	delete rootTwins;
+
+}
+	SECTION("No addition possible: Name already exists - Test 3"){
+	MyRoot* rootTwins = new MyRoot("testdrei.txt",12244,16,50003);
+	int result = rootTwins->addFile("testdrei.txt",2441,18,1010001,40001);
+	REQUIRE(result==-1);
+	delete rootTwins;
 }
 
-*/
 //-----deleteFile----------------------------------------------------------------------------------------
 	SECTION("Delete File"){
 	MyFile * f = new MyFile();
