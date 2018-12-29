@@ -6,6 +6,7 @@
 #include <string>
 #include "macros.h"
 
+
 MyRoot::MyRoot(MyFile firstfile) {
 	sizeRoot = 1;
 	addressRoot = new MyFile(firstfile);
@@ -36,7 +37,9 @@ MyRoot::MyRoot(string name, off_t size, mode_t mode, int firstBlock) {
 
 MyRoot::MyRoot(char** array){
 //Files mit allen Werten aus array fuellen
-	sizeRoot = array[0];
+	if(isdigit(*array[0])){
+	sizeRoot = atoi(array[0]);}
+
 	MyFile * firstfile = new MyFile(array[1]);
 	addressRoot = firstfile;
 
@@ -219,7 +222,7 @@ char** MyRoot::writeBlocks()
 
 }
 
-char** readBlocks(){
+char** MyRoot::readBlocks(){
 	//Sollen mehrere ausgelesen werden?
 	//Wenn ja, welche?
 
@@ -230,7 +233,7 @@ char** readBlocks(){
 
 	for(int i=0;it != files.end(); it++, i++) {
 			*block= new char[BLOCK_SIZE];
-			*block= it_>readBlock();
+			//*block= it->readBlock();
 			//TODO readBlock implementieren
 	}
 

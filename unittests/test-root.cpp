@@ -141,3 +141,71 @@ TEST_CASE( "Add/get/delete File", "[root]" ) {
 	delete myroot;
 }
 
+TEST_CASE( 	"createCharArray:Fill Array with all files in root//"
+			"MyRoot(char** array):Give new files the array-values", "[root]" ) {
+
+	SECTION("createCharArray:Fill Array with all files in root"){
+		/*
+		 * string cname, uid_t cuser, gid_t cgroup, off_t csize,
+		 * mode_t cmode, time_t clastAccess, time_t clastMod,
+		 * time_t clastStatusChange, int cfirstBlock
+		 */
+
+		  char name[] = "name";
+		  char user[] = "user";
+		  char group[] = "group";
+		  char size[] = "size";
+		  char mode[] = "mode";
+		  char lastAccess[] = "lastAccess";
+		  char lastMod[] = "lastMod";
+		  char lastStatusChange[] = "lastStatusChange";
+		  char firstBlock[] = "firstBlock";
+
+		  char name1[] = "name1";
+		  char user1[] = "user1";
+		  char group1[] = "group1";
+		  char size1[] = "size1";
+		  char mode1[] = "mode1";
+		  char lastAccess1[] = "lastAccess1";
+		  char lastMod1[] = "lastMod1";
+		  char lastStatusChange1[] = "lastStatusChange1";
+		  char firstBlock1[] = "firstBlock1";
+
+		  char name2[] = "name2";
+		  char user2[] = "user2";
+		  char group2[] = "group2";
+		  char size2[] = "size2";
+		  char mode2[] = "mode2";
+		  char lastAccess2[] = "lastAccess2";
+		  char lastMod2[] = "lastMod2";
+		  char lastStatusChange2[] = "lastStatusChange2";
+		  char firstBlock2[] = "firstBlock2";
+
+		  char *file[]  = { name, user, group, size, mode, lastAccess, lastMod, lastStatusChange, firstBlock };
+		  char *file1[] = { name1, user1, group1, size1, mode1, lastAccess1, lastMod1, lastStatusChange1, firstBlock1 };
+		  char *file2[] = { name2, user2, group2, size2, mode2, lastAccess2, lastMod2, lastStatusChange2, firstBlock2 };
+
+		  char arraysize[] ="3";
+		  char* sizePointer[] = {arraysize};
+
+		  char **array[] = { sizePointer, file, file, file1, file2 };
+		  MyRoot* charRoot= new MyRoot(*array);
+
+		  REQUIRE( charRoot->sizeRoot == 3);
+
+		  MyFile * firstFile = new MyFile(array[1]);
+
+		  REQUIRE( charRoot->addressRoot == firstFile);
+
+		  for(int i=0; i<=charRoot->sizeRoot;i++){
+			  REQUIRE(array[i+2] == charRoot->getFile(*array[i+2],new MyFile()));
+		  }
+
+
+
+
+	}
+	SECTION("MyRoot(char** array):Give new files the array-values"){
+
+	}
+}
