@@ -142,70 +142,114 @@ TEST_CASE( "Add/get/delete File", "[root]" ) {
 }
 
 TEST_CASE( 	"createCharArray:Fill Array with all files in root//"
-			"MyRoot(char** array):Give new files the array-values", "[root]" ) {
+			"MyRoot(char** array):Convert the array-values for the new files","[root]" ) {
 
 	SECTION("createCharArray:Fill Array with all files in root"){
-		/*
-		 * string cname, uid_t cuser, gid_t cgroup, off_t csize,
-		 * mode_t cmode, time_t clastAccess, time_t clastMod,
-		 * time_t clastStatusChange, int cfirstBlock
-		 */
 
-		  char name[] = "name";
-		  char user[] = "user";
-		  char group[] = "group";
-		  char size[] = "size";
-		  char mode[] = "mode";
-		  char lastAccess[] = "lastAccess";
-		  char lastMod[] = "lastMod";
-		  char lastStatusChange[] = "lastStatusChange";
-		  char firstBlock[] = "firstBlock";
+		MyRoot* originalRoot = new MyRoot();
+		originalRoot->addFile("firstfile.txt",  12345,12,1000000,50009);
+		originalRoot->addFile("secondfile.txt",	12345,34,1000001,50099);
+		originalRoot->addFile("thirdfile.txt",	12345,56,1000011,50999);
+		originalRoot->addFile("fourthfile.txt",	12345,78,1000111,60000);
 
-		  char name1[] = "name1";
-		  char user1[] = "user1";
-		  char group1[] = "group1";
-		  char size1[] = "size1";
-		  char mode1[] = "mode1";
-		  char lastAccess1[] = "lastAccess1";
-		  char lastMod1[] = "lastMod1";
-		  char lastStatusChange1[] = "lastStatusChange1";
-		  char firstBlock1[] = "firstBlock1";
+		char**array;
+		array = originalRoot->createCharArray(array);
 
-		  char name2[] = "name2";
-		  char user2[] = "user2";
-		  char group2[] = "group2";
-		  char size2[] = "size2";
-		  char mode2[] = "mode2";
-		  char lastAccess2[] = "lastAccess2";
-		  char lastMod2[] = "lastMod2";
-		  char lastStatusChange2[] = "lastStatusChange2";
-		  char firstBlock2[] = "firstBlock2";
-
-		  char *file[]  = { name, user, group, size, mode, lastAccess, lastMod, lastStatusChange, firstBlock };
-		  char *file1[] = { name1, user1, group1, size1, mode1, lastAccess1, lastMod1, lastStatusChange1, firstBlock1 };
-		  char *file2[] = { name2, user2, group2, size2, mode2, lastAccess2, lastMod2, lastStatusChange2, firstBlock2 };
-
-		  char arraysize[] ="3";
-		  char* sizePointer[] = {arraysize};
-
-		  char **array[] = { sizePointer, file, file, file1, file2 };
-		  MyRoot* charRoot= new MyRoot(*array);
-
-		  REQUIRE( charRoot->sizeRoot == 3);
-
-		  MyFile * firstFile = new MyFile(array[1]);
-
-		  REQUIRE( charRoot->addressRoot == firstFile);
-
-		  for(int i=0; i<=charRoot->sizeRoot;i++){
-			  REQUIRE(array[i+2] == charRoot->getFile(*array[i+2],new MyFile()));
-		  }
-
-
-
+		REQUIRE(originalRoot->sizeRoot==array[0]);//size ist 4
+		string str1(*array[1]);
+		REQUIRE(str1.compare(originalRoot->addressRoot->getName())==0);
+		string str2;
+		//Variante 1 zum Vergleichen aller Namen
+		for(int i=2;i<=(array[0]+2);i++){
+			str2(*array[i]);
+			REQUIRE(originalRoot->existName(str2)==true);
+			MyFile *f= originalRoot->getFile(str2,f);
+			REQUIRE(str2.compare(f->getName())==0);
+		}
+		//Variante 2 zum Vergleichen aller Namen
+		string str3;
+		string *nameArray = originalRoot->getArray();
+		for(int k=2;k<=(array[0]+2);k++){
+			str3(*array[k]);
+			REQUIRE(originalRoot->existName(str3)==true);
+			REQUIRE(str3.compare(nameArray[k])==0);
+		}
 
 	}
-	SECTION("MyRoot(char** array):Give new files the array-values"){
+	SECTION("MyRoot(char** array):Convert the array-values for the new files "){
+				/*
+				 * string cname, uid_t cuser, gid_t cgroup, off_t csize,
+				 * mode_t cmode, time_t clastAccess, time_t clastMod,
+				 * time_t clastStatusChange, int cfirstBlock
+				 */
+
+		char name[] = "name";
+		char user[] = "user";
+		char group[] = "group";
+		char size[] = "size";
+		char mode[] = "mode";
+		char lastAccess[] = "lastAccess";
+		char lastMod[] = "lastMod";
+		char lastStatusChange[] = "lastStatusChange";
+		char firstBlock[] = "firstBlock";
+
+		char name1[] = "name1";
+		char user1[] = "user1";
+		char group1[] = "group1";
+		char size1[] = "size1";
+		char mode1[] = "mode1";
+		char lastAccess1[] = "lastAccess1";
+		char lastMod1[] = "lastMod1";
+		char lastStatusChange1[] = "lastStatusChange1";
+		char firstBlock1[] = "firstBlock1";
+
+		char name2[] = "name2";
+		char user2[] = "user2";
+		char group2[] = "group2";
+		char size2[] = "size2";
+		char mode2[] = "mode2";
+		char lastAccess2[] = "lastAccess2";
+		char lastMod2[] = "lastMod2";
+		char lastStatusChange2[] = "lastStatusChange2";
+		char firstBlock2[] = "firstBlock2";
+
+		char *file[]  = { name, user, group, size, mode, lastAccess, lastMod, lastStatusChange, firstBlock };
+		char *file1[] = { name1, user1, group1, size1, mode1, lastAccess1, lastMod1, lastStatusChange1, firstBlock1 };
+		char *file2[] = { name2, user2, group2, size2, mode2, lastAccess2, lastMod2, lastStatusChange2, firstBlock2 };
+
+		char arraysize[] ="3";
+		char* sizePointer[] = {arraysize};
+
+		char **array[] = { sizePointer, file, file, file1, file2 };
+		MyRoot* charRoot= new MyRoot(*array);
+
+		REQUIRE( charRoot->sizeRoot == 3);
+
+		MyFile * firstFile = new MyFile(array[1]);
+
+		REQUIRE( charRoot->addressRoot == firstFile);
+
+		for(int i=0; i<=charRoot->sizeRoot;i++){
+			REQUIRE(array[i+2] == charRoot->getFile(*array[i+2],new MyFile()));
+		}
+				  /* Ist das Löschen dieser
+				   * Objekte notwendig?
+				   * delete [] name;
+				   * delete [] user;
+				   * delete [] group;
+				   * delete [] size;
+				   * delete [] mode;
+				   * delete [] lastAccess;
+				   * delete [] lastMod;
+				   * delete [] lastStatusChange;
+				   * delete [] firstBlock;
+				   * delete [] file;
+				   * ....
+				   * delete [] arraysize;
+				   * delete [] sizePointer;
+				   */
+		delete firstFile;
+		delete charRoot;
 
 	}
 }
