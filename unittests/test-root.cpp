@@ -174,7 +174,7 @@ TEST_CASE( 	"createCharArray:Fill Array with all files in root//"
 		char**array;
 		array = originalRoot->createCharArray(array);
 
-		REQUIRE(originalRoot->sizeRoot==array[0]);//size ist 4
+		REQUIRE(originalRoot->getSize()==array[0]);//size ist 4
 		string str1(*array[1]);
 		REQUIRE(str1.compare(originalRoot->addressRoot->getName())==0);
 		string str2;

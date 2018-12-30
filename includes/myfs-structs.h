@@ -19,10 +19,10 @@
 #define DMAP_START 1
 #define DMAP_SIZE 118
 #define FAT_START 119
-#define FAT_SIZE 586
-#define ROOT_START 705
+#define FAT_SIZE 704
+#define ROOT_START 823
 #define ROOT_SIZE 64
-#define BLOCKS_START 770
+#define BLOCKS_START 887
 
 //for MyFile
 #define MAX_FILE_SIZE 345

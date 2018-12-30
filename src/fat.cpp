@@ -46,7 +46,7 @@ MyFAT::MyFAT() {
 	for (int i = 0; i < size; i++)
 		table[i] = -1;
 
-	printf("Konstruktor von MyFat ist beendet \n");
+	//printf("Konstruktor von MyFat ist beendet \n");
 
 }
 
@@ -54,41 +54,56 @@ MyFAT::~MyFAT() {
 	for (int i = 0; i < size; i++)
 		table[i] = -1;
 
-	printf("Destruktor von MyFat ist beendet \n");
+	//printf("Destruktor von MyFat ist beendet \n");
 }
 
 char * MyFAT::writeBlock() {
-	char * result = new char[size * 2];
-	char * next = new char[1];
+	char * result = new char[size * 6];
+
 
 	strcpy(result, to_string(this->table[0]).c_str());
+	strcat(result, "_");
 
 	for (int i = 1; i < size; i++) {
 
-		strcpy(next, to_string(this->table[i ]).c_str());
+		char * next = new char[5];
+		strcpy(next, to_string(this->table[i]).c_str());
 		strcat(result, next);
+		strcat(result, "_");
+		delete[] next;
 
 	}
+
+	//strcat(result, "END");
 	/*for (int i = nr*BLOCK_SIZE+BLOCK_SIZE; i < size; i++)
 	 //table[i] = -1;
 	 {
 
 	 }*/
 	//delete[] next;
+
 	return result;
 }
 
 MyFAT::MyFAT(char * buf) {
-	char * next = new char[1];
-	for (int i = 0; i < size; i++) {
 
-		if (*buf == '-' && *(buf + 1) == '1') {
+	for (int i = 0; i < size; i++) { //||(strcmp(buf, "END")==0)
+
+		char * next = new char[5];
+		for(int j=0;*buf!='_'; j++, buf++)
+		{
+			next[j]=*buf;
+		}
+		buf++;
+		table[i] = atoi(next);
+		delete[] next;
+		/*if (*buf == '-' && *(buf + 1) == '1') {
 			table[i] = -1;
 			buf += 2;
 		} else {
 			next = (buf++);
 			table[i] = atoi(next);
-		}
+		}*/
 
 	}
 

@@ -30,14 +30,14 @@ dMap::dMap() {
 		//dmap[i] = 0;
 
 	firstFreeBlock = 0;
-	printf("Konstruktor von dMap ist beendet \n");
+	//printf("Konstruktor von dMap ist beendet \n");
 }
 
 dMap::~dMap() {
 
 	for (int i = 0; i < BLOCK_NUMBER; i++)
 		dmap[i] = -1;
-	printf("Destruktor von dMap ist beendet \n");
+	//printf("Destruktor von dMap ist beendet \n");
 }
 
 int dMap::getFreeBlocks(int neededBlocks, int** returnArray) {

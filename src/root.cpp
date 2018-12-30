@@ -12,14 +12,14 @@ MyRoot::MyRoot(MyFile firstfile) {
 	addressRoot = new MyFile(firstfile);
 	files.push_front(firstfile);
 
-	printf("Konstruktor von MyRoot ist beendet \n");
+	//printf("Konstruktor von MyRoot ist beendet \n");
 }
 
 MyRoot::MyRoot() {
 	sizeRoot = 0;
 	addressRoot = NULL;
 
-	printf("Konstruktor von MyRoot ist beendet \n");
+	//printf("Konstruktor von MyRoot ist beendet \n");
 }
 
 //MyFile(string cname, uid_t cuser, gid_t cgroup, off_t csize, mode_t cmode, time_t clastAccess,
@@ -32,7 +32,7 @@ MyRoot::MyRoot(string name, off_t size, mode_t mode, int firstBlock) {
 			time(NULL), time(NULL), time(NULL), firstBlock);
 	addressRoot = firstfile;
 	files.push_front(*firstfile);
-	printf("Konstruktor von MyRoot ist beendet \n");
+	//printf("Konstruktor von MyRoot ist beendet \n");
 }
 
 MyRoot::MyRoot(char** array){
@@ -71,14 +71,14 @@ char** MyRoot::createCharArray(char** array){
 	//im Array gespeichert
 	//Alle Files werden darauffolgend als char* hinterlegt
 
-	return *array;
+	return array;
 }
 
 
 MyRoot::~MyRoot() {
 	sizeRoot = 0;
 	files.clear();
-	printf("Destruktor von MyRoot ist beendet \n");
+	//printf("Destruktor von MyRoot ist beendet \n");
 }
 
 int MyRoot::addFile(string name, off_t size, mode_t mode, time_t st_mtime,

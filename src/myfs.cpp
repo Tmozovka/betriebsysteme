@@ -42,7 +42,7 @@ MyFS::MyFS() {
 	this->logFile = stderr;
 
 	// printf("Konstruktor von MyFS ist beendet \n");
-	LOG("Konstruktor von MyFS ist beendet \n");
+	//LOG("Konstruktor von MyFS ist beendet \n");
 }
 
 MyFS::MyFS(char * nameCont) {
@@ -56,7 +56,7 @@ MyFS::MyFS(char * nameCont) {
 	blocks->create(nameCont);
 
 	// printf("Konstruktor von MyFS ist beendet \n");
-	LOG("Konstruktor von MyFS ist beendet \n");
+	//LOG("Konstruktor von MyFS ist beendet \n");
 }
 
 MyFS::~MyFS() {
@@ -66,8 +66,8 @@ MyFS::~MyFS() {
 	delete fat;
 	delete root;
 	delete blocks;
-	printf("Destruktor von MyFS ist beendet \n");
-	LOG("Destruktor von MyFS ist beendet \n");
+	//printf("Destruktor von MyFS ist beendet \n");
+	//LOG("Destruktor von MyFS ist beendet \n");
 
 }
 

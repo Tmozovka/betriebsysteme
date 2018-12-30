@@ -17,10 +17,10 @@ MyFile::MyFile(string cname, uid_t cuser, gid_t cgroup, off_t csize,
 	lastStatusChange = clastStatusChange; //letzter Status�nderung (ctime)
 	firstBlock = cfirstBlock; //Zeiger auf ersten Block (u_int32_t BlockNo)
 
-	printf("Konstruktor von MyFile ist beendet \n");
+	//printf("Konstruktor von MyFile ist beendet \n");
 }
 MyFile::~MyFile() { //
-	printf("Destruktor von MyFile ist beendet \n");
+	//printf("Destruktor von MyFile ist beendet \n");
 }
 
 //Define the constructor
@@ -36,7 +36,7 @@ MyFile::MyFile() {
 	lastStatusChange = time(NULL); //letzter Status�nderung (ctime)
 	firstBlock = -1; //Zeiger auf ersten Block (u_int32_t BlockNo)
 
-	printf("Konstruktor von MyFile ist beendet \n");
+	//printf("Konstruktor von MyFile ist beendet \n");
 }
 
 void MyFile::showFile() {
