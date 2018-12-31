@@ -43,43 +43,23 @@ TEST_CASE( "Set/get/delete Allocated Blocks", "[fat]" ) {
 		int next=i+1;
 		fat->link(i, &next);
 	}
-	char * buf;
-	buf = fat->writeBlock();
-	//printf("fat: %s \n", buf);
+
 	printf("START FAT TEST \n ");
-	char * writeBuf = new char [512];
-	char * readBuf = new char [512];
 
 	BlockDevice blocks;
 	remove("containerFatTest.bin");
 	blocks.create("containerFatTest.bin");
 
 	//write in blocks
-	int i=0;
-	while(*buf!='\0')
-	{
-		writeBuf=buf;
-		blocks.write(i++,writeBuf);
-		buf+=BLOCK_SIZE;
-	}
-	buf-=512*i;
-	printf("IN TEST FAT NUMBER WROTEN BLOCKS : %i \n", i);
+	int nrBlocks=0;
+	fat->writeBlockDevice(&blocks,200,&nrBlocks);
+	printf("IN TEST FAT NUMBER WROTEN BLOCKS : %i \n", nrBlocks);
 	//read from blocks
-	char * newBuf = new char[BLOCK_NUMBER * 6];;
-	int j=i;
-	i=0;
-	while(j!=0)
-	{
-		blocks.read(i++,readBuf);
-		strcat(newBuf,readBuf);
-		j--;
-	}
-
-	MyFAT* newFat = new MyFAT(newBuf);
+	MyFAT* newFat = new MyFAT(&blocks,200,nrBlocks);
 	//newFat->showFat();
+
 	REQUIRE(compare(*fat, *newFat)==0);
-	delete [] buf;
-	delete [] newBuf;
+
 	delete newFat;
 
 }

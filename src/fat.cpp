@@ -74,20 +74,17 @@ char * MyFAT::writeBlock() {
 
 	}
 
-	//strcat(result, "END");
-	/*for (int i = nr*BLOCK_SIZE+BLOCK_SIZE; i < size; i++)
-	 //table[i] = -1;
-	 {
-
-	 }*/
-	//delete[] next;
 
 	return result;
 }
 
-MyFAT::MyFAT(char * buf) {
+MyFAT::MyFAT(BlockDevice * blocks, int start, int nrBlocks)
+{
+	char * buf = new char[BLOCK_NUMBER * 6];
+	this->readBlockDevice(blocks,200,buf,nrBlocks);
 
-	for (int i = 0; i < size; i++) { //||(strcmp(buf, "END")==0)
+//MyFAT::MyFAT(char * buf)
+	for (int i = 0; i < size; i++) {
 
 		char * next = new char[5];
 		for(int j=0;*buf!='_'; j++, buf++)
@@ -97,18 +94,24 @@ MyFAT::MyFAT(char * buf) {
 		buf++;
 		table[i] = atoi(next);
 		delete[] next;
-		/*if (*buf == '-' && *(buf + 1) == '1') {
-			table[i] = -1;
-			buf += 2;
-		} else {
-			next = (buf++);
-			table[i] = atoi(next);
-		}*/
+	}
+}
 
+/*MyFAT::MyFAT(char * buf) {
+
+	for (int i = 0; i < size; i++) {
+
+		char * next = new char[5];
+		for(int j=0;*buf!='_'; j++, buf++)
+		{
+			next[j]=*buf;
+		}
+		buf++;
+		table[i] = atoi(next);
+		delete[] next;
 	}
 
-//	delete[] next;
-}
+}*/
 
 int compare(MyFAT f1, MyFAT f2) {
 	for (int i = 0; i < f1.getSize(); i++) {
@@ -118,6 +121,42 @@ int compare(MyFAT f1, MyFAT f2) {
 
 	return 0;
 }
+
+void MyFAT::writeBlockDevice(BlockDevice * blocks, int start,int * nrBlocks)
+{
+	char * buf;
+	buf = this->writeBlock();
+	//printf("fat: %s \n", buf);
+	char * writeBuf = new char [BLOCK_SIZE];
+	char * startWriteBuf = writeBuf;
+
+		while(*buf!='\0')
+		{
+			writeBuf=buf;
+			blocks->write(start++,writeBuf);
+			(*nrBlocks)++;
+			buf+=BLOCK_SIZE;
+		}
+		writeBuf = startWriteBuf;
+		delete [] writeBuf;
+}
+
+void MyFAT::readBlockDevice( BlockDevice * blocks,int start,char * newBuf,int nrBlocks)
+{
+		char * readBuf = new char [BLOCK_SIZE];
+		int j=nrBlocks;
+		int i=start;
+		while(j!=0)
+		{
+			blocks->read(i++,readBuf);
+			strcat(newBuf,readBuf);
+			j--;
+		}
+
+		//delete [] readBuf;
+}
+
+
 /*char * MyFAT::BlockIntoBuffer(BlockDevice fatBlocks) {
 
 	for (int i = 0; i < size; i++) {
