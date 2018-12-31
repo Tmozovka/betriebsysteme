@@ -148,7 +148,7 @@ SECTION("write on blockdevice with every 5000th block set"){
 	}
 
 	//dmap->showDmap();
-	remove("testdmap.bin");
+
 	BlockDevice bd;
 	bd.create("testdmap.bin");
 
@@ -181,7 +181,7 @@ SECTION("write on blockdevice with every 5000th block set"){
 		}
 	}
 
-
+	remove("testdmap.bin");
 }
 SECTION("write on blockdevice with random bits"){
 
@@ -198,7 +198,7 @@ SECTION("write on blockdevice with random bits"){
 
 
 	//dmap->showDmap();
-	remove("testdmap.bin");
+
 	BlockDevice bd;
 	bd.create("testdmap.bin");
 
@@ -230,7 +230,7 @@ SECTION("write on blockdevice with random bits"){
 			REQUIRE(dmap->isSet(i)==0);
 		}
 	}
-
+remove("testdmap.bin");
 delete[] randomArray;
 }
 
