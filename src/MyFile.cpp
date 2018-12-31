@@ -219,7 +219,7 @@ MyFile::MyFile(char * buf) {
 	buf += count;
 	count = 0;
 
-	printf("Konstruktor von MyFile ist beendet \n");
+	//printf("Konstruktor von MyFile ist beendet \n");
 
 }
 //get

@@ -128,7 +128,7 @@ void MyFAT::writeBlockDevice(BlockDevice * blocks, int start,int * nrBlocks)
 	buf = this->writeBlock();
 	//printf("fat: %s \n", buf);
 	char * writeBuf = new char [BLOCK_SIZE];
-	char * startWriteBuf = writeBuf;
+	//char * startWriteBuf = writeBuf;
 
 		while(*buf!='\0')
 		{
@@ -137,8 +137,8 @@ void MyFAT::writeBlockDevice(BlockDevice * blocks, int start,int * nrBlocks)
 			(*nrBlocks)++;
 			buf+=BLOCK_SIZE;
 		}
-		writeBuf = startWriteBuf;
-		delete [] writeBuf;
+		//writeBuf = startWriteBuf;
+		//delete [] writeBuf;
 }
 
 void MyFAT::readBlockDevice( BlockDevice * blocks,int start,char * newBuf,int nrBlocks)
@@ -153,7 +153,7 @@ void MyFAT::readBlockDevice( BlockDevice * blocks,int start,char * newBuf,int nr
 			j--;
 		}
 
-		//delete [] readBuf;
+		delete [] readBuf;
 }
 
 

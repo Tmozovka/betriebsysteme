@@ -96,7 +96,7 @@ SECTION("write on blockdevice with every 3^n block set  "){
 		}
 	}
 	//dmap->showDmap();
-	remove("testdmap.bin");
+
 	BlockDevice bd;
 	bd.create("testdmap.bin");
 
@@ -133,6 +133,7 @@ SECTION("write on blockdevice with every 3^n block set  "){
 			REQUIRE(dmap->isSet(i)==0);
 		}
 	}
+	remove("testdmap.bin");
 }
 
 

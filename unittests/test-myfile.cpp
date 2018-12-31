@@ -35,7 +35,7 @@ TEST_CASE( "Compare File// Getter- and Settermethods", "[MyFile]" ) {
 
 		BlockDevice  blocks ;
 
-		remove("containerFileTest.bin");
+
 		blocks.create("containerFileTest.bin");
 		blocks.write(0,buf);
 		blocks.read(0,readBuf);
@@ -44,7 +44,7 @@ TEST_CASE( "Compare File// Getter- and Settermethods", "[MyFile]" ) {
 		MyFile * newFile = new MyFile(readBuf);
 		REQUIRE(*newFile == *tryFile);
 
-
+		remove("containerFileTest.bin");
 		delete tryFile;
 		delete newFile;
 	//	delete blocks;

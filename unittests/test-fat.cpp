@@ -47,7 +47,6 @@ TEST_CASE( "Set/get/delete Allocated Blocks", "[fat]" ) {
 	printf("START FAT TEST \n ");
 
 	BlockDevice blocks;
-	remove("containerFatTest.bin");
 	blocks.create("containerFatTest.bin");
 
 	//write in blocks
@@ -59,8 +58,9 @@ TEST_CASE( "Set/get/delete Allocated Blocks", "[fat]" ) {
 	//newFat->showFat();
 
 	REQUIRE(compare(*fat, *newFat)==0);
-
+	remove("containerFatTest.bin");
 	delete newFat;
+
 
 }
 

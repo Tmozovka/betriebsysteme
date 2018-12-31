@@ -131,7 +131,7 @@ TEST_CASE( "my Funktionen in myfs testen", "[myfs]" ) {
 
 
 	delete [] ar;
-
+	remove("containerTest.bin");
 	delete fs;
 }
 
