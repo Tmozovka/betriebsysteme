@@ -52,4 +52,36 @@ TEST_CASE( "Compare File// Getter- and Settermethods", "[MyFile]" ) {
 		delete [] buf;
 
 	}
+	SECTION("Read File in Block"){
+		MyFile * tryFile = new MyFile("testfile.txt",199,991,12567,34512,1111101,110111111,11001111,50000);
+
+
+		char * buf = new char [512];
+		char * readBuf = new char [512];
+		buf = tryFile->writeBlock();
+
+		printf("buf mit tryFile: %s \n", buf);
+		printf("write to block \n");
+
+		BlockDevice  blocks ;
+
+		printf("START TO READ IN BLOCK \n");
+		blocks.create("containerFileTest.bin");
+		blocks.write(0,buf);
+		readBuf=tryFile->readBlock(0,blocks);
+
+		printf("buf aus BlockDevice %s \n", readBuf);
+
+		REQUIRE(strcmp(buf, readBuf)==0);
+		MyFile * newFile = new MyFile(readBuf);
+		REQUIRE(*newFile == *tryFile);
+
+		remove("containerFileTest.bin");
+		delete tryFile;
+		delete newFile;
+	//	delete blocks;
+		delete [] readBuf;
+		delete [] buf;
+
+	}
 }

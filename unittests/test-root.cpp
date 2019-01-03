@@ -160,115 +160,69 @@ TEST_CASE( "Add/get/delete File", "[root]" ) {
 	delete myroot;
 }
 
-TEST_CASE( 	"createCharArray:Fill Array with all files in root//"
-			"MyRoot(char** array):Convert the array-values for the new files","[root]" ) {
+TEST_CASE( "Write/Read Root in Block","[root]" ) {
 
-	SECTION("createCharArray:Fill Array with all files in root"){
+	SECTION("Write Root in Block"){
+			MyFile * firstFile = new MyFile("firstFile.txt",2000,1777,12000,10005,1000000,100011000,11111000,50000);
+			MyFile * secondFile = new MyFile("secondFile.txt",1999,1666,10300,12005,1000001,110011011,11000111,59999);
+			MyFile * thirdFile = new MyFile("thirdFile.txt",1888,1555,10045,12300,1000011,111110111,10001111,60000);
 
-		MyRoot* originalRoot = new MyRoot();
-		originalRoot->addFile("firstfile.txt",  12345,12,1000000,50009);
-		originalRoot->addFile("secondfile.txt",	12345,34,1000001,50099);
-		originalRoot->addFile("thirdfile.txt",	12345,56,1000011,50999);
-		originalRoot->addFile("fourthfile.txt",	12345,78,1000111,60000);
+			MyRoot * tryRoot = new MyRoot(firstFile);
+			tryRoot->addFile("secondFile.txt",10300,12005,1000001,59999);
+			tryRoot->addFile("secondFile.txt",10045,12300,1000011,60000);
 
-		char**array;
-		array = originalRoot->createCharArray(array);
+			//writeBlocks anwenden auf Root
+			char ** writeBlockChar = new char * [tryRoot->sizeRoot];
+			writeBlockChar= tryRoot->writeBlocks();
 
-		REQUIRE(originalRoot->getSize()==array[0]);//size ist 4
-		string str1(*array[1]);
-		REQUIRE(str1.compare(originalRoot->addressRoot->getName())==0);
-		string str2;
-		//Variante 1 zum Vergleichen aller Namen
-		for(int i=2;i<=(array[0]+2);i++){
-			str2(*array[i]);
-			REQUIRE(originalRoot->existName(str2)==true);
-			MyFile *f= originalRoot->getFile(str2,f);
-			REQUIRE(str2.compare(f->getName())==0);
+			char*containerpaths[]= new char [tryRoot->sizeRoot];
+			char*path_file;
+			char*path_bin;
+
+			for(int i=0; i<=tryRoot->sizeRoot;i++){
+				path_file ="containerFile";
+				path_bin=".bin";
+				containerpaths[i]= sprintf( path_file, "%s%d%s", path_file, i, path_bin );
+			}
+
+			char * buf = new char [512];
+			char * readBuf = new char [512];
+
+			BlockDevice  blocks ;
+
+			string *nameArray = tryRoot->getArray();
+
+			for(u_int32_t k=0;k<=tryRoot->sizeRoot;k++){
+				//tryRoot->getFile(nameArray[k],new MyFile());
+				buf = *writeBlockChar;
+
+				blocks.create(containerpaths[k]);
+				blocks.write(k,buf);
+				blocks.read(k,readBuf);
+				REQUIRE(strcmp(buf, readBuf)==0);
+
+				writeBlockChar++;
+			}
+				//Auslesen der BLoecke
+			char ** readBlockChar = new char * [tryRoot->sizeRoot];
+			readBlockChar=tryRoot->readBlocks(blocks);
+
+
+			REQUIRE[strcmp(*writeBlockChar,*readBlockChar)==0];
+
+			//Final Test
+			MyRoot * newRoot = new MyRoot(readBlockChar);
+
+			//TODO: Fertig implementieren
+			//REQUIRE(newRoot->compareRoots(tryFile));
+
+
+			remove("containerFileTest.bin");
+			delete tryRoot;
+			delete newRoot;
+		//	delete blocks;
+			delete [] readBuf;
+			delete [] buf;
+
 		}
-		//Variante 2 zum Vergleichen aller Namen
-		string str3;
-		string *nameArray = originalRoot->getArray();
-		for(int k=2;k<=(array[0]+2);k++){
-			str3(*array[k]);
-			REQUIRE(originalRoot->existName(str3)==true);
-			REQUIRE(str3.compare(nameArray[k])==0);
-		}
-
-	}
-	SECTION("MyRoot(char** array):Convert the array-values for the new files "){
-				/*
-				 * string cname, uid_t cuser, gid_t cgroup, off_t csize,
-				 * mode_t cmode, time_t clastAccess, time_t clastMod,
-				 * time_t clastStatusChange, int cfirstBlock
-				 */
-
-		char name[] = "name";
-		char user[] = "user";
-		char group[] = "group";
-		char size[] = "size";
-		char mode[] = "mode";
-		char lastAccess[] = "lastAccess";
-		char lastMod[] = "lastMod";
-		char lastStatusChange[] = "lastStatusChange";
-		char firstBlock[] = "firstBlock";
-
-		char name1[] = "name1";
-		char user1[] = "user1";
-		char group1[] = "group1";
-		char size1[] = "size1";
-		char mode1[] = "mode1";
-		char lastAccess1[] = "lastAccess1";
-		char lastMod1[] = "lastMod1";
-		char lastStatusChange1[] = "lastStatusChange1";
-		char firstBlock1[] = "firstBlock1";
-
-		char name2[] = "name2";
-		char user2[] = "user2";
-		char group2[] = "group2";
-		char size2[] = "size2";
-		char mode2[] = "mode2";
-		char lastAccess2[] = "lastAccess2";
-		char lastMod2[] = "lastMod2";
-		char lastStatusChange2[] = "lastStatusChange2";
-		char firstBlock2[] = "firstBlock2";
-
-		char *file[]  = { name, user, group, size, mode, lastAccess, lastMod, lastStatusChange, firstBlock };
-		char *file1[] = { name1, user1, group1, size1, mode1, lastAccess1, lastMod1, lastStatusChange1, firstBlock1 };
-		char *file2[] = { name2, user2, group2, size2, mode2, lastAccess2, lastMod2, lastStatusChange2, firstBlock2 };
-
-		char arraysize[] ="3";
-		char* sizePointer[] = {arraysize};
-
-		char **array[] = { sizePointer, file, file, file1, file2 };
-		MyRoot* charRoot= new MyRoot(*array);
-
-		REQUIRE( charRoot->sizeRoot == 3);
-
-		MyFile * firstFile = new MyFile(array[1]);
-
-		REQUIRE( charRoot->addressRoot == firstFile);
-
-		for(int i=0; i<=charRoot->sizeRoot;i++){
-			REQUIRE(array[i+2] == charRoot->getFile(*array[i+2],new MyFile()));
-		}
-				  /* Ist das Löschen dieser
-				   * Objekte notwendig?
-				   * delete [] name;
-				   * delete [] user;
-				   * delete [] group;
-				   * delete [] size;
-				   * delete [] mode;
-				   * delete [] lastAccess;
-				   * delete [] lastMod;
-				   * delete [] lastStatusChange;
-				   * delete [] firstBlock;
-				   * delete [] file;
-				   * ....
-				   * delete [] arraysize;
-				   * delete [] sizePointer;
-				   */
-		delete firstFile;
-		delete charRoot;
-
-	}
 }

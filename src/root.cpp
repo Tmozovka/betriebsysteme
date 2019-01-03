@@ -35,44 +35,7 @@ MyRoot::MyRoot(string name, off_t size, mode_t mode, int firstBlock) {
 	//printf("Konstruktor von MyRoot ist beendet \n");
 }
 
-MyRoot::MyRoot(char** array){
-//Files mit allen Werten aus array fuellen
-	if(isdigit(*array[0])){
-	sizeRoot = atoi(array[0]);}
 
-	MyFile * firstfile = new MyFile(array[1]);
-	addressRoot = firstfile;
-
-		for (int k=1; k <= sizeRoot;) {
-				files.push_front(array[k]);
-		}
-
-}
-char** MyRoot::createCharArray(char** array){
-//Array mit allen chars (Files) aus files fuellen
-	*array = new char[sizeRoot+2];
-	char * buf = new char [512];
-
-	sprintf (array[0], "%d", sizeRoot);
-	array[1]=addressRoot->writeBlock();
-	//Steht in array[2] das gleiche?
-	int k = 2;
-
-	std::list<MyFile>::iterator it = files.begin();
-
-		while (it != files.end()) {
-		buf = it->writeBlock();
-		array[k] = buf;
-		it++;
-		k++;
-		}
-
-	//Am Anfang werden addressRoot und sizeRoot
-	//im Array gespeichert
-	//Alle Files werden darauffolgend als char* hinterlegt
-
-	return array;
-}
 
 
 MyRoot::~MyRoot() {
@@ -131,6 +94,32 @@ bool MyRoot::existName(string name) {
 	}
 
 	return false;
+}
+
+bool MyRoot::compareRoots(MyRoot * root){
+	string* thisRoot = this->getArray();
+	string* similarRoot = root->getArray();
+
+		for(int k=0; k<=this->sizeRoot && k<=root->sizeRoot;k++){
+			if((thisRoot[k]==similarRoot[k])==false){
+				return false;
+			}
+			MyFile *f1 = new MyFile();
+			this->getFile(thisRoot[k],f1);
+			MyFile *f2 = new MyFile();
+			this->getFile(thisRoot[k],f2);
+			/*
+			 * tring cname, uid_t cuser, gid_t cgroup, off_t csize,
+			mode_t cmode, time_t clastAccess, time_t clastMod,
+			time_t clastStatusChange, int cfirstBlock)
+			 */
+			if((f1->user==f2->user)==false){
+				return false;
+			}
+			//... usw.
+			//oder man erstellt durch writeBlock() Chars* durch die iteriert wird.
+		}
+
 }
 
 void MyRoot::showRoot() {
@@ -222,7 +211,7 @@ char** MyRoot::writeBlocks()
 
 }
 
-char** MyRoot::readBlocks(){
+char** MyRoot::readBlocks(BlockDevice blocks){
 	//Sollen mehrere ausgelesen werden?
 	//Wenn ja, welche?
 
@@ -233,8 +222,9 @@ char** MyRoot::readBlocks(){
 
 	for(int i=0;it != files.end(); it++, i++) {
 			*block= new char[BLOCK_SIZE];
-			//*block= it->readBlock();
-			//TODO readBlock implementieren
+			*block= it->readBlock(i,blocks);
+			block++;
+			it++;
 	}
 
 	return block;

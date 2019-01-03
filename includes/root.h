@@ -6,6 +6,7 @@
 #include <string.h>
 
 #include "MyFile.h"
+#include "blockdevice.h"
 #include <sys/types.h>
 #include <unistd.h>
 using namespace std;
@@ -35,7 +36,7 @@ public  :
 	string* getArray();
 
 	bool existName(string name);
-
+	bool compareRoots(MyRoot* root);
 	void showRoot();
 
 	int getSize() {
@@ -44,7 +45,7 @@ public  :
 	char** createCharArray(char** array);
 
 	char** writeBlocks();
-	char** readBlocks();
+	char** readBlocks(BlockDevice blocks);
 
 };
 
