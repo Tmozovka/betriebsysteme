@@ -35,7 +35,18 @@ MyRoot::MyRoot(string name, off_t size, mode_t mode, int firstBlock) {
 	//printf("Konstruktor von MyRoot ist beendet \n");
 }
 
+MyRoot::MyRoot(char **array){
+	sizeRoot = sizeof(array);
+	for(int i=0; i<=sizeRoot; i++,array++){
+		//TODO: Funktioniert der Konstruktor ?Oder array
+		MyFile *f = new MyFile(*array);
+		this->addFile(f->getName(),f->getSize(),f->getMode(),f->getLastMod(),f->getFirstBlock());
+		delete f;
+	}
+	std::list<MyFile>::iterator it = files.begin();
+	addressRoot = it;
 
+}
 
 
 MyRoot::~MyRoot() {
@@ -100,25 +111,30 @@ bool MyRoot::compareRoots(MyRoot * root){
 	string* thisRoot = this->getArray();
 	string* similarRoot = root->getArray();
 
+	MyFile *f1 = new MyFile();
+	MyFile *f2 = new MyFile();
+
 		for(int k=0; k<=this->sizeRoot && k<=root->sizeRoot;k++){
 			if((thisRoot[k]==similarRoot[k])==false){
 				return false;
 			}
-			MyFile *f1 = new MyFile();
 			this->getFile(thisRoot[k],f1);
-			MyFile *f2 = new MyFile();
 			this->getFile(thisRoot[k],f2);
-			/*
-			 * tring cname, uid_t cuser, gid_t cgroup, off_t csize,
-			mode_t cmode, time_t clastAccess, time_t clastMod,
-			time_t clastStatusChange, int cfirstBlock)
-			 */
+
 			if((f1->user==f2->user)==false){
 				return false;
+			} else if((f1->size==f2->size)==false){
+				return false;
+			}else if((f1->mode==f2->mode)==false){
+				return false;
+			}else if((f1->lastMod==f2->lastMod)==false){
+				return false;
+			}else if((f1->firstBlock==f2->firstBlock)==false){
+				return false;
 			}
-			//... usw.
-			//oder man erstellt durch writeBlock() Chars* durch die iteriert wird.
+
 		}
+		return true;
 
 }
 

@@ -28,7 +28,6 @@ TEST_CASE( "Add/get/delete File", "[root]" ) {
 		MyFile * f = new MyFile(name,NULL,NULL,NULL,NULL,time(NULL),time(NULL),time(NULL),-1);
 		myroot->addFile(f->getName(),f->getSize(),f->getMode(),f->getLastMod(),f->getFirstBlock());
 		name[0] ++;
-
 	}
 	int result = myroot->addFile(f->getName(),f->getSize(),f->getMode(),f->getLastMod(),f->getFirstBlock());
 	REQUIRE(result==-1);
@@ -208,13 +207,13 @@ TEST_CASE( "Write/Read Root in Block","[root]" ) {
 			readBlockChar=tryRoot->readBlocks(blocks);
 
 
-			REQUIRE[strcmp(*writeBlockChar,*readBlockChar)==0];
+			REQUIRE(strcmp(*writeBlockChar,*readBlockChar)==0);
 
 			//Final Test
 			MyRoot * newRoot = new MyRoot(readBlockChar);
 
 			//TODO: Fertig implementieren
-			//REQUIRE(newRoot->compareRoots(tryFile));
+			REQUIRE(newRoot->compareRoots(tryRoot));
 
 
 			remove("containerFileTest.bin");
