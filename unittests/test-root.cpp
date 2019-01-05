@@ -162,66 +162,97 @@ TEST_CASE( "Add/get/delete File", "[root]" ) {
 TEST_CASE( "Write/Read Root in Block","[root]" ) {
 
 	SECTION("Write Root in Block"){
-			MyFile * firstFile = new MyFile("firstFile.txt",2000,1777,12000,10005,1000000,100011000,11111000,50000);
-			MyFile * secondFile = new MyFile("secondFile.txt",1999,1666,10300,12005,1000001,110011011,11000111,59999);
-			MyFile * thirdFile = new MyFile("thirdFile.txt",1888,1555,10045,12300,1000011,111110111,10001111,60000);
+	MyFile * firstFile = new MyFile("firstFile.txt",2000,1777,12000,10005,1000000,100011000,11111000,50000);
+	MyFile * secondFile = new MyFile("secondFile.txt",1999,1666,10300,12005,1000001,110011011,11000111,59999);
+	MyFile * thirdFile = new MyFile("thirdFile.txt",1888,1555,10045,12300,1000011,111110111,10001111,60000);
 
-			MyRoot * tryRoot = new MyRoot(firstFile);
-			tryRoot->addFile("secondFile.txt",10300,12005,1000001,59999);
-			tryRoot->addFile("secondFile.txt",10045,12300,1000011,60000);
+	//MyRoot * tryRoot = new MyRoot(firstFile);
+	MyRoot * tryRoot = new MyRoot(*firstFile);
+	tryRoot->addFile("secondFile.txt",10300,12005,1000001,59999);
+	tryRoot->addFile("secondFile.txt",10045,12300,1000011,60000);
 
-			//writeBlocks anwenden auf Root
-			char ** writeBlockChar = new char * [tryRoot->sizeRoot];
-			writeBlockChar= tryRoot->writeBlocks();
+	//writeBlocks anwenden auf Root
+	char ** writeBlockChar = new char * [tryRoot->getSize()];
+	writeBlockChar= tryRoot->writeBlocks();
 
-			char*containerpaths[]= new char [tryRoot->sizeRoot];
-			char*path_file;
-			char*path_bin;
+	//char*containerpaths[]= new char [tryRoot->sizeRoot];
+	char* containerpaths= new char [tryRoot->getSize()];
+	char*path_file;
+	char*path_bin;
 
-			for(int i=0; i<=tryRoot->sizeRoot;i++){
-				path_file ="containerFile";
-				path_bin=".bin";
-				containerpaths[i]= sprintf( path_file, "%s%d%s", path_file, i, path_bin );
-			}
+	for(int i=0; i<=tryRoot->getSize();i++) {
+		path_file ="containerFile";
+		path_bin=".bin";
+		containerpaths[i]= sprintf( path_file, "%s%d%s", path_file, i, path_bin );
+	}
 
-			char * buf = new char [512];
-			char * readBuf = new char [512];
+	char * buf = new char [512];
+	char * readBuf = new char [512];
 
-			BlockDevice  blocks ;
+	BlockDevice blocks;
 
-			string *nameArray = tryRoot->getArray();
+	string *nameArray = tryRoot->getArray();
 
-			for(u_int32_t k=0;k<=tryRoot->sizeRoot;k++){
-				//tryRoot->getFile(nameArray[k],new MyFile());
-				buf = *writeBlockChar;
+	for(u_int32_t k=0;k<=tryRoot->getSize();k++) {
+		//tryRoot->getFile(nameArray[k],new MyFile());
+		buf = *writeBlockChar;
 
-				blocks.create(containerpaths[k]);
-				blocks.write(k,buf);
-				blocks.read(k,readBuf);
-				REQUIRE(strcmp(buf, readBuf)==0);
+		//Tanja's Frage: blocks.create kann nur ein mal erstellt werden, so wird ein Binaere Datei erstellt.
+		//In der Datei muessen alle MyFiles usw geschrieben werden.
+		//Wieso ist es in der Schleife?
+		blocks.create(containerpaths[k]);//??????ERROR HIER????????????????
 
-				writeBlockChar++;
-			}
-				//Auslesen der BLoecke
-			char ** readBlockChar = new char * [tryRoot->sizeRoot];
-			readBlockChar=tryRoot->readBlocks(blocks);
+		blocks.write(k,buf);
+		blocks.read(k,readBuf);
+		REQUIRE(strcmp(buf, readBuf)==0);
+
+		writeBlockChar++;
+	}
+	//Auslesen der BLoecke
+	char ** readBlockChar = new char * [tryRoot->getSize()];
+	readBlockChar=tryRoot->readBlocks(blocks);
+
+	REQUIRE(strcmp(*writeBlockChar,*readBlockChar)==0);
+
+	//Final Test
+	MyRoot * newRoot = new MyRoot(readBlockChar);
+
+	//TODO: Fertig implementieren
+	REQUIRE(newRoot->compareRoots(tryRoot));
+
+	remove("containerFileTest.bin");
+	delete tryRoot;
+	delete newRoot;
+	//	delete blocks;
+	delete [] readBuf;
+	delete [] buf;
+
+}
+
+SECTION("Klein Test fuer das Block Beschreiben")
+{
+	MyFile * firstFile = new MyFile("firstFile.txt",2000,1777,12000,10005,1000000,100011000,11111000,50000);
+	MyFile * secondFile = new MyFile("secondFile.txt",1999,1666,10300,12005,1000001,110011011,11000111,59999);
+	MyFile * thirdFile = new MyFile("thirdFile.txt",1888,1555,10045,12300,1000011,111110111,10001111,60000);
+
+	//MyRoot * tryRoot = new MyRoot(firstFile);
+	MyRoot * tryRoot = new MyRoot(*firstFile);
+	tryRoot->addFile("secondFile.txt",10300,12005,1000001,59999);
+	tryRoot->addFile("secondFile.txt",10045,12300,1000011,60000);
+
+	//kann man das so implementieren??
+
+	BlockDevice blocks;
+	blocks.create("RootTest.bin");
+	char ** readBlockChar = new char * [tryRoot->getSize()];
+	readBlockChar=tryRoot->readBlocks(blocks);
+	MyRoot * newRoot = new MyRoot(readBlockChar);
+	REQUIRE(newRoot->compareRoots(tryRoot));
+
+	remove("RootTest.bin");
+	delete tryRoot;
+	delete newRoot;
 
 
-			REQUIRE(strcmp(*writeBlockChar,*readBlockChar)==0);
-
-			//Final Test
-			MyRoot * newRoot = new MyRoot(readBlockChar);
-
-			//TODO: Fertig implementieren
-			REQUIRE(newRoot->compareRoots(tryRoot));
-
-
-			remove("containerFileTest.bin");
-			delete tryRoot;
-			delete newRoot;
-		//	delete blocks;
-			delete [] readBuf;
-			delete [] buf;
-
-		}
+}
 }

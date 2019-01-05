@@ -44,7 +44,7 @@ MyRoot::MyRoot(char **array){
 		delete f;
 	}
 	std::list<MyFile>::iterator it = files.begin();
-	addressRoot = it;
+	addressRoot = &(*it);
 
 }
 
@@ -114,14 +114,22 @@ bool MyRoot::compareRoots(MyRoot * root){
 	MyFile *f1 = new MyFile();
 	MyFile *f2 = new MyFile();
 
-		for(int k=0; k<=this->sizeRoot && k<=root->sizeRoot;k++){
+	if(this->sizeRoot!=root->sizeRoot)
+		return false;
+
+	//TODO: adressroot compere //braucht man das ?
+
+		for(int k=0; k<=this->sizeRoot ;k++){
 			if((thisRoot[k]==similarRoot[k])==false){
 				return false;
 			}
 			this->getFile(thisRoot[k],f1);
-			this->getFile(thisRoot[k],f2);
+			this->getFile(similarRoot[k],f2);
 
-			if((f1->user==f2->user)==false){
+			if(f1!=f2)
+				return false;
+
+			/*if((f1->user==f2->user)==false){
 				return false;
 			} else if((f1->size==f2->size)==false){
 				return false;
@@ -131,7 +139,7 @@ bool MyRoot::compareRoots(MyRoot * root){
 				return false;
 			}else if((f1->firstBlock==f2->firstBlock)==false){
 				return false;
-			}
+			}*/
 
 		}
 		return true;
