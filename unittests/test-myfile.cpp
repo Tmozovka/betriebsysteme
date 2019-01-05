@@ -7,7 +7,7 @@
 
 TEST_CASE( "Compare File// Getter- and Settermethods", "[MyFile]" ) {
 
-	printf("START MYFILE TEST \n");
+	//printf("START MYFILE TEST \n");
 	MyFile* myfile = new MyFile("myfile.txt", getuid(), getgid(), 0, NULL,
 			time(NULL), time(NULL), time(NULL), 2);
 
@@ -22,16 +22,16 @@ TEST_CASE( "Compare File// Getter- and Settermethods", "[MyFile]" ) {
 	delete myfile;
 
 
-	SECTION("Write File in Block"){
+	SECTION("Write File in Block using char *"){
 		MyFile * tryFile = new MyFile("newfile.txt",2000,2000,12345,12345,1111111,111111111,11111111,60000);
 
-		printf("START TO WRITE IN BLOCK \n");
+		//printf("START TO WRITE IN BLOCK \n");
 		char * buf = new char [512];
 		char * readBuf = new char [512];
 		buf = tryFile->writeBlock();
 
-		printf("buf mit tryFile: %s \n", buf);
-		printf("write to block \n");
+		//printf("buf mit tryFile: %s \n", buf);
+		//printf("write to block \n");
 
 		BlockDevice  blocks ;
 
@@ -52,4 +52,9 @@ TEST_CASE( "Compare File// Getter- and Settermethods", "[MyFile]" ) {
 		delete [] buf;
 
 	}
+
+
+
 }
+
+
