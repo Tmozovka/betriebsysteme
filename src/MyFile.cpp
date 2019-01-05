@@ -125,8 +125,10 @@ char * MyFile::writeBlock() {
 	return block;
 
 }
-int readBlock(int t){
-//Wofuer steht t? Was wird damit uebergeben?
+char * MyFile::readBlock(int blockNo, BlockDevice blocks){
+	char * buf = new char [512];
+	blocks.read(blockNo,buf);
+	return buf;
 }
 
 char * MyFile::writeVar(char * buf, int size, int &count) {

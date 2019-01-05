@@ -171,6 +171,7 @@ int dMap::init(int startingBlock,BlockDevice *blocks){
 
 
 
+
 int dMap::read(int startingBlock, BlockDevice* blocks){
 
 	int currentBlock = startingBlock;

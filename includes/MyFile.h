@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include "myfs-structs.h"
+#include "blockdevice.h"
 using namespace std;
 
 class MyFile {
@@ -57,7 +58,7 @@ public:
 	void convertI(T & var, char * varT);
 
 
-	int readBlock(int t);
+	char * readBlock(int blockNo, BlockDevice  blocks);
 
 	void resize(char * text, int oldSize, int newSize);
 };
