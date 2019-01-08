@@ -25,11 +25,16 @@ void dMap::showDmap() {
 
 dMap::dMap() {
 
-	//is not needed because biset is initalised with 0;
-	//for (int i = 0; i < BLOCK_NUMBER; i++)
-		//dmap[i] = 0;
+	//erste Bloecke braucht man fuer Datenstrukturen
+	/*for (int i = 0; i < BLOCKS_START; i++)
+			dmap[i] = -1;
+
+	for (int i = BLOCKS_START; i < BLOCK_NUMBER; i++)
+		dmap[i] = 0;*/
+
 
 	firstFreeBlock = 0;
+	//firstFreeBlock = BLOCKS_START;
 	//printf("Konstruktor von dMap ist beendet \n");
 }
 

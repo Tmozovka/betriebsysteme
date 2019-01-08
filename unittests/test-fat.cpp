@@ -50,11 +50,11 @@ TEST_CASE( "Set/get/delete Allocated Blocks", "[fat]" ) {
 	blocks.create("containerFatTest.bin");
 
 	//write in blocks
-	int nrBlocks=0;
-	fat->writeBlockDevice(&blocks,200,&nrBlocks);
-	printf("IN TEST FAT NUMBER WROTEN BLOCKS : %i \n", nrBlocks);
+	//int nrBlocks=0;
+	fat->writeBlockDevice(&blocks,200);
+//	printf("IN TEST FAT NUMBER WROTEN BLOCKS : %i \n", nrBlocks);
 	//read from blocks
-	MyFAT* newFat = new MyFAT(&blocks,200,nrBlocks);
+	MyFAT* newFat = new MyFAT(&blocks,200);
 	//newFat->showFat();
 	remove("containerFatTest.bin");
 	REQUIRE(compare(*fat, *newFat)==0);

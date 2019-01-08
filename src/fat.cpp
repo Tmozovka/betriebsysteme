@@ -43,7 +43,10 @@ int MyFAT::getNext(int current, int*next) {
 
 MyFAT::MyFAT() {
 
-	for (int i = 0; i < size; i++)
+	for (int i = 0; i <BLOCKS_START ; i++)
+		table[i] = -2;
+
+	for (int i = BLOCKS_START; i < size; i++)
 		table[i] = -1;
 
 	//printf("Konstruktor von MyFat ist beendet \n");
@@ -76,9 +79,9 @@ char * MyFAT::writeBlock() {
 	return result;
 }
 
-MyFAT::MyFAT(BlockDevice * blocks, int start, int nrBlocks) {
+MyFAT::MyFAT(BlockDevice * blocks, int start) {
 	char * buf = new char[BLOCK_NUMBER * 6];
-	this->readBlockDevice(blocks, 200, buf, nrBlocks);
+	this->readBlockDevice(blocks, 200, buf);
 
 	//printf("readBlockDevice fat : %s \n", buf);
 	//printf("readBlockDevice fat end of first Block: %s \n", buf + 510);
@@ -122,10 +125,14 @@ int compare(MyFAT f1, MyFAT f2) {
 	return 0;
 }
 
-void MyFAT::writeBlockDevice(BlockDevice * blocks, int start, int * nrBlocks) {
+void MyFAT::writeBlockDevice(BlockDevice * blocks, int start) {
+	int nrBlocks=0;
 	char * buf;
 	buf = this->writeBlock();
 	//printf("fat: %s \n", buf);
+
+	int firstBlock=start;
+	start++;
 
 	while (*buf != '\0') {
 		char * writeBuf = new char[BLOCK_SIZE];
@@ -140,19 +147,34 @@ void MyFAT::writeBlockDevice(BlockDevice * blocks, int start, int * nrBlocks) {
 
 		//writeBuf=buf;
 		blocks->write(start++, writeBuf);
-		(*nrBlocks)++;
+		(nrBlocks)++;
 		//buf+=BLOCK_SIZE;
 
 		//writeBuf = startWriteBuf;
+
+
+
 		delete[] writeBuf;
 	}
 
+	char * temp = new char[BLOCK_SIZE];
+
+	strcpy(temp, to_string(nrBlocks).c_str());
+		//resize(buf, to_string(this->sizeRoot).length(), BLOCK_SIZE);
+
+	printf("nrBlocks write : %s \n",  temp);
+	blocks->write(firstBlock, temp);
+
+	delete [] temp;
 }
 
-void MyFAT::readBlockDevice(BlockDevice * blocks, int start, char * newBuf,
-		int nrBlocks) {
+void MyFAT::readBlockDevice(BlockDevice * blocks, int start, char * newBuf) {
 	char * readBuf = new char[512];
-	int j = nrBlocks;
+
+	blocks->read(start++, readBuf);
+	int j = atoi(readBuf);
+	printf("nrBlocks read : %i \n",  j);
+
 	int i = start;
 	while (j != 0) {
 		blocks->read(i++, readBuf);

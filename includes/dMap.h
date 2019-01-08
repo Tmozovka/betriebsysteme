@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include "blockdevice.h"
 #include <bitset>
-#include "blockdevice.h"
+#include "myfs-structs.h"
 
 class dMap {
 

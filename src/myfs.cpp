@@ -41,6 +41,11 @@ MyFS* MyFS::Instance() {
 MyFS::MyFS() {
 	this->logFile = stderr;
 
+	sp = new SuperBlock();
+	dmap = new dMap();
+	fat = new MyFAT();
+	root = new MyRoot();
+	blocks = new BlockDevice();
 	// printf("Konstruktor von MyFS ist beendet \n");
 	//LOG("Konstruktor von MyFS ist beendet \n");
 }
@@ -48,12 +53,16 @@ MyFS::MyFS() {
 MyFS::MyFS(char * nameCont) {
 	this->logFile = stderr;
 
+	blocks = new BlockDevice();
+	blocks->open(nameCont);
+
+	//TODO: init fuer sp und dmap
 	sp = new SuperBlock();
 	dmap = new dMap();
-	fat = new MyFAT();
-	root = new MyRoot();
-	blocks = new BlockDevice();
-	blocks->create(nameCont);
+
+	fat = new MyFAT(blocks, FAT_START);
+	root = new MyRoot(blocks, ROOT_START);
+
 
 	// printf("Konstruktor von MyFS ist beendet \n");
 	//LOG("Konstruktor von MyFS ist beendet \n");
@@ -71,6 +80,17 @@ MyFS::~MyFS() {
 
 }
 
+bool operator ==(MyFS const &f1, MyFS const& f2) {
+
+	if(!(f1.fat==f2.fat))
+		return false;
+
+	if(!(f1.root==f2.root))
+		return false;
+
+	return true;
+
+}
 
 void MyFS::resize(char * text, int oldSize, int newSize) {
 
@@ -90,7 +110,7 @@ int MyFS::readFile(const char *path, char *buf, size_t size, off_t offset,
 
 	// TODO: Implement this!
 	//printf("readFile start \n"); //funktioniert nicht
-	LOG("********************************************************************************************** "); LOG("readFile start "); LOGF("offset: %i, size: %i", offset, size);
+	LOG("********************************************************************************************** ");LOG("readFile start ");LOGF("offset: %i, size: %i", offset, size);
 	/*if (offset > size) // not possible
 	 RETURN(-1);*/
 
@@ -143,7 +163,7 @@ int MyFS::readFile(const char *path, char *buf, size_t size, off_t offset,
 	}
 	buf -= count;
 
-	LOGF("all buf is  : %s \n",buf); LOG("readFile success \n");
+	LOGF("all buf is  : %s \n",buf);LOG("readFile success \n");
 	buffer1 -= count;
 	delete[] buffer1; //error
 	delete fcopy;
@@ -153,7 +173,7 @@ int MyFS::readFile(const char *path, char *buf, size_t size, off_t offset,
 // int fuseCreate(const char *, mode_t, struct fuse_file_info *);
 int MyFS::addFile(const char * name, mode_t mode, time_t mtime, off_t size,
 		char * text) {
-	LOG("********************************************************************************************** "); LOG("addFile start");
+	LOG("********************************************************************************************** ");LOG("addFile start");
 	if (size % BD_BLOCK_SIZE != 0) {
 		LOGF("Die Datei %s wurde falsh hinzugefuegt \n", name);
 		RETURN(-1);
@@ -252,7 +272,7 @@ int MyFS::deleteFile(const char *name) {
 
 		blocksNumber--;
 	}
-delete [] text;
+	delete[] text;
 	RETURN(0);
 }
 
@@ -275,7 +295,7 @@ int MyFS::fuseGetattr(const char *path, struct stat *st) {
 		//Path ist ungleich "/"
 		LOG("can't get file from root. File's should start with /");
 		RETURN(-ENOENT);
-	} LOG("2");
+	}LOG("2");
 
 	if (strcmp(path, "/") != 0)
 		if (root->getFile(path + 2, &fcopy) == -1) {
@@ -358,7 +378,7 @@ int MyFS::fuseOpen(const char *path, struct fuse_file_info *fileInfo) { // How t
 	LOG("1");
 	if (root->existName(path) == 0) {
 		fileInfo->fh = 1;
-	} LOG("2");
+	}LOG("2");
 	//TOdo etwas tun, wenn path existiert
 	//vermerken, dass datei geöffnet
 	//Julia: als was merken? als int, ähnlich zu filedescriptor in liunx?
@@ -533,7 +553,7 @@ int MyFS::fuseReaddir(const char *path, void *buffer, fuse_fill_dir_t filler,
 
 	}
 
-	RETURN(0); LOG("readDir success");
+	RETURN(0);LOG("readDir success");
 	// <<< My new code
 }
 
@@ -572,7 +592,7 @@ void* MyFS::fuseInit(struct fuse_conn_info *conn) {
 		// turn of logfile buffering
 		setvbuf(this->logFile, NULL, _IOLBF, 0);
 
-		LOG("Starting logging...\n"); LOGM();
+		LOG("Starting logging...\n");LOGM();
 
 		// you can get the containfer file name here:
 		LOGF("Container file name: %s", ((MyFsInfo *) fuse_get_context()->private_data)->contFile);

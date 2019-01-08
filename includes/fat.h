@@ -10,7 +10,7 @@ private:
 public:
 	MyFAT();
 	MyFAT(char * b);
-	MyFAT(BlockDevice * blocks, int start, int nrBlocks);
+	MyFAT(BlockDevice * blocks, int start);
 	~MyFAT();
 
 	int link(int currentNo, int* nextNo);
@@ -26,8 +26,8 @@ public:
 	void resize(char * text, int oldSize, int newSize);
 	char * writeBlock();
 	friend int compare(MyFAT f1, MyFAT f2);
-	void writeBlockDevice(BlockDevice * b,int start,int * nrBlocks);
-	void readBlockDevice( BlockDevice * blocks,int start,char * newBuf,int nrBlocks);
+	void writeBlockDevice(BlockDevice * b,int start);
+	void readBlockDevice( BlockDevice * blocks,int start,char * newBuf);
 	/*int firstBlock:
 	 int nextBlock;
 	 int currentBlock;

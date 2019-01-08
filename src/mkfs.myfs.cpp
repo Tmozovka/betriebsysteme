@@ -30,7 +30,8 @@ int main(int argc, char *argv[]) {
 	char * nameCont = argv[1];
 	LOGF("container: %s \n",nameCont);
 
-	MyFS * fs = new MyFS(nameCont);
+	MyFS * fs = new MyFS();
+	fs->blocks->create(nameCont);
 
 	char * pufferAdd;
 	char * pufferRead;

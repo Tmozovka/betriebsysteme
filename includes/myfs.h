@@ -101,6 +101,8 @@ public:
 	//int fuseRead(const char *path, char *buf, size_t size, off_t offset, struct fuse_file_info *fileInfo);
 	int readFile(const char *name, char *buffer, size_t size, off_t offset,
 			struct fuse_file_info *fi);
+
+	friend bool operator ==(MyFS const &f, MyFS const& f2);
 };
 
 #endif /* myfs_h */

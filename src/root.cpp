@@ -280,8 +280,8 @@ char** MyRoot::readBlocks(BlockDevice blocks) {
 	return block;
 
 }
-////////////////////////////////////////////////////////////////////////////////////
-void MyRoot::writeBlocksTanja(BlockDevice blocks, int start) {
+/////////////////////////////////Tanja's funktionen , um Root in BlockDevice zu schreiben/////////////////////////////////////////////////////
+void MyRoot::writeBlocksTanja(BlockDevice * blocks, int start) {
 
 	char * buf = new char[BLOCK_SIZE];
 
@@ -291,7 +291,7 @@ void MyRoot::writeBlocksTanja(BlockDevice blocks, int start) {
 	//resize(buf, to_string(this->sizeRoot).length(), BLOCK_SIZE);
 
 	printf("buf %i : %s \n", start, buf);
-	blocks.write(start++, buf);
+	blocks->write(start++, buf);
 
 
 	std::list<MyFile>::iterator it = files.begin();
@@ -299,22 +299,22 @@ void MyRoot::writeBlocksTanja(BlockDevice blocks, int start) {
 	while ( it != files.end()) {
 		buf = it->writeFileChar();
 		printf("buf %i : %s \n", start, buf);
-		blocks.write(start++, buf);
+		blocks->write(start++, buf);
 		it++;
 	}
 
 }
 
-MyRoot::MyRoot(BlockDevice blocks, int start)
+MyRoot::MyRoot(BlockDevice * blocks, int start)
 {
 	char * buf = new char [512];
-	blocks.read(start++,buf);
+	blocks->read(start++,buf);
 	sizeRoot=atoi(buf);
 
 
 	for(int i=0;i<sizeRoot;i++)
 	{
-		blocks.read(start++,buf);
+		blocks->read(start++,buf);
 		printf("blocks.read buf %i : %s \n", start-1, buf);
 		MyFile * f= new MyFile(buf);
 		files.push_back(*f);

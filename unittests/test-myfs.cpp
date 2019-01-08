@@ -40,7 +40,8 @@ TEST_CASE( "my Funktionen in myfs testen", "[myfs]" ) {
 
 	SECTION("addFile readFile deleteFile"){
 
-	MyFS * fs = new MyFS(nameCont);
+	MyFS * fs = new MyFS();
+	fs->blocks->create(nameCont);
 	// printf("MyFS ist erstellt \n");
 	START:
 	//write files
@@ -126,18 +127,56 @@ TEST_CASE( "my Funktionen in myfs testen", "[myfs]" ) {
 	//printf("deleteFile: %s \n", argv[2]);
 	//REQUIRE(fs->deleteFile(argv[2])==0); //error
 	temp= argv[2];
-	REQUIRE(fs->deleteFile(temp)==0); //error
+	REQUIRE(fs->deleteFile(temp)==0);//error
 	REQUIRE(fs->root->getSize()==0);
-
 
 	delete [] ar;
 	remove("containerTest.bin");
 	delete fs;
 }
 
+	SECTION("write in BlockDevice"){
+
+	MyFS * fs = new MyFS();
+	fs->blocks->create(nameCont);
+	//fs->writeBlockDevice();
+	// printf("MyFS ist erstellt \n");
+
+///////////////////////////////////////WRITE IN FS//////////////////////////////////////////
+	//write files
+	for(int i=2;i<argc;i++)
+	{
+		//printf("try to open %s \n", argv[i]);
+
+		fin = fopen(argv[i], "rwb");
+		if(fin)
+		{
+			//printf("OPENED! \n");
+			struct stat st;
+			st.st_mode = S_IFREG | 0444;
+			stat(argv[i], &st);
+			off_t size=ceil((double)st.st_size/BD_BLOCK_SIZE)*BD_BLOCK_SIZE;
+			pufferAdd = new char[size];
+			fread(pufferAdd, size, 1, fin);
+			//printf("try to resize \n");
+			fs->resize(pufferAdd,st.st_size,size);
+			//printf("REseised! \n");
+			//printf("try to add File! \n");
+			fs->addFile(argv[i],st.st_mode,st.st_mtime,size,pufferAdd);
+			//printf("ADDED! \n");
+			sizeRoot++;
+
+			delete [] pufferAdd;
+		}
+	}
 
 
+	//MyFS * newFs = new MyFS(nameCont);
 
+	//REQUIRE(*fs==*newFs);
+
+	remove("containerTest.bin");
 }
 
+}
 
