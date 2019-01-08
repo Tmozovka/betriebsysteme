@@ -23,6 +23,7 @@ public:
 
 	void showFat();
 
+	void resize(char * text, int oldSize, int newSize);
 	char * writeBlock();
 	friend int compare(MyFAT f1, MyFAT f2);
 	void writeBlockDevice(BlockDevice * b,int start,int * nrBlocks);

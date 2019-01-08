@@ -82,6 +82,7 @@ char * MyFile::writeBlock(){
 			if(strcmp(buf, readBuf)!=0){
 				throw std::invalid_argument( "Differences between written and read Blocks" );
 			}
+			remove("containerFileTest.bin");
 			return readBuf;
 }
 

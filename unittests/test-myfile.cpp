@@ -53,7 +53,7 @@ TEST_CASE( "Compare File// Getter- and Settermethods", "[MyFile]" ) {
 		BlockDevice  blocks ;
 
 		printf("START TO READ IN BLOCK \n");
-		blocks.create("containerFileTest.bin");
+		blocks.create("containerFileTest2.bin");
 		blocks.write(0,buf);
 		readBuf=tryFile->readBlock(0,blocks);
 
@@ -63,7 +63,7 @@ TEST_CASE( "Compare File// Getter- and Settermethods", "[MyFile]" ) {
 		MyFile * newFile = new MyFile(readBuf);
 		REQUIRE(*newFile == *tryFile);
 
-		remove("containerFileTest.bin");
+		remove("containerFileTest2.bin");
 		delete tryFile;
 		delete newFile;
 	//	delete blocks;

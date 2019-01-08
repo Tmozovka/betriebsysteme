@@ -56,9 +56,9 @@ TEST_CASE( "Set/get/delete Allocated Blocks", "[fat]" ) {
 	//read from blocks
 	MyFAT* newFat = new MyFAT(&blocks,200,nrBlocks);
 	//newFat->showFat();
-
-	REQUIRE(compare(*fat, *newFat)==0);
 	remove("containerFatTest.bin");
+	REQUIRE(compare(*fat, *newFat)==0);
+
 	delete newFat;
 
 

@@ -161,7 +161,7 @@ TEST_CASE( "Add/get/delete File", "[root]" ) {
 
 TEST_CASE( "Write/Read Root in Block","[root]" ) {
 
-	SECTION("Write Root in Block"){
+/*	SECTION("Write Root in Block"){
 	MyFile * firstFile = new MyFile("firstFile.txt",2000,1777,12000,10005,1000000,100011000,11111000,50000);
 	MyFile * secondFile = new MyFile("secondFile.txt",1999,1666,10300,12005,1000001,110011011,11000111,59999);
 	MyFile * thirdFile = new MyFile("thirdFile.txt",1888,1555,10045,12300,1000011,111110111,10001111,60000);
@@ -172,6 +172,7 @@ TEST_CASE( "Write/Read Root in Block","[root]" ) {
 	tryRoot->addFile("secondFile.txt",10045,12300,1000011,60000);
 
 	BlockDevice blocks;
+	blocks.create("containerRootTest.bin");
 	//Anwenden auf Root
 	char ** writeBlockChar = tryRoot->writeBlocks(blocks);
 
@@ -184,7 +185,8 @@ TEST_CASE( "Write/Read Root in Block","[root]" ) {
 	MyRoot * newRoot = new MyRoot(readBlockChar);
 	REQUIRE(newRoot->compareRoots(tryRoot));
 
-	//remove("containerFileTest.bin");
+//	remove("containerFileTest.bin");
+	remove("containerRootTest.bin");
 	delete tryRoot;
 	delete newRoot;
 	//	delete blocks;
@@ -216,5 +218,5 @@ SECTION("Klein Test fuer das Block Beschreiben")
 	delete newRoot;
 
 
-}
+}*/
 }

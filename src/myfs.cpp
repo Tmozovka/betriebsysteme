@@ -71,7 +71,7 @@ MyFS::~MyFS() {
 
 }
 
-//TODOs:
+
 void MyFS::resize(char * text, int oldSize, int newSize) {
 
 	int i = newSize - oldSize;

@@ -60,7 +60,6 @@ MyFAT::~MyFAT() {
 char * MyFAT::writeBlock() {
 	char * result = new char[size * 6];
 
-
 	strcpy(result, to_string(this->table[0]).c_str());
 	strcat(result, "_");
 
@@ -74,22 +73,23 @@ char * MyFAT::writeBlock() {
 
 	}
 
-
 	return result;
 }
 
-MyFAT::MyFAT(BlockDevice * blocks, int start, int nrBlocks)
-{
+MyFAT::MyFAT(BlockDevice * blocks, int start, int nrBlocks) {
 	char * buf = new char[BLOCK_NUMBER * 6];
-	this->readBlockDevice(blocks,200,buf,nrBlocks);
+	this->readBlockDevice(blocks, 200, buf, nrBlocks);
+
+	//printf("readBlockDevice fat : %s \n", buf);
+	//printf("readBlockDevice fat end of first Block: %s \n", buf + 510);
+	//printf("readBlockDevice fat end of second Block: %s \n", buf + 510 * 2);
 
 //MyFAT::MyFAT(char * buf)
 	for (int i = 0; i < size; i++) {
 
 		char * next = new char[5];
-		for(int j=0;*buf!='_'; j++, buf++)
-		{
-			next[j]=*buf;
+		for (int j = 0; *buf != '_'; j++, buf++) {
+			next[j] = *buf;
 		}
 		buf++;
 		table[i] = atoi(next);
@@ -99,19 +99,19 @@ MyFAT::MyFAT(BlockDevice * blocks, int start, int nrBlocks)
 
 /*MyFAT::MyFAT(char * buf) {
 
-	for (int i = 0; i < size; i++) {
+ for (int i = 0; i < size; i++) {
 
-		char * next = new char[5];
-		for(int j=0;*buf!='_'; j++, buf++)
-		{
-			next[j]=*buf;
-		}
-		buf++;
-		table[i] = atoi(next);
-		delete[] next;
-	}
+ char * next = new char[5];
+ for(int j=0;*buf!='_'; j++, buf++)
+ {
+ next[j]=*buf;
+ }
+ buf++;
+ table[i] = atoi(next);
+ delete[] next;
+ }
 
-}*/
+ }*/
 
 int compare(MyFAT f1, MyFAT f2) {
 	for (int i = 0; i < f1.getSize(); i++) {
@@ -122,63 +122,84 @@ int compare(MyFAT f1, MyFAT f2) {
 	return 0;
 }
 
-void MyFAT::writeBlockDevice(BlockDevice * blocks, int start,int * nrBlocks)
-{
+void MyFAT::writeBlockDevice(BlockDevice * blocks, int start, int * nrBlocks) {
 	char * buf;
 	buf = this->writeBlock();
 	//printf("fat: %s \n", buf);
-	char * writeBuf = new char [BLOCK_SIZE];
-	//char * startWriteBuf = writeBuf;
 
-		while(*buf!='\0')
-		{
-			writeBuf=buf;
-			blocks->write(start++,writeBuf);
-			(*nrBlocks)++;
-			buf+=BLOCK_SIZE;
+	while (*buf != '\0') {
+		char * writeBuf = new char[BLOCK_SIZE];
+		//	char * startWriteBuf = writeBuf;
+
+		int i = 0;
+		for (; i < BLOCK_SIZE-1; i++) {
+			writeBuf[i] = *buf;
+			buf++;
 		}
+		writeBuf[i]=char(0);
+
+		//writeBuf=buf;
+		blocks->write(start++, writeBuf);
+		(*nrBlocks)++;
+		//buf+=BLOCK_SIZE;
+
 		//writeBuf = startWriteBuf;
-		//delete [] writeBuf;
+		delete[] writeBuf;
+	}
+
 }
 
-void MyFAT::readBlockDevice( BlockDevice * blocks,int start,char * newBuf,int nrBlocks)
-{
-		char * readBuf = new char [BLOCK_SIZE];
-		int j=nrBlocks;
-		int i=start;
-		while(j!=0)
-		{
-			blocks->read(i++,readBuf);
-			strcat(newBuf,readBuf);
-			j--;
-		}
+void MyFAT::readBlockDevice(BlockDevice * blocks, int start, char * newBuf,
+		int nrBlocks) {
+	char * readBuf = new char[512];
+	int j = nrBlocks;
+	int i = start;
+	while (j != 0) {
+		blocks->read(i++, readBuf);
 
-		delete [] readBuf;
+
+		strcat(newBuf, readBuf);
+		j--;
+
+	}
+
+	delete[] readBuf;
 }
 
+void MyFAT::resize(char * text, int oldSize, int newSize) {
 
+	int i = newSize - oldSize;
+	text += oldSize - 1;
+	while (i != 0) {
+		*(text++) = char(0);
+		i--;
+	}
+	//*(text-1)='\0';
+	text -= newSize;
+
+}
 /*char * MyFAT::BlockIntoBuffer(BlockDevice fatBlocks) {
 
-	for (int i = 0; i < size; i++) {
-		for (int j = 0; j < size; j++) {
-			* buf[i]= * *fatBlocks[i];
-			i++;
-			j++;
-		}
-	}
-	return * buf;
-	}
+ for (int i = 0; i < size; i++) {
+ for (int j = 0; j < size; j++) {
+ * buf[i]= * *fatBlocks[i];
+ i++;
+ j++;
+ }
+ }
+ return * buf;
+ }
 
  MyFAT::pufferIntoBlock(char * buf) {
 
-	BlockDevice fatBlocks = new BlockDevice;
+ BlockDevice fatBlocks = new BlockDevice;
 
-	for (int i = 0; i < size; i++) {
-		for (int j = 0; j < size; j++) {
-			*fatBlocks[i]= * buf[j];
-			i++;
-			j++;
-		}
-	}
-	return fatBlocks;
-	}*/
+ for (int i = 0; i < size; i++) {
+ for (int j = 0; j < size; j++) {
+ *fatBlocks[i]= * buf[j];
+ i++;
+ j++;
+ }
+ }
+ return fatBlocks;
+ }*/

@@ -249,7 +249,7 @@ char ** MyRoot::writeBlocks(BlockDevice blocks){
 		//this>getFile(nameArray[k],new MyFile());
 		buf = *writeBlockChar;
 
-		blocks.create("containerRootTest.bin"); //Ist der alte Fehler beseitigt?
+		//blocks.create("containerRootTest.bin"); //Ist der alte Fehler beseitigt?
 
 		blocks.write(k,buf);
 		blocks.read(k,readBuf);
@@ -259,6 +259,7 @@ char ** MyRoot::writeBlocks(BlockDevice blocks){
 
 		writeBlockChar++;
 	}
+
 	return writeBlockChar;
 }
 
