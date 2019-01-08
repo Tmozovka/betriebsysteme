@@ -171,61 +171,23 @@ TEST_CASE( "Write/Read Root in Block","[root]" ) {
 	tryRoot->addFile("secondFile.txt",10300,12005,1000001,59999);
 	tryRoot->addFile("secondFile.txt",10045,12300,1000011,60000);
 
-	//writeBlocks anwenden auf Root
-	char ** writeBlockChar = new char * [tryRoot->getSize()];
-	writeBlockChar= tryRoot->writeBlocks();
-
-	//char*containerpaths[]= new char [tryRoot->sizeRoot];
-	char* containerpaths= new char [tryRoot->getSize()];
-	char*path_file;
-	char*path_bin;
-
-	for(int i=0; i<=tryRoot->getSize();i++) {
-		path_file ="containerFile";
-		path_bin=".bin";
-		containerpaths[i]= sprintf( path_file, "%s%d%s", path_file, i, path_bin );
-	}
-
-	char * buf = new char [512];
-	char * readBuf = new char [512];
-
 	BlockDevice blocks;
+	//Anwenden auf Root
+	char ** writeBlockChar = tryRoot->writeBlocks(blocks);
 
-	string *nameArray = tryRoot->getArray();
-
-	for(u_int32_t k=0;k<=tryRoot->getSize();k++) {
-		//tryRoot->getFile(nameArray[k],new MyFile());
-		buf = *writeBlockChar;
-
-		//Tanja's Frage: blocks.create kann nur ein mal erstellt werden, so wird ein Binaere Datei erstellt.
-		//In der Datei muessen alle MyFiles usw geschrieben werden.
-		//Wieso ist es in der Schleife?
-		blocks.create(containerpaths[k]);//??????ERROR HIER????????????????
-
-		blocks.write(k,buf);
-		blocks.read(k,readBuf);
-		REQUIRE(strcmp(buf, readBuf)==0);
-
-		writeBlockChar++;
-	}
 	//Auslesen der BLoecke
 	char ** readBlockChar = new char * [tryRoot->getSize()];
 	readBlockChar=tryRoot->readBlocks(blocks);
-
 	REQUIRE(strcmp(*writeBlockChar,*readBlockChar)==0);
 
 	//Final Test
 	MyRoot * newRoot = new MyRoot(readBlockChar);
-
-	//TODO: Fertig implementieren
 	REQUIRE(newRoot->compareRoots(tryRoot));
 
-	remove("containerFileTest.bin");
+	//remove("containerFileTest.bin");
 	delete tryRoot;
 	delete newRoot;
 	//	delete blocks;
-	delete [] readBuf;
-	delete [] buf;
 
 }
 

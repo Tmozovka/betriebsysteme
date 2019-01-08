@@ -66,8 +66,26 @@ MyFile& MyFile::operator =(const MyFile &f) {
 }
 
 //to Blocks
+char * MyFile::writeBlock(){
+	char * buf = new char [512];
+			char * readBuf = new char [512];
+			buf = this->writeFileChar();
 
-char * MyFile::writeBlock() {
+			//printf("buf mit tryFile: %s \n", buf);
+			//printf("write to block \n");
+
+			BlockDevice  blocks ;
+
+			blocks.create("containerFileTest.bin");
+			blocks.write(0,buf);
+			blocks.read(0,readBuf);
+			if(strcmp(buf, readBuf)!=0){
+				throw std::invalid_argument( "Differences between written and read Blocks" );
+			}
+			return readBuf;
+}
+
+char * MyFile::writeFileChar() {
 
 	char * name = new char[FILE_NAME_SIZE];
 	strcpy(name, this->name.c_str());

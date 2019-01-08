@@ -44,7 +44,8 @@ public  :
 	}
 	char** createCharArray(char** array);
 
-	char** writeBlocks();
+	char** writeRootChar();
+	char** writeBlocks(BlockDevice blocks);
 	char** readBlocks(BlockDevice blocks);
 
 };

@@ -217,7 +217,7 @@ string * MyRoot::getArray() {
 	return arr;
 }
 
-char** MyRoot::writeBlocks()
+char** MyRoot::writeRootChar()
 {
 	char ** block;//[sizeRoot][BLOCK_SIZE];
 	block = new char * [sizeRoot];
@@ -226,13 +226,40 @@ char** MyRoot::writeBlocks()
 
 	while (it != files.end()) {
 			*block= new char[BLOCK_SIZE];
-			*block=it->writeBlock();
+			*block=it->writeFileChar();
 			block++;
 			it++;
 		}
 
 	return block;
 
+}
+char ** MyRoot::writeBlocks(BlockDevice blocks){
+	char ** writeBlockChar = new char * [this->getSize()];
+
+	writeBlockChar= this->writeRootChar();
+
+	char * buf = new char [512];
+	char * readBuf = new char [512];
+
+
+	string *nameArray = this->getArray();
+
+	for(u_int32_t k=0;k<=this->getSize();k++) {
+		//this>getFile(nameArray[k],new MyFile());
+		buf = *writeBlockChar;
+
+		blocks.create("containerRootTest.bin"); //Ist der alte Fehler beseitigt?
+
+		blocks.write(k,buf);
+		blocks.read(k,readBuf);
+		if(strcmp(buf, readBuf)!=0){
+			throw std::invalid_argument( "Differences between written and read Blocks" );
+		}
+
+		writeBlockChar++;
+	}
+	return writeBlockChar;
 }
 
 char** MyRoot::readBlocks(BlockDevice blocks){

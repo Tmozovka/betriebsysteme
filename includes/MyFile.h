@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 
+#include <stdexcept>
 #include <stdio.h>
 #include "myfs-structs.h"
 #include "blockdevice.h"
@@ -48,8 +49,9 @@ public:
 	friend bool operator ==(MyFile const &f, MyFile const& f2);
 	MyFile& operator =(const MyFile &f);
 
+	char * writeFileChar();
 	char * writeBlock();
-
+	char * readBlock(int blockNo, BlockDevice  blocks);
 
 	char * writeVar( char * buf, int size, int & count );
 	//void writeVar(int * var, char * buf, int size, int & count );
@@ -58,7 +60,7 @@ public:
 	void convertI(T & var, char * varT);
 
 
-	char * readBlock(int blockNo, BlockDevice  blocks);
+
 
 	void resize(char * text, int oldSize, int newSize);
 };
