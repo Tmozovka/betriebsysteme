@@ -6,7 +6,6 @@
 #include <string>
 #include "macros.h"
 
-
 MyRoot::MyRoot(MyFile firstfile) {
 	sizeRoot = 1;
 	addressRoot = new MyFile(firstfile);
@@ -35,19 +34,19 @@ MyRoot::MyRoot(string name, off_t size, mode_t mode, int firstBlock) {
 	//printf("Konstruktor von MyRoot ist beendet \n");
 }
 
-MyRoot::MyRoot(char **array){
+MyRoot::MyRoot(char **array) {
 	sizeRoot = sizeof(array);
-	for(int i=0; i<=sizeRoot; i++,array++){
+	for (int i = 0; i <= sizeRoot; i++, array++) {
 		//TODO: Funktioniert der Konstruktor ?Oder array
 		MyFile *f = new MyFile(*array);
-		this->addFile(f->getName(),f->getSize(),f->getMode(),f->getLastMod(),f->getFirstBlock());
+		this->addFile(f->getName(), f->getSize(), f->getMode(), f->getLastMod(),
+				f->getFirstBlock());
 		delete f;
 	}
 	std::list<MyFile>::iterator it = files.begin();
 	addressRoot = &(*it);
 
 }
-
 
 MyRoot::~MyRoot() {
 	sizeRoot = 0;
@@ -107,42 +106,42 @@ bool MyRoot::existName(string name) {
 	return false;
 }
 
-bool MyRoot::compareRoots(MyRoot * root){
+bool MyRoot::compareRoots(MyRoot * root) {
 	string* thisRoot = this->getArray();
 	string* similarRoot = root->getArray();
 
 	MyFile *f1 = new MyFile();
 	MyFile *f2 = new MyFile();
 
-	if(this->sizeRoot!=root->sizeRoot)
+	if (this->sizeRoot != root->sizeRoot)
 		return false;
 
 	//TODO: adressroot compere //braucht man das ?
 
-		for(int k=0; k<=this->sizeRoot ;k++){
-			if((thisRoot[k]==similarRoot[k])==false){
-				return false;
-			}
-			this->getFile(thisRoot[k],f1);
-			this->getFile(similarRoot[k],f2);
-
-			if(f1!=f2)
-				return false;
-
-			/*if((f1->user==f2->user)==false){
-				return false;
-			} else if((f1->size==f2->size)==false){
-				return false;
-			}else if((f1->mode==f2->mode)==false){
-				return false;
-			}else if((f1->lastMod==f2->lastMod)==false){
-				return false;
-			}else if((f1->firstBlock==f2->firstBlock)==false){
-				return false;
-			}*/
-
+	for (int k = 0; k <= this->sizeRoot; k++) {
+		if ((thisRoot[k] == similarRoot[k]) == false) {
+			return false;
 		}
-		return true;
+		this->getFile(thisRoot[k], f1);
+		this->getFile(similarRoot[k], f2);
+
+		if (f1 != f2)
+			return false;
+
+		/*if((f1->user==f2->user)==false){
+		 return false;
+		 } else if((f1->size==f2->size)==false){
+		 return false;
+		 }else if((f1->mode==f2->mode)==false){
+		 return false;
+		 }else if((f1->lastMod==f2->lastMod)==false){
+		 return false;
+		 }else if((f1->firstBlock==f2->firstBlock)==false){
+		 return false;
+		 }*/
+
+	}
+	return true;
 
 }
 
@@ -217,44 +216,43 @@ string * MyRoot::getArray() {
 	return arr;
 }
 
-char** MyRoot::writeRootChar()
-{
-	char ** block;//[sizeRoot][BLOCK_SIZE];
-	block = new char * [sizeRoot];
+char** MyRoot::writeRootChar() {
+	char ** block;		//[sizeRoot][BLOCK_SIZE];
+	block = new char *[sizeRoot];
 
 	std::list<MyFile>::iterator it = files.begin();
 
 	while (it != files.end()) {
-			*block= new char[BLOCK_SIZE];
-			*block=it->writeFileChar();
-			block++;
-			it++;
-		}
+		*block = new char[BLOCK_SIZE];
+		*block = it->writeFileChar();
+		block++;
+		it++;
+	}
 
 	return block;
 
 }
-char ** MyRoot::writeBlocks(BlockDevice blocks){
-	char ** writeBlockChar = new char * [this->getSize()];
+char ** MyRoot::writeBlocks(BlockDevice blocks) {
+	char ** writeBlockChar = new char *[this->getSize()];
 
-	writeBlockChar= this->writeRootChar();
+	writeBlockChar = this->writeRootChar();
 
-	char * buf = new char [512];
-	char * readBuf = new char [512];
-
+	char * buf = new char[512];
+	char * readBuf = new char[512];
 
 	string *nameArray = this->getArray();
 
-	for(u_int32_t k=0;k<=this->getSize();k++) {
+	for (u_int32_t k = 0; k <= this->getSize(); k++) {
 		//this>getFile(nameArray[k],new MyFile());
 		buf = *writeBlockChar;
 
 		//blocks.create("containerRootTest.bin"); //Ist der alte Fehler beseitigt?
 
-		blocks.write(k,buf);
-		blocks.read(k,readBuf);
-		if(strcmp(buf, readBuf)!=0){
-			throw std::invalid_argument( "Differences between written and read Blocks" );
+		blocks.write(k, buf);
+		blocks.read(k, readBuf);
+		if (strcmp(buf, readBuf) != 0) {
+			throw std::invalid_argument(
+					"Differences between written and read Blocks");
 		}
 
 		writeBlockChar++;
@@ -263,23 +261,99 @@ char ** MyRoot::writeBlocks(BlockDevice blocks){
 	return writeBlockChar;
 }
 
-char** MyRoot::readBlocks(BlockDevice blocks){
+char** MyRoot::readBlocks(BlockDevice blocks) {
 	//Sollen mehrere ausgelesen werden?
 	//Wenn ja, welche?
 
 	char ** block;
-	block = new char * [sizeRoot];
+	block = new char *[sizeRoot];
 
 	std::list<MyFile>::iterator it = files.begin();
 
-	for(int i=0;it != files.end(); it++, i++) {
-			*block= new char[BLOCK_SIZE];
-			*block= it->readBlock(i,blocks);
-			block++;
-			it++;
+	for (int i = 0; it != files.end(); it++, i++) {
+		*block = new char[BLOCK_SIZE];
+		*block = it->readBlock(i, blocks);
+		block++;
+		it++;
 	}
 
 	return block;
+
+}
+////////////////////////////////////////////////////////////////////////////////////
+void MyRoot::writeBlocksTanja(BlockDevice blocks, int start) {
+
+	char * buf = new char[BLOCK_SIZE];
+
+	printf("sizeRoot %i \n ", sizeRoot);
+
+	strcpy(buf, to_string(this->sizeRoot).c_str());
+	//resize(buf, to_string(this->sizeRoot).length(), BLOCK_SIZE);
+
+	printf("buf %i : %s \n", start, buf);
+	blocks.write(start++, buf);
+
+
+	std::list<MyFile>::iterator it = files.begin();
+
+	while ( it != files.end()) {
+		buf = it->writeFileChar();
+		printf("buf %i : %s \n", start, buf);
+		blocks.write(start++, buf);
+		it++;
+	}
+
+}
+
+MyRoot::MyRoot(BlockDevice blocks, int start)
+{
+	char * buf = new char [512];
+	blocks.read(start++,buf);
+	sizeRoot=atoi(buf);
+
+
+	for(int i=0;i<sizeRoot;i++)
+	{
+		blocks.read(start++,buf);
+		printf("blocks.read buf %i : %s \n", start-1, buf);
+		MyFile * f= new MyFile(buf);
+		files.push_back(*f);
+
+	}
+
+	std::list<MyFile>::iterator it = files.begin();
+	addressRoot=&(*it);
+
+
+}
+
+bool operator ==(MyRoot const &r1, MyRoot const& r2)
+{
+	if(r1.sizeRoot!=r2.sizeRoot)
+		return false;
+
+	std::list<MyFile>::const_iterator it1 = r1.files.begin();
+	std::list<MyFile>::const_iterator it2 = r2.files.begin();
+
+		for (int i = 0; it1 != r1.files.end(); it1++, i++, it2++)
+		{
+			if(!(*it1==*it2))
+				return false;
+		}
+
+	return true;
+}
+
+void MyRoot::resize(char * text, int oldSize, int newSize) {
+
+	int i = newSize - oldSize;
+	text += oldSize - 1;
+	while (i != 0) {
+		*(text++) = char(0);
+		i--;
+	}
+	//*(text-1)='\0';
+	text -= newSize;
 
 }
 

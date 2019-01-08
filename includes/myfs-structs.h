@@ -21,8 +21,8 @@
 #define FAT_START 119
 #define FAT_SIZE 704
 #define ROOT_START 823
-#define ROOT_SIZE 64
-#define BLOCKS_START 887
+#define ROOT_SIZE 65
+#define BLOCKS_START 888
 
 //for MyFile
 #define MAX_FILE_SIZE 345

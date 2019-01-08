@@ -192,7 +192,8 @@ TEST_CASE( "Write/Read Root in Block","[root]" ) {
 	//	delete blocks;
 
 }
-
+*/
+	/*
 SECTION("Klein Test fuer das Block Beschreiben")
 {
 	MyFile * firstFile = new MyFile("firstFile.txt",2000,1777,12000,10005,1000000,100011000,11111000,50000);
@@ -219,4 +220,34 @@ SECTION("Klein Test fuer das Block Beschreiben")
 
 
 }*/
+
+	SECTION("Tanja's Test fuer das Block Beschreiben")
+	{
+		printf("START TANJA'S TESTS IN ROOT \n");
+		MyFile * firstFile = new MyFile("firstFile.txt",2000,1777,12000,10005,1000000,100011000,11111000,50000);
+		//MyFile * secondFile = new MyFile("secondFile.txt",1999,1666,10300,12005,1000001,110011011,11000111,59999);
+		//MyFile * thirdFile = new MyFile("thirdFile.txt",1888,1555,10045,12300,1000011,111110111,10001111,60000);
+
+		MyRoot * tryRoot = new MyRoot(*firstFile);
+		tryRoot->addFile("secondFile.txt",10300,12005,1000001,59999);
+		tryRoot->addFile("thirdFile.txt",10045,12300,1000011,60000);
+
+
+		BlockDevice blocks;
+		blocks.create("RootTestTanja.bin");
+
+		tryRoot->writeBlocksTanja(blocks, 0);
+
+		MyRoot * newRoot = new MyRoot(blocks, 0);
+		remove("RootTestTanja.bin");
+		REQUIRE(*newRoot==*tryRoot);
+
+
+
+		delete tryRoot;
+		delete newRoot;
+
+
+	}
+
 }
