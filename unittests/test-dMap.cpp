@@ -41,6 +41,32 @@ TEST_CASE( " Set/unset/find Blocks", "[dMap]" ) {
 
 
 }
+
+
+	SECTION("test operatoren == and !="){
+
+		dmap->setUsed(1);
+		dmap->setUsed(7);
+		dmap->setUsed(59);
+
+		dMap* d2 = new dMap();
+		d2->setUsed(1);
+		d2->setUsed(7);
+		d2->setUsed(59);
+
+		dMap* d3 = new dMap();
+		d3->setUsed(1);
+		d3->setUsed(7);
+		d3->setUsed(590);
+
+		REQUIRE(*dmap==*d2);
+		REQUIRE(*dmap!=*d3);
+
+		delete d2;
+		delete d3;
+
+	}
+
 	SECTION("get 3 Blocks after block is set free"){
 
 	dmap->setUsed(1);

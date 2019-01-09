@@ -35,5 +35,7 @@ public:
 	//return next Block to read
 	int read(int startingBlock, BlockDevice* blocks);
 
+	friend bool operator ==(dMap const &f, dMap const& f2);
+	friend bool operator !=(dMap const &f, dMap const& f2);
 
 };

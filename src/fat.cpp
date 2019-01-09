@@ -43,7 +43,7 @@ int MyFAT::getNext(int current, int*next) {
 
 MyFAT::MyFAT() {
 
-	for (int i = 0; i <BLOCKS_START ; i++)
+	for (int i = 0; i < BLOCKS_START; i++)
 		table[i] = -2;
 
 	for (int i = BLOCKS_START; i < size; i++)
@@ -79,9 +79,34 @@ char * MyFAT::writeBlock() {
 	return result;
 }
 
-MyFAT::MyFAT(BlockDevice * blocks, int start) {
+void MyFAT::read(int start, BlockDevice * blocks) {
+	printf("start MyFAT(BlockDevice * blocks, int start) start : %i \n", start);
 	char * buf = new char[BLOCK_NUMBER * 6];
-	this->readBlockDevice(blocks, 200, buf);
+	this->readBlockDevice(blocks, start, buf);
+
+	//printf("readBlockDevice fat : %s \n", buf);
+	//printf("readBlockDevice fat end of first Block: %s \n", buf + 510);
+	//printf("readBlockDevice fat end of second Block: %s \n", buf + 510 * 2);
+
+//MyFAT::MyFAT(char * buf)
+	for (int i = 0; i < size; i++) {
+
+		char * next = new char[5];
+		for (int j = 0; *buf != '_'; j++, buf++) {
+			next[j] = *buf;
+		}
+		buf++;
+		table[i] = atoi(next);
+		delete[] next;
+	}
+}
+
+
+
+MyFAT::MyFAT(BlockDevice * blocks, int start) {
+	printf("start MyFAT(BlockDevice * blocks, int start) start : %i \n", start);
+	char * buf = new char[BLOCK_NUMBER * 6];
+	this->readBlockDevice(blocks, start, buf);
 
 	//printf("readBlockDevice fat : %s \n", buf);
 	//printf("readBlockDevice fat end of first Block: %s \n", buf + 510);
@@ -115,6 +140,12 @@ MyFAT::MyFAT(BlockDevice * blocks, int start) {
  }
 
  }*/
+bool operator !=(MyFAT const &f1, MyFAT const& f2) {
+	return compare(f1, f2) == -1;
+}
+bool operator ==(MyFAT const &f1, MyFAT const& f2) {
+	return compare(f1, f2) == 0;
+}
 
 int compare(MyFAT f1, MyFAT f2) {
 	for (int i = 0; i < f1.getSize(); i++) {
@@ -126,12 +157,13 @@ int compare(MyFAT f1, MyFAT f2) {
 }
 
 void MyFAT::writeBlockDevice(BlockDevice * blocks, int start) {
-	int nrBlocks=0;
+	printf("start for fat writeBlockDevice  start : %i \n", start);
+	int nrBlocks = 0;
 	char * buf;
 	buf = this->writeBlock();
 	//printf("fat: %s \n", buf);
 
-	int firstBlock=start;
+	int firstBlock = start;
 	start++;
 
 	while (*buf != '\0') {
@@ -139,11 +171,11 @@ void MyFAT::writeBlockDevice(BlockDevice * blocks, int start) {
 		//	char * startWriteBuf = writeBuf;
 
 		int i = 0;
-		for (; i < BLOCK_SIZE-1; i++) {
+		for (; i < BLOCK_SIZE - 1; i++) {
 			writeBuf[i] = *buf;
 			buf++;
 		}
-		writeBuf[i]=char(0);
+		writeBuf[i] = char(0);
 
 		//writeBuf=buf;
 		blocks->write(start++, writeBuf);
@@ -152,33 +184,32 @@ void MyFAT::writeBlockDevice(BlockDevice * blocks, int start) {
 
 		//writeBuf = startWriteBuf;
 
-
-
 		delete[] writeBuf;
 	}
 
 	char * temp = new char[BLOCK_SIZE];
 
 	strcpy(temp, to_string(nrBlocks).c_str());
-		//resize(buf, to_string(this->sizeRoot).length(), BLOCK_SIZE);
+	temp[to_string(nrBlocks).length()] = char(0);
+	//resize(buf, to_string(this->sizeRoot).length(), BLOCK_SIZE);
 
-	printf("nrBlocks write : %s \n",  temp);
+	printf("nrBlocks write in %i : %s \n", firstBlock, temp);
 	blocks->write(firstBlock, temp);
 
-	delete [] temp;
+	delete[] temp;
 }
 
 void MyFAT::readBlockDevice(BlockDevice * blocks, int start, char * newBuf) {
 	char * readBuf = new char[512];
 
-	blocks->read(start++, readBuf);
+	blocks->read(start, readBuf);
 	int j = atoi(readBuf);
-	printf("nrBlocks read : %i \n",  j);
+	printf("nrBlocks read from %i : %i \n", start, j);
+	start++;
 
 	int i = start;
 	while (j != 0) {
 		blocks->read(i++, readBuf);
-
 
 		strcat(newBuf, readBuf);
 		j--;

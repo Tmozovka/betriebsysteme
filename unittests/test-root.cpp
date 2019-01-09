@@ -221,9 +221,9 @@ SECTION("Klein Test fuer das Block Beschreiben")
 
 }*/
 
-	SECTION("Tanja's Test fuer das Block Beschreiben")
+	SECTION(" Test fuer das Block Beschreiben")
 	{
-		printf("START TANJA'S TESTS IN ROOT \n");
+		printf("START  TESTS IN ROOT \n");
 		MyFile * firstFile = new MyFile("firstFile.txt",2000,1777,12000,10005,1000000,100011000,11111000,50000);
 		//MyFile * secondFile = new MyFile("secondFile.txt",1999,1666,10300,12005,1000001,110011011,11000111,59999);
 		//MyFile * thirdFile = new MyFile("thirdFile.txt",1888,1555,10045,12300,1000011,111110111,10001111,60000);
@@ -234,12 +234,12 @@ SECTION("Klein Test fuer das Block Beschreiben")
 
 
 		BlockDevice blocks;
-		blocks.create("RootTestTanja.bin");
+		blocks.create("RootTest2.bin");
 
 		tryRoot->writeBlockDevice(&blocks, 0);
 
 		MyRoot * newRoot = new MyRoot(&blocks, 0);
-		remove("RootTestTanja.bin");
+		remove("RootTest2.bin");
 		REQUIRE(*newRoot==*tryRoot);
 
 
@@ -248,6 +248,53 @@ SECTION("Klein Test fuer das Block Beschreiben")
 		delete newRoot;
 
 
+	}
+
+	SECTION(" Test fuer das Block Beschreiben with read")
+		{
+			printf("START  TESTS IN ROOT \n");
+			MyFile * firstFile = new MyFile("firstFile.txt",2000,1777,12000,10005,1000000,100011000,11111000,50000);
+			//MyFile * secondFile = new MyFile("secondFile.txt",1999,1666,10300,12005,1000001,110011011,11000111,59999);
+			//MyFile * thirdFile = new MyFile("thirdFile.txt",1888,1555,10045,12300,1000011,111110111,10001111,60000);
+
+			MyRoot * tryRoot = new MyRoot(*firstFile);
+			tryRoot->addFile("secondFile.txt",10300,12005,1000001,59999);
+			tryRoot->addFile("thirdFile.txt",10045,12300,1000011,60000);
+
+
+			BlockDevice blocks;
+			blocks.create("RootTest2.bin");
+
+			tryRoot->writeBlockDevice(&blocks, ROOT_START);
+
+			MyRoot * newRoot = new MyRoot();
+			newRoot->read( ROOT_START, &blocks);
+			remove("RootTest2.bin");
+			REQUIRE(*newRoot==*tryRoot);
+
+
+
+			delete tryRoot;
+			delete newRoot;
+
+
+		}
+
+	SECTION("test operator == and !="){
+		MyRoot* r1 = new MyRoot("testdrei.txt",12244,16,50003);
+		MyRoot* r2 = new MyRoot("testdrei.txt",12244,16,50003);
+		MyRoot* r3 = new MyRoot("testdrei.txt",12244,16,50003);
+		r3->addFile("secondFile.txt",10300,12005,1000001,59999);
+		MyRoot* r4 = new MyRoot("testdreiiiiiiiii.txt",12344,16,50003);
+
+
+		REQUIRE(*r1==*r2);
+		REQUIRE(*r1!=*r3);
+		REQUIRE(*r1!=*r4);
+		delete r1;
+		delete r2;
+		delete r3;
+		delete r4;
 	}
 
 }

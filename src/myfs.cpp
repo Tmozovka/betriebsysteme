@@ -54,18 +54,16 @@ MyFS::MyFS(char * nameCont) {
 	this->logFile = stderr;
 
 	blocks = new BlockDevice();
-	blocks->open(nameCont);
-
-	//TODO: init fuer sp und dmap
 	sp = new SuperBlock();
 	dmap = new dMap();
-
-	fat = new MyFAT(blocks, FAT_START);
-	root = new MyRoot(blocks, ROOT_START);
-
+	fat = new MyFAT();
+	root = new MyRoot();
 
 
-
+	blocks->open(nameCont);
+	dmap->read(DMAP_START, blocks);
+	fat->read(FAT_START, blocks);
+	root->read(ROOT_START, blocks);
 
 	// printf("Konstruktor von MyFS ist beendet \n");
 	//LOG("Konstruktor von MyFS ist beendet \n");
@@ -85,11 +83,15 @@ MyFS::~MyFS() {
 
 bool operator ==(MyFS const &f1, MyFS const& f2) {
 
-	if(!(f1.fat==f2.fat))
+
+	if(*(f1.fat)!=*(f2.fat))
 		return false;
 
-	if(!(f1.root==f2.root))
+	if(*(f1.root)!=*(f2.root))
 		return false;
+
+	/*if((*(f1.dmap)!=*(f2.dmap)))
+		return false;*/
 
 	return true;
 
@@ -97,8 +99,10 @@ bool operator ==(MyFS const &f1, MyFS const& f2) {
 
 void MyFS::writeBlockDevice()
 {
+	printf("start writeBlockDevice() \n");
 	fat->writeBlockDevice(blocks,FAT_START);
 	root->writeBlockDevice(blocks,ROOT_START);
+	dmap->init(DMAP_START, blocks);
 }
 
 void MyFS::resize(char * text, int oldSize, int newSize) {
@@ -611,11 +615,16 @@ void* MyFS::fuseInit(struct fuse_conn_info *conn) {
 		//Wieso muessen wir Konstruktor schreiben? Er wird automatisch aufgerufen
 		// Falls wir das von Terminal aufrufen dann? was passiert dann? Muessen wir so was schreiben MyFs mf = new MyFs()?;
 		//MyFS();
-		char * nameCont =
-				((MyFsInfo *) fuse_get_context()->private_data)->contFile;
-		LOG("try blocks->open(nameCont) \n");
+		char * nameCont =((MyFsInfo *) fuse_get_context()->private_data)->contFile;
+
+			blocks->open(nameCont);
+			fat->read(FAT_START, blocks);
+			root->read(ROOT_START, blocks);
+			dmap->read(DMAP_START, blocks);
+		/*LOG("try blocks->open(nameCont) \n");
 		BlockDevice * blocks = new BlockDevice();
-		blocks->open(nameCont);
+		blocks->open(nameCont);*/
+
 		LOG("sucess blocks->open(nameCont) \n");
 	}
 

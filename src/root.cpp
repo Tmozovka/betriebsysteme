@@ -283,6 +283,8 @@ char** MyRoot::readBlocks(BlockDevice blocks) {
 /////////////////////////////////Tanja's funktionen , um Root in BlockDevice zu schreiben/////////////////////////////////////////////////////
 void MyRoot::writeBlockDevice(BlockDevice * blocks, int start) {
 
+	printf("start for root writeBlockDevice \n");
+
 	char * buf = new char[BLOCK_SIZE];
 
 	printf("sizeRoot %i \n ", sizeRoot);
@@ -292,6 +294,7 @@ void MyRoot::writeBlockDevice(BlockDevice * blocks, int start) {
 
 	printf("buf %i : %s \n", start, buf);
 	blocks->write(start++, buf);
+
 
 
 	std::list<MyFile>::iterator it = files.begin();
@@ -305,12 +308,17 @@ void MyRoot::writeBlockDevice(BlockDevice * blocks, int start) {
 
 }
 
+
+
 MyRoot::MyRoot(BlockDevice * blocks, int start)
 {
+	printf("start MyRoot(BlockDevice * blocks, int start) \n");
 	char * buf = new char [512];
 	blocks->read(start++,buf);
 	sizeRoot=atoi(buf);
 
+	if(sizeRoot!=0)
+	{
 
 	for(int i=0;i<sizeRoot;i++)
 	{
@@ -324,6 +332,41 @@ MyRoot::MyRoot(BlockDevice * blocks, int start)
 	std::list<MyFile>::iterator it = files.begin();
 	addressRoot=&(*it);
 
+	}
+	else
+		addressRoot=NULL;
+
+	delete [] buf;
+
+}
+
+void MyRoot::read( int start, BlockDevice * blocks)
+{
+	printf("start MyRoot(BlockDevice * blocks, int start) \n");
+	char * buf = new char [512];
+	blocks->read(start++,buf);
+	sizeRoot=atoi(buf);
+
+	if(sizeRoot!=0)
+	{
+
+	for(int i=0;i<sizeRoot;i++)
+	{
+		blocks->read(start++,buf);
+		printf("blocks.read buf %i : %s \n", start-1, buf);
+		MyFile * f= new MyFile(buf);
+		files.push_back(*f);
+
+	}
+
+	std::list<MyFile>::iterator it = files.begin();
+	addressRoot=&(*it);
+
+	}
+	else
+		addressRoot=NULL;
+
+	delete [] buf;
 
 }
 
@@ -343,6 +386,12 @@ bool operator ==(MyRoot const &r1, MyRoot const& r2)
 
 	return true;
 }
+
+bool operator !=(MyRoot const &r1, MyRoot const& r2)
+		{
+	return !(r1==r2);
+		}
+
 
 void MyRoot::resize(char * text, int oldSize, int newSize) {
 

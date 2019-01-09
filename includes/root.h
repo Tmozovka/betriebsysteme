@@ -52,7 +52,10 @@ public  :
 	void writeBlockDevice(BlockDevice * blocks, int start);
 	void resize(char * text, int oldSize, int newSize);
 	MyRoot(BlockDevice * b, int start);
+	void init(BlockDevice * b, int start);
+	void read( int start, BlockDevice * b);
 	friend bool operator ==(MyRoot const &f, MyRoot const& f2);
+	friend bool operator !=(MyRoot const &f, MyRoot const& f2);
 
 
 };
