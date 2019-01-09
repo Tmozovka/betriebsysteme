@@ -123,7 +123,9 @@ int MyFS::readFile(const char *path, char *buf, size_t size, off_t offset,
 
 	// TODO: Implement this!
 	//printf("readFile start \n"); //funktioniert nicht
-	LOG("********************************************************************************************** ");LOG("readFile start ");LOGF("offset: %i, size: %i", offset, size);
+	LOG("********************************************************************************************** ");
+	LOG("readFile start ");
+	LOGF("offset: %i, size: %i", offset, size);
 	/*if (offset > size) // not possible
 	 RETURN(-1);*/
 
@@ -175,8 +177,9 @@ int MyFS::readFile(const char *path, char *buf, size_t size, off_t offset,
 		blocksNumber--;
 	}
 	buf -= count;
-
-	LOGF("all buf is  : %s \n",buf);LOG("readFile success \n");
+	buf+=offset;
+	LOGF("all buf is  : %s \n",buf);
+	LOG("readFile success \n");
 	buffer1 -= count;
 	delete[] buffer1; //error
 	delete fcopy;
@@ -304,20 +307,40 @@ int MyFS::fuseGetattr(const char *path, struct stat *st) {
 	MyFile fcopy;
 	LOG("1");
 
-	if (strcmp(path, "/")) {
+	/*const char *temp = new char[1];
+	temp=path;
+	if (strcmp(temp, "/")) {
 		//Path ist ungleich "/"
 		LOG("can't get file from root. File's should start with /");
 		RETURN(-ENOENT);
-	}LOG("2");
+	}*/
+	LOG("2");
 
 	if (strcmp(path, "/") != 0)
-		if (root->getFile(path + 2, &fcopy) == -1) {
+		if (root->getFile(path + 1, &fcopy) == -1) {
 
 			LOGF("Cant find a file with path: %s",path);
 			RETURN(-ENOENT);
 		}
 
 	LOG("Now starting to set attributes");
+
+	/*struct stat {
+    dev_t     st_dev;
+    ino_t     st_ino;     /* inode number
+    mode_t    st_mode;    /* protection
+    nlink_t   st_nlink;   /* number of hard links
+    uid_t     st_uid;     /* user ID of owner /
+    gid_t     st_gid;     /* group ID of owner
+    dev_t     st_rdev;    / device ID (if special file)
+    off_t     st_size;    / total size, inytes
+    blksize_t st_blksize; / blocksize for fi system I/O
+    blkcnt_t  st_blocks;  / number of 512B blos allocated
+    time_t    st_atime;   / time of last access
+    time_t    st_mtime;   / time of last modification
+    time_t    st_ctime;   / time of last status change
+};*/
+
 	st->st_uid = getuid(); // The owner of the file/directory is the user who mounted the filesystem
 	st->st_gid = getgid(); // The group of the file/directory is the same as the group of the user who mounted the filesystem
 	st->st_atime = time(NULL); // The last "a"ccess of the file/directory is right now
@@ -335,6 +358,7 @@ int MyFS::fuseGetattr(const char *path, struct stat *st) {
 		LOG("Anderere Path als \"/\" wurde abgefragt");
 		st->st_mode = S_IFREG | 0444;
 		st->st_nlink = 1;
+		LOGF("size from %s is %i", path,fcopy.getSize() );
 		st->st_size = fcopy.getSize();
 
 	}
@@ -389,8 +413,16 @@ int MyFS::fuseOpen(const char *path, struct fuse_file_info *fileInfo) { // How t
 //sp
 	sp->addOpen();
 	LOG("1");
-	if (root->existName(path) == 0) {
+	LOGF("root->existName(%s) == %i ", path+1, root->existName(path+1));
+	if (root->existName(path+1)) {
+	/*	MyFile fcopy;
+		if (root->getFile(path + 1, &fcopy) == 0)
+		{
+			fileInfo->attribute angeben...
+		}*/
+		LOGF("name %s exist \n", path);
 		fileInfo->fh = 1;
+		RETURN(0);
 	}LOG("2");
 	//TOdo etwas tun, wenn path existiert
 	//vermerken, dass datei geöffnet
@@ -406,16 +438,32 @@ int MyFS::fuseOpen(const char *path, struct fuse_file_info *fileInfo) { // How t
 
 	 }*/
 
-	RETURN(0);
+	RETURN(-1);
 }
 
 int MyFS::fuseRead(const char *path, char *buf, size_t size, off_t offset,
 		struct fuse_file_info *fileInfo) {
-	LOGM();
+	LOGF("fuseRead start path: %s \n",path);
+
+	LOGF("root->existName(%s) == %i \n", path+1, root->existName(path+1));
+
+	if (root->existName(path+1)==0)
+		{RETURN(-1);
+		LOG("root->existName(path+1)==0 \n");
+		}
+	LOG("1");
+
+/*	if(offset>size)
+		RETURN(-1);*/
+
+	buf = new char[size-offset];
+	LOG("2");
 
 	// TODO: Implement this!
 
-	RETURN(readFile(path, buf, size, offset, fileInfo));
+
+	int i=readFile(path+1, buf, size, offset, fileInfo);
+	RETURN(i);
 
 }
 /*int MyFS::fuseWrite

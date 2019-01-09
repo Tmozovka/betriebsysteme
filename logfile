@@ -1,41 +1,45 @@
 	Starting logging...
 
-src/myfs.cpp:611:fuseInit()
+src/myfs.cpp:659:fuseInit()
 	Container file name: /home/tanya/Documents/Betriebsysteme/Aufgaben/Teil1/bs-uebung-template-v0.5/container.bin
 	sucess blocks->open(nameCont) 
 
 fuseInit() returned 0
-src/myfs.cpp:293:fuseGetattr()
+src/myfs.cpp:296:fuseGetattr()
 	Requested path = /.Trash 
 	1
-	can't get file from root. File's should start with /
+	2
+	Cant find a file with path: /.Trash
 fuseGetattr() returned -2
-src/myfs.cpp:293:fuseGetattr()
+src/myfs.cpp:296:fuseGetattr()
 	Requested path = /.Trash-1000 
 	1
-	can't get file from root. File's should start with /
+	2
+	Cant find a file with path: /.Trash-1000
 fuseGetattr() returned -2
-src/myfs.cpp:511:fuseOpendir()
-	Requested path in Fuse Open dir = / 
-	strcmp(path, "/") returns: 0
-fuseOpendir() returned 0
-src/myfs.cpp:293:fuseGetattr()
+src/myfs.cpp:296:fuseGetattr()
 	Requested path = /.xdg-volume-info 
 	1
-	can't get file from root. File's should start with /
-fuseGetattr() returned -2
-src/myfs.cpp:293:fuseGetattr()
-	Requested path = / 
-	1
 	2
-	Now starting to set attributes
-	Path == /
-	fuseGetattr erfolgreich beendet
-fuseGetattr() returned 0
-src/myfs.cpp:293:fuseGetattr()
+	Cant find a file with path: /.xdg-volume-info
+fuseGetattr() returned -2
+src/myfs.cpp:559:fuseOpendir()
+	Requested path in Fuse Open dir = / 
+	strcmp(path, "/") returns: 0
+fuseOpendir() returned 0
+src/myfs.cpp:296:fuseGetattr()
 	Requested path = /autorun.inf 
 	1
-	can't get file from root. File's should start with /
+	2
+src/myfs.cpp:296:fuseGetattr()
+	Requested path = / 
+	1
+	2
+	Now starting to set attributes
+	Path == /
+	fuseGetattr erfolgreich beendet
+fuseGetattr() returned 0
+	Cant find a file with path: /autorun.inf
 fuseGetattr() returned -2
 	start fuseReaddir 
 
@@ -53,23 +57,31 @@ fuseGetattr() returned -2
 	readDir success
 
 fuseReaddir() returned 0
-src/myfs.cpp:293:fuseGetattr()
+src/myfs.cpp:296:fuseGetattr()
 	Requested path = /text1.txt 
 	1
-	can't get file from root. File's should start with /
-fuseGetattr() returned -2
-src/myfs.cpp:293:fuseGetattr()
+	2
+	Now starting to set attributes
+	Anderere Path als "/" wurde abgefragt
+	size from /text1.txt is 512
+	fuseGetattr erfolgreich beendet
+fuseGetattr() returned 0
+src/myfs.cpp:296:fuseGetattr()
 	Requested path = /text2.txt 
 	1
-	can't get file from root. File's should start with /
-fuseGetattr() returned -2
-src/myfs.cpp:577:fuseReleasedir()
+	2
+	Now starting to set attributes
+	Anderere Path als "/" wurde abgefragt
+	size from /text2.txt is 1024
+	fuseGetattr erfolgreich beendet
+fuseGetattr() returned 0
+src/myfs.cpp:625:fuseReleasedir()
 fuseReleasedir() returned 0
-src/myfs.cpp:511:fuseOpendir()
+src/myfs.cpp:559:fuseOpendir()
 	Requested path in Fuse Open dir = / 
 	strcmp(path, "/") returns: 0
 fuseOpendir() returned 0
-src/myfs.cpp:293:fuseGetattr()
+src/myfs.cpp:296:fuseGetattr()
 	Requested path = / 
 	1
 	2
@@ -93,23 +105,13 @@ fuseGetattr() returned 0
 	readDir success
 
 fuseReaddir() returned 0
-src/myfs.cpp:293:fuseGetattr()
-	Requested path = /text1.txt 
-	1
-	can't get file from root. File's should start with /
-fuseGetattr() returned -2
-src/myfs.cpp:293:fuseGetattr()
-	Requested path = /text2.txt 
-	1
-	can't get file from root. File's should start with /
-fuseGetattr() returned -2
-src/myfs.cpp:577:fuseReleasedir()
+src/myfs.cpp:625:fuseReleasedir()
 fuseReleasedir() returned 0
-src/myfs.cpp:511:fuseOpendir()
+src/myfs.cpp:559:fuseOpendir()
 	Requested path in Fuse Open dir = / 
 	strcmp(path, "/") returns: 0
 fuseOpendir() returned 0
-src/myfs.cpp:293:fuseGetattr()
+src/myfs.cpp:296:fuseGetattr()
 	Requested path = / 
 	1
 	2
@@ -133,23 +135,13 @@ fuseGetattr() returned 0
 	readDir success
 
 fuseReaddir() returned 0
-src/myfs.cpp:293:fuseGetattr()
-	Requested path = /text1.txt 
-	1
-	can't get file from root. File's should start with /
-fuseGetattr() returned -2
-src/myfs.cpp:293:fuseGetattr()
-	Requested path = /text2.txt 
-	1
-	can't get file from root. File's should start with /
-fuseGetattr() returned -2
-src/myfs.cpp:577:fuseReleasedir()
+src/myfs.cpp:625:fuseReleasedir()
 fuseReleasedir() returned 0
-src/myfs.cpp:511:fuseOpendir()
+src/myfs.cpp:559:fuseOpendir()
 	Requested path in Fuse Open dir = / 
 	strcmp(path, "/") returns: 0
 fuseOpendir() returned 0
-src/myfs.cpp:293:fuseGetattr()
+src/myfs.cpp:296:fuseGetattr()
 	Requested path = / 
 	1
 	2
@@ -173,23 +165,13 @@ fuseGetattr() returned 0
 	readDir success
 
 fuseReaddir() returned 0
-src/myfs.cpp:293:fuseGetattr()
-	Requested path = /text1.txt 
-	1
-	can't get file from root. File's should start with /
-fuseGetattr() returned -2
-src/myfs.cpp:293:fuseGetattr()
-	Requested path = /text2.txt 
-	1
-	can't get file from root. File's should start with /
-fuseGetattr() returned -2
-src/myfs.cpp:577:fuseReleasedir()
+src/myfs.cpp:625:fuseReleasedir()
 fuseReleasedir() returned 0
-src/myfs.cpp:511:fuseOpendir()
+src/myfs.cpp:559:fuseOpendir()
 	Requested path in Fuse Open dir = / 
 	strcmp(path, "/") returns: 0
 fuseOpendir() returned 0
-src/myfs.cpp:293:fuseGetattr()
+src/myfs.cpp:296:fuseGetattr()
 	Requested path = / 
 	1
 	2
@@ -213,23 +195,13 @@ fuseGetattr() returned 0
 	readDir success
 
 fuseReaddir() returned 0
-src/myfs.cpp:293:fuseGetattr()
-	Requested path = /text1.txt 
-	1
-	can't get file from root. File's should start with /
-fuseGetattr() returned -2
-src/myfs.cpp:293:fuseGetattr()
-	Requested path = /text2.txt 
-	1
-	can't get file from root. File's should start with /
-fuseGetattr() returned -2
-src/myfs.cpp:577:fuseReleasedir()
+src/myfs.cpp:625:fuseReleasedir()
 fuseReleasedir() returned 0
-src/myfs.cpp:511:fuseOpendir()
+src/myfs.cpp:559:fuseOpendir()
 	Requested path in Fuse Open dir = / 
 	strcmp(path, "/") returns: 0
 fuseOpendir() returned 0
-src/myfs.cpp:293:fuseGetattr()
+src/myfs.cpp:296:fuseGetattr()
 	Requested path = / 
 	1
 	2
@@ -253,23 +225,13 @@ fuseGetattr() returned 0
 	readDir success
 
 fuseReaddir() returned 0
-src/myfs.cpp:293:fuseGetattr()
-	Requested path = /text1.txt 
-	1
-	can't get file from root. File's should start with /
-fuseGetattr() returned -2
-src/myfs.cpp:293:fuseGetattr()
-	Requested path = /text2.txt 
-	1
-	can't get file from root. File's should start with /
-fuseGetattr() returned -2
-src/myfs.cpp:577:fuseReleasedir()
+src/myfs.cpp:625:fuseReleasedir()
 fuseReleasedir() returned 0
-src/myfs.cpp:511:fuseOpendir()
+src/myfs.cpp:559:fuseOpendir()
 	Requested path in Fuse Open dir = / 
 	strcmp(path, "/") returns: 0
 fuseOpendir() returned 0
-src/myfs.cpp:293:fuseGetattr()
+src/myfs.cpp:296:fuseGetattr()
 	Requested path = / 
 	1
 	2
@@ -293,23 +255,13 @@ fuseGetattr() returned 0
 	readDir success
 
 fuseReaddir() returned 0
-src/myfs.cpp:293:fuseGetattr()
-	Requested path = /text1.txt 
-	1
-	can't get file from root. File's should start with /
-fuseGetattr() returned -2
-src/myfs.cpp:293:fuseGetattr()
-	Requested path = /text2.txt 
-	1
-	can't get file from root. File's should start with /
-fuseGetattr() returned -2
-src/myfs.cpp:577:fuseReleasedir()
+src/myfs.cpp:625:fuseReleasedir()
 fuseReleasedir() returned 0
-src/myfs.cpp:511:fuseOpendir()
+src/myfs.cpp:559:fuseOpendir()
 	Requested path in Fuse Open dir = / 
 	strcmp(path, "/") returns: 0
 fuseOpendir() returned 0
-src/myfs.cpp:293:fuseGetattr()
+src/myfs.cpp:296:fuseGetattr()
 	Requested path = / 
 	1
 	2
@@ -333,23 +285,13 @@ fuseGetattr() returned 0
 	readDir success
 
 fuseReaddir() returned 0
-src/myfs.cpp:293:fuseGetattr()
-	Requested path = /text1.txt 
-	1
-	can't get file from root. File's should start with /
-fuseGetattr() returned -2
-src/myfs.cpp:293:fuseGetattr()
-	Requested path = /text2.txt 
-	1
-	can't get file from root. File's should start with /
-fuseGetattr() returned -2
-src/myfs.cpp:577:fuseReleasedir()
+src/myfs.cpp:625:fuseReleasedir()
 fuseReleasedir() returned 0
-src/myfs.cpp:511:fuseOpendir()
+src/myfs.cpp:559:fuseOpendir()
 	Requested path in Fuse Open dir = / 
 	strcmp(path, "/") returns: 0
 fuseOpendir() returned 0
-src/myfs.cpp:293:fuseGetattr()
+src/myfs.cpp:296:fuseGetattr()
 	Requested path = / 
 	1
 	2
@@ -373,23 +315,13 @@ fuseGetattr() returned 0
 	readDir success
 
 fuseReaddir() returned 0
-src/myfs.cpp:293:fuseGetattr()
-	Requested path = /text1.txt 
-	1
-	can't get file from root. File's should start with /
-fuseGetattr() returned -2
-src/myfs.cpp:293:fuseGetattr()
-	Requested path = /text2.txt 
-	1
-	can't get file from root. File's should start with /
-fuseGetattr() returned -2
-src/myfs.cpp:577:fuseReleasedir()
+src/myfs.cpp:625:fuseReleasedir()
 fuseReleasedir() returned 0
-src/myfs.cpp:511:fuseOpendir()
+src/myfs.cpp:559:fuseOpendir()
 	Requested path in Fuse Open dir = / 
 	strcmp(path, "/") returns: 0
 fuseOpendir() returned 0
-src/myfs.cpp:293:fuseGetattr()
+src/myfs.cpp:296:fuseGetattr()
 	Requested path = / 
 	1
 	2
@@ -413,23 +345,13 @@ fuseGetattr() returned 0
 	readDir success
 
 fuseReaddir() returned 0
-src/myfs.cpp:293:fuseGetattr()
-	Requested path = /text1.txt 
-	1
-	can't get file from root. File's should start with /
-fuseGetattr() returned -2
-src/myfs.cpp:293:fuseGetattr()
-	Requested path = /text2.txt 
-	1
-	can't get file from root. File's should start with /
-fuseGetattr() returned -2
-src/myfs.cpp:577:fuseReleasedir()
+src/myfs.cpp:625:fuseReleasedir()
 fuseReleasedir() returned 0
-src/myfs.cpp:511:fuseOpendir()
+src/myfs.cpp:559:fuseOpendir()
 	Requested path in Fuse Open dir = / 
 	strcmp(path, "/") returns: 0
 fuseOpendir() returned 0
-src/myfs.cpp:293:fuseGetattr()
+src/myfs.cpp:296:fuseGetattr()
 	Requested path = / 
 	1
 	2
@@ -453,23 +375,13 @@ fuseGetattr() returned 0
 	readDir success
 
 fuseReaddir() returned 0
-src/myfs.cpp:293:fuseGetattr()
-	Requested path = /text1.txt 
-	1
-	can't get file from root. File's should start with /
-fuseGetattr() returned -2
-src/myfs.cpp:293:fuseGetattr()
-	Requested path = /text2.txt 
-	1
-	can't get file from root. File's should start with /
-fuseGetattr() returned -2
-src/myfs.cpp:577:fuseReleasedir()
+src/myfs.cpp:625:fuseReleasedir()
 fuseReleasedir() returned 0
-src/myfs.cpp:511:fuseOpendir()
+src/myfs.cpp:559:fuseOpendir()
 	Requested path in Fuse Open dir = / 
 	strcmp(path, "/") returns: 0
 fuseOpendir() returned 0
-src/myfs.cpp:293:fuseGetattr()
+src/myfs.cpp:296:fuseGetattr()
 	Requested path = / 
 	1
 	2
@@ -493,23 +405,13 @@ fuseGetattr() returned 0
 	readDir success
 
 fuseReaddir() returned 0
-src/myfs.cpp:293:fuseGetattr()
-	Requested path = /text1.txt 
-	1
-	can't get file from root. File's should start with /
-fuseGetattr() returned -2
-src/myfs.cpp:293:fuseGetattr()
-	Requested path = /text2.txt 
-	1
-	can't get file from root. File's should start with /
-fuseGetattr() returned -2
-src/myfs.cpp:577:fuseReleasedir()
+src/myfs.cpp:625:fuseReleasedir()
 fuseReleasedir() returned 0
-src/myfs.cpp:511:fuseOpendir()
+src/myfs.cpp:559:fuseOpendir()
 	Requested path in Fuse Open dir = / 
 	strcmp(path, "/") returns: 0
 fuseOpendir() returned 0
-src/myfs.cpp:293:fuseGetattr()
+src/myfs.cpp:296:fuseGetattr()
 	Requested path = / 
 	1
 	2
@@ -533,23 +435,13 @@ fuseGetattr() returned 0
 	readDir success
 
 fuseReaddir() returned 0
-src/myfs.cpp:293:fuseGetattr()
-	Requested path = /text1.txt 
-	1
-	can't get file from root. File's should start with /
-fuseGetattr() returned -2
-src/myfs.cpp:293:fuseGetattr()
-	Requested path = /text2.txt 
-	1
-	can't get file from root. File's should start with /
-fuseGetattr() returned -2
-src/myfs.cpp:577:fuseReleasedir()
+src/myfs.cpp:625:fuseReleasedir()
 fuseReleasedir() returned 0
-src/myfs.cpp:511:fuseOpendir()
+src/myfs.cpp:559:fuseOpendir()
 	Requested path in Fuse Open dir = / 
 	strcmp(path, "/") returns: 0
 fuseOpendir() returned 0
-src/myfs.cpp:293:fuseGetattr()
+src/myfs.cpp:296:fuseGetattr()
 	Requested path = / 
 	1
 	2
@@ -573,23 +465,13 @@ fuseGetattr() returned 0
 	readDir success
 
 fuseReaddir() returned 0
-src/myfs.cpp:293:fuseGetattr()
-	Requested path = /text1.txt 
-	1
-	can't get file from root. File's should start with /
-fuseGetattr() returned -2
-src/myfs.cpp:293:fuseGetattr()
-	Requested path = /text2.txt 
-	1
-	can't get file from root. File's should start with /
-fuseGetattr() returned -2
-src/myfs.cpp:577:fuseReleasedir()
+src/myfs.cpp:625:fuseReleasedir()
 fuseReleasedir() returned 0
-src/myfs.cpp:511:fuseOpendir()
+src/myfs.cpp:559:fuseOpendir()
 	Requested path in Fuse Open dir = / 
 	strcmp(path, "/") returns: 0
 fuseOpendir() returned 0
-src/myfs.cpp:293:fuseGetattr()
+src/myfs.cpp:296:fuseGetattr()
 	Requested path = / 
 	1
 	2
@@ -613,23 +495,13 @@ fuseGetattr() returned 0
 	readDir success
 
 fuseReaddir() returned 0
-src/myfs.cpp:293:fuseGetattr()
-	Requested path = /text1.txt 
-	1
-	can't get file from root. File's should start with /
-fuseGetattr() returned -2
-src/myfs.cpp:293:fuseGetattr()
-	Requested path = /text2.txt 
-	1
-	can't get file from root. File's should start with /
-fuseGetattr() returned -2
-src/myfs.cpp:577:fuseReleasedir()
+src/myfs.cpp:625:fuseReleasedir()
 fuseReleasedir() returned 0
-src/myfs.cpp:511:fuseOpendir()
+src/myfs.cpp:559:fuseOpendir()
 	Requested path in Fuse Open dir = / 
 	strcmp(path, "/") returns: 0
 fuseOpendir() returned 0
-src/myfs.cpp:293:fuseGetattr()
+src/myfs.cpp:296:fuseGetattr()
 	Requested path = / 
 	1
 	2
@@ -653,23 +525,13 @@ fuseGetattr() returned 0
 	readDir success
 
 fuseReaddir() returned 0
-src/myfs.cpp:293:fuseGetattr()
-	Requested path = /text1.txt 
-	1
-	can't get file from root. File's should start with /
-fuseGetattr() returned -2
-src/myfs.cpp:293:fuseGetattr()
-	Requested path = /text2.txt 
-	1
-	can't get file from root. File's should start with /
-fuseGetattr() returned -2
-src/myfs.cpp:577:fuseReleasedir()
+src/myfs.cpp:625:fuseReleasedir()
 fuseReleasedir() returned 0
-src/myfs.cpp:511:fuseOpendir()
+src/myfs.cpp:559:fuseOpendir()
 	Requested path in Fuse Open dir = / 
 	strcmp(path, "/") returns: 0
 fuseOpendir() returned 0
-src/myfs.cpp:293:fuseGetattr()
+src/myfs.cpp:296:fuseGetattr()
 	Requested path = / 
 	1
 	2
@@ -693,23 +555,13 @@ fuseGetattr() returned 0
 	readDir success
 
 fuseReaddir() returned 0
-src/myfs.cpp:293:fuseGetattr()
-	Requested path = /text1.txt 
-	1
-	can't get file from root. File's should start with /
-fuseGetattr() returned -2
-src/myfs.cpp:293:fuseGetattr()
-	Requested path = /text2.txt 
-	1
-	can't get file from root. File's should start with /
-fuseGetattr() returned -2
-src/myfs.cpp:577:fuseReleasedir()
+src/myfs.cpp:625:fuseReleasedir()
 fuseReleasedir() returned 0
-src/myfs.cpp:511:fuseOpendir()
+src/myfs.cpp:559:fuseOpendir()
 	Requested path in Fuse Open dir = / 
 	strcmp(path, "/") returns: 0
 fuseOpendir() returned 0
-src/myfs.cpp:293:fuseGetattr()
+src/myfs.cpp:296:fuseGetattr()
 	Requested path = / 
 	1
 	2
@@ -733,23 +585,13 @@ fuseGetattr() returned 0
 	readDir success
 
 fuseReaddir() returned 0
-src/myfs.cpp:293:fuseGetattr()
-	Requested path = /text1.txt 
-	1
-	can't get file from root. File's should start with /
-fuseGetattr() returned -2
-src/myfs.cpp:293:fuseGetattr()
-	Requested path = /text2.txt 
-	1
-	can't get file from root. File's should start with /
-fuseGetattr() returned -2
-src/myfs.cpp:577:fuseReleasedir()
+src/myfs.cpp:625:fuseReleasedir()
 fuseReleasedir() returned 0
-src/myfs.cpp:511:fuseOpendir()
+src/myfs.cpp:559:fuseOpendir()
 	Requested path in Fuse Open dir = / 
 	strcmp(path, "/") returns: 0
 fuseOpendir() returned 0
-src/myfs.cpp:293:fuseGetattr()
+src/myfs.cpp:296:fuseGetattr()
 	Requested path = / 
 	1
 	2
@@ -773,23 +615,13 @@ fuseGetattr() returned 0
 	readDir success
 
 fuseReaddir() returned 0
-src/myfs.cpp:293:fuseGetattr()
-	Requested path = /text1.txt 
-	1
-	can't get file from root. File's should start with /
-fuseGetattr() returned -2
-src/myfs.cpp:293:fuseGetattr()
-	Requested path = /text2.txt 
-	1
-	can't get file from root. File's should start with /
-fuseGetattr() returned -2
-src/myfs.cpp:577:fuseReleasedir()
+src/myfs.cpp:625:fuseReleasedir()
 fuseReleasedir() returned 0
-src/myfs.cpp:511:fuseOpendir()
+src/myfs.cpp:559:fuseOpendir()
 	Requested path in Fuse Open dir = / 
 	strcmp(path, "/") returns: 0
 fuseOpendir() returned 0
-src/myfs.cpp:293:fuseGetattr()
+src/myfs.cpp:296:fuseGetattr()
 	Requested path = / 
 	1
 	2
@@ -813,23 +645,13 @@ fuseGetattr() returned 0
 	readDir success
 
 fuseReaddir() returned 0
-src/myfs.cpp:293:fuseGetattr()
-	Requested path = /text1.txt 
-	1
-	can't get file from root. File's should start with /
-fuseGetattr() returned -2
-src/myfs.cpp:293:fuseGetattr()
-	Requested path = /text2.txt 
-	1
-	can't get file from root. File's should start with /
-fuseGetattr() returned -2
-src/myfs.cpp:577:fuseReleasedir()
+src/myfs.cpp:625:fuseReleasedir()
 fuseReleasedir() returned 0
-src/myfs.cpp:511:fuseOpendir()
+src/myfs.cpp:559:fuseOpendir()
 	Requested path in Fuse Open dir = / 
 	strcmp(path, "/") returns: 0
 fuseOpendir() returned 0
-src/myfs.cpp:293:fuseGetattr()
+src/myfs.cpp:296:fuseGetattr()
 	Requested path = / 
 	1
 	2
@@ -853,23 +675,13 @@ fuseGetattr() returned 0
 	readDir success
 
 fuseReaddir() returned 0
-src/myfs.cpp:293:fuseGetattr()
-	Requested path = /text1.txt 
-	1
-	can't get file from root. File's should start with /
-fuseGetattr() returned -2
-src/myfs.cpp:293:fuseGetattr()
-	Requested path = /text2.txt 
-	1
-	can't get file from root. File's should start with /
-fuseGetattr() returned -2
-src/myfs.cpp:577:fuseReleasedir()
+src/myfs.cpp:625:fuseReleasedir()
 fuseReleasedir() returned 0
-src/myfs.cpp:511:fuseOpendir()
+src/myfs.cpp:559:fuseOpendir()
 	Requested path in Fuse Open dir = / 
 	strcmp(path, "/") returns: 0
 fuseOpendir() returned 0
-src/myfs.cpp:293:fuseGetattr()
+src/myfs.cpp:296:fuseGetattr()
 	Requested path = / 
 	1
 	2
@@ -893,23 +705,13 @@ fuseGetattr() returned 0
 	readDir success
 
 fuseReaddir() returned 0
-src/myfs.cpp:293:fuseGetattr()
-	Requested path = /text1.txt 
-	1
-	can't get file from root. File's should start with /
-fuseGetattr() returned -2
-src/myfs.cpp:293:fuseGetattr()
-	Requested path = /text2.txt 
-	1
-	can't get file from root. File's should start with /
-fuseGetattr() returned -2
-src/myfs.cpp:577:fuseReleasedir()
+src/myfs.cpp:625:fuseReleasedir()
 fuseReleasedir() returned 0
-src/myfs.cpp:511:fuseOpendir()
+src/myfs.cpp:559:fuseOpendir()
 	Requested path in Fuse Open dir = / 
 	strcmp(path, "/") returns: 0
 fuseOpendir() returned 0
-src/myfs.cpp:293:fuseGetattr()
+src/myfs.cpp:296:fuseGetattr()
 	Requested path = / 
 	1
 	2
@@ -933,25 +735,15 @@ fuseGetattr() returned 0
 	readDir success
 
 fuseReaddir() returned 0
-src/myfs.cpp:293:fuseGetattr()
-	Requested path = /text1.txt 
-	1
-	can't get file from root. File's should start with /
-fuseGetattr() returned -2
-src/myfs.cpp:293:fuseGetattr()
-	Requested path = /text2.txt 
-	1
-	can't get file from root. File's should start with /
-fuseGetattr() returned -2
-src/myfs.cpp:577:fuseReleasedir()
+src/myfs.cpp:625:fuseReleasedir()
 fuseReleasedir() returned 0
-src/myfs.cpp:293:fuseGetattr()
+src/myfs.cpp:296:fuseGetattr()
 	Requested path = /autorun.inf 
 	1
-	can't get file from root. File's should start with /
+	2
+	Cant find a file with path: /autorun.inf
 fuseGetattr() returned -2
-src/myfs.cpp:688:fuseStatfs()
-src/myfs.cpp:293:fuseGetattr()
+src/myfs.cpp:296:fuseGetattr()
 	Requested path = / 
 	1
 	2
@@ -959,11 +751,11 @@ src/myfs.cpp:293:fuseGetattr()
 	Path == /
 	fuseGetattr erfolgreich beendet
 fuseGetattr() returned 0
-src/myfs.cpp:511:fuseOpendir()
+src/myfs.cpp:559:fuseOpendir()
 	Requested path in Fuse Open dir = / 
 	strcmp(path, "/") returns: 0
 fuseOpendir() returned 0
-src/myfs.cpp:293:fuseGetattr()
+src/myfs.cpp:296:fuseGetattr()
 	Requested path = / 
 	1
 	2
@@ -987,15 +779,137 @@ fuseGetattr() returned 0
 	readDir success
 
 fuseReaddir() returned 0
-src/myfs.cpp:293:fuseGetattr()
+src/myfs.cpp:296:fuseGetattr()
 	Requested path = /text1.txt 
 	1
-	can't get file from root. File's should start with /
-fuseGetattr() returned -2
-src/myfs.cpp:293:fuseGetattr()
+	2
+	Now starting to set attributes
+	Anderere Path als "/" wurde abgefragt
+	size from /text1.txt is 512
+	fuseGetattr erfolgreich beendet
+fuseGetattr() returned 0
+src/myfs.cpp:296:fuseGetattr()
 	Requested path = /text2.txt 
 	1
-	can't get file from root. File's should start with /
-fuseGetattr() returned -2
-src/myfs.cpp:577:fuseReleasedir()
+	2
+	Now starting to set attributes
+	Anderere Path als "/" wurde abgefragt
+	size from /text2.txt is 1024
+	fuseGetattr erfolgreich beendet
+fuseGetattr() returned 0
+src/myfs.cpp:625:fuseReleasedir()
 fuseReleasedir() returned 0
+src/myfs.cpp:296:fuseGetattr()
+	Requested path = /text1.txt 
+	1
+	2
+	Now starting to set attributes
+	Anderere Path als "/" wurde abgefragt
+	size from /text1.txt is 512
+	fuseGetattr erfolgreich beendet
+fuseGetattr() returned 0
+src/myfs.cpp:404:fuseOpen()
+	Requested path in Fuse Open = /text1.txt 
+	1
+	root->existName(text1.txt) == 1 
+	name /text1.txt exist 
+
+fuseOpen() returned 0
+	fuseRead start path: /text1.txt 
+
+	root->existName(text1.txt) == 1 
+
+	1
+	2
+	********************************************************************************************** 
+	readFile start 
+	offset: 0, size: 4096
+	buffer in currentBlock 888 is : 1234567890 
+
+	all buf is  : 1234567890 
+
+	readFile success 
+
+readFile() returned 0
+fuseRead() returned 0
+src/myfs.cpp:741:fuseFlush()
+src/myfs.cpp:547:fuseRelease()
+fuseRelease() returned 0
+src/myfs.cpp:296:fuseGetattr()
+	Requested path = / 
+	1
+	2
+	Now starting to set attributes
+	Path == /
+	fuseGetattr erfolgreich beendet
+fuseGetattr() returned 0
+src/myfs.cpp:296:fuseGetattr()
+	Requested path = /text1.txt 
+	1
+	2
+	Now starting to set attributes
+	Anderere Path als "/" wurde abgefragt
+	size from /text1.txt is 512
+	fuseGetattr erfolgreich beendet
+fuseGetattr() returned 0
+src/myfs.cpp:404:fuseOpen()
+	Requested path in Fuse Open = /text1.txt 
+	1
+	root->existName(text1.txt) == 1 
+	name /text1.txt exist 
+
+fuseOpen() returned 0
+	fuseRead start path: /text1.txt 
+
+	root->existName(text1.txt) == 1 
+
+	1
+	2
+	********************************************************************************************** 
+	readFile start 
+	offset: 0, size: 4096
+	buffer in currentBlock 888 is : 1234567890 
+
+	all buf is  : 1234567890 
+
+	readFile success 
+
+readFile() returned 0
+fuseRead() returned 0
+src/myfs.cpp:296:fuseGetattr()
+	Requested path = /text1.txt 
+	1
+	2
+	Now starting to set attributes
+	Anderere Path als "/" wurde abgefragt
+	size from /text1.txt is 512
+	fuseGetattr erfolgreich beendet
+fuseGetattr() returned 0
+	fuseRead start path: /text1.txt 
+
+	root->existName(text1.txt) == 1 
+
+	1
+	2
+	********************************************************************************************** 
+	readFile start 
+	offset: 0, size: 4096
+	buffer in currentBlock 888 is : 1234567890 
+
+	all buf is  : 1234567890 
+
+	readFile success 
+
+readFile() returned 0
+fuseRead() returned 0
+src/myfs.cpp:741:fuseFlush()
+src/myfs.cpp:547:fuseRelease()
+fuseRelease() returned 0
+src/myfs.cpp:296:fuseGetattr()
+	Requested path = / 
+	1
+	2
+	Now starting to set attributes
+	Path == /
+	fuseGetattr erfolgreich beendet
+fuseGetattr() returned 0

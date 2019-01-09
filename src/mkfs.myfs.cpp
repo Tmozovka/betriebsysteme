@@ -59,7 +59,7 @@ int main(int argc, char *argv[]) {
 			/*char * name = new char [255];
 			name[0]='/';
 			int j=1;
-			while(argv[i][j]!='\0')
+			while(argv[i][j-1]!='\0')
 			{
 				name[j]=argv[i][j-1];
 				j++;
@@ -67,7 +67,7 @@ int main(int argc, char *argv[]) {
 			name[j]='\0';
 
 			fs->addFile(name, st.st_mode, st.st_mtime, size, pufferAdd);*/
-			fs->addFile(argv[i], st.st_mode, st.st_mtime, size, pufferAdd);
+		fs->addFile(argv[i], st.st_mode, st.st_mtime, size, pufferAdd);
 
 
 		} else {
