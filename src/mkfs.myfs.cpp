@@ -55,7 +55,20 @@ int main(int argc, char *argv[]) {
 			fread(pufferAdd, size, 1, fin);
 			fs->resize(pufferAdd, st.st_size, size);
 			LOGF("File: %s ,size: %i, puffer: %s  \n",argv[i],size, pufferAdd );
+
+			/*char * name = new char [255];
+			name[0]='/';
+			int j=1;
+			while(argv[i][j]!='\0')
+			{
+				name[j]=argv[i][j-1];
+				j++;
+			}
+			name[j]='\0';
+
+			fs->addFile(name, st.st_mode, st.st_mtime, size, pufferAdd);*/
 			fs->addFile(argv[i], st.st_mode, st.st_mtime, size, pufferAdd);
+
 
 		} else {
 			//printf("can't open File: %s \n", argv[i]);

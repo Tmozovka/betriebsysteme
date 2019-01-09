@@ -48,7 +48,7 @@ TEST_CASE( " Set/unset/find Blocks", "[dMap]" ) {
 }
 
 
-	SECTION("test operatoren == and !="){
+	/*SECTION("test operatoren == and !="){
 
 		dmap->setUsed(1);
 		dmap->setUsed(7);
@@ -70,7 +70,7 @@ TEST_CASE( " Set/unset/find Blocks", "[dMap]" ) {
 		delete d2;
 		delete d3;
 
-	}
+	}*/
 
 	SECTION("get 3 Blocks after block is set free"){
 

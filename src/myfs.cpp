@@ -534,7 +534,7 @@ int MyFS::fuseOpendir(const char *path, struct fuse_file_info *fileInfo) { // Is
 
 int MyFS::fuseReaddir(const char *path, void *buffer, fuse_fill_dir_t filler,
 		off_t offset, struct fuse_file_info *fileInfo) {
-	LOGM();
+	LOG("start fuseReaddir \n");
 
 	// TODO: Implement this!
 
@@ -542,7 +542,7 @@ int MyFS::fuseReaddir(const char *path, void *buffer, fuse_fill_dir_t filler,
 	 return -ENOENT ;//Datei oder Verzeichnis existiert nicht
 	 }*/
 
-	printf("--> Getting The List of Files of %s\n", path);
+	LOGF("--> Getting The List of Files of %s\n", path);
 
 	// filler(void *buf, const char *name,const struct stat *stbuf, off_t off);
 	// struct stat <- can contain the file type
@@ -550,23 +550,26 @@ int MyFS::fuseReaddir(const char *path, void *buffer, fuse_fill_dir_t filler,
 	filler(buffer, ".", NULL, 0); // Current Directory
 	filler(buffer, "..", NULL, 0); // Parent Directory
 
+	LOG(" ready with filler"); // Parent Directory\n");
+
 	string * listNames;
 	offset = 0;
 
 	listNames = root->getArray();
 
-	for (int unsigned i = 0; i < (listNames->length()); i++) {
+	for (int unsigned i = 0; i < (root->getSize()); i++) {
 		//convert from string to char. Do we need string?
-		char *name = new char[listNames[i].length() + 1];
+		char *name = new char[listNames[i].length()+1];
 		strcpy(name, listNames[i].c_str());
+		LOGF("name %i : %s \n", i, name);
 		//////////////////////////////////////////////////////////////////////
-
 		filler(buffer, name, NULL, 0);
+		LOG("filler success \n");
 		delete[] name;
 
 	}
-
-	RETURN(0);LOG("readDir success");
+	LOG("readDir success\n");
+	RETURN(0);
 	// <<< My new code
 }
 
