@@ -30,10 +30,12 @@ dMap::dMap() {
 			dmap[i] = -1;
 
 	for (int i = BLOCKS_START; i < BLOCK_NUMBER; i++)
-		dmap[i] = 0;*/
+		dmap[i] = 1;*/
 
 
 	firstFreeBlock = 0;
+
+
 	//firstFreeBlock = BLOCKS_START;
 	//printf("Konstruktor von dMap ist beendet \n");
 }

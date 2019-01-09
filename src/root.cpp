@@ -281,7 +281,7 @@ char** MyRoot::readBlocks(BlockDevice blocks) {
 
 }
 /////////////////////////////////Tanja's funktionen , um Root in BlockDevice zu schreiben/////////////////////////////////////////////////////
-void MyRoot::writeBlocksTanja(BlockDevice * blocks, int start) {
+void MyRoot::writeBlockDevice(BlockDevice * blocks, int start) {
 
 	char * buf = new char[BLOCK_SIZE];
 

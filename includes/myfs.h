@@ -103,6 +103,8 @@ public:
 			struct fuse_file_info *fi);
 
 	friend bool operator ==(MyFS const &f, MyFS const& f2);
+
+	void writeBlockDevice();
 };
 
 #endif /* myfs_h */
