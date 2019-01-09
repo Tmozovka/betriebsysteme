@@ -236,7 +236,7 @@ SECTION("Klein Test fuer das Block Beschreiben")
 		BlockDevice blocks;
 		blocks.create("RootTestTanja.bin");
 
-		tryRoot->writeBlocksTanja(&blocks, 0);
+		tryRoot->writeBlockDevice(&blocks, 0);
 
 		MyRoot * newRoot = new MyRoot(&blocks, 0);
 		remove("RootTestTanja.bin");

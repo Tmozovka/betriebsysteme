@@ -64,6 +64,9 @@ MyFS::MyFS(char * nameCont) {
 	root = new MyRoot(blocks, ROOT_START);
 
 
+
+
+
 	// printf("Konstruktor von MyFS ist beendet \n");
 	//LOG("Konstruktor von MyFS ist beendet \n");
 }
@@ -90,6 +93,12 @@ bool operator ==(MyFS const &f1, MyFS const& f2) {
 
 	return true;
 
+}
+
+void MyFS::writeBlockDevice()
+{
+	fat->writeBlockDevice(blocks,FAT_START);
+	root->writeBlockDevice(blocks,ROOT_START);
 }
 
 void MyFS::resize(char * text, int oldSize, int newSize) {

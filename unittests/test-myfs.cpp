@@ -139,7 +139,7 @@ TEST_CASE( "my Funktionen in myfs testen", "[myfs]" ) {
 
 	MyFS * fs = new MyFS();
 	fs->blocks->create(nameCont);
-	//fs->writeBlockDevice();
+
 	// printf("MyFS ist erstellt \n");
 
 ///////////////////////////////////////WRITE IN FS//////////////////////////////////////////
@@ -170,10 +170,10 @@ TEST_CASE( "my Funktionen in myfs testen", "[myfs]" ) {
 		}
 	}
 
+	fs->writeBlockDevice();
+	MyFS * newFs = new MyFS(nameCont);
 
-	//MyFS * newFs = new MyFS(nameCont);
-
-	//REQUIRE(*fs==*newFs);
+	REQUIRE(*fs==*newFs);
 
 	remove("containerTest.bin");
 }

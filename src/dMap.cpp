@@ -23,11 +23,21 @@ void dMap::showDmap() {
 }
 
 dMap::dMap() {
+
 	firstFreeBlock = 0;
 	//Erste BLOCKS_START Blöcke besetzt markieren
 	for (int i = 0; i < BLOCKS_START; i++) {
 		setUsed(i);
 	}
+
+
+
+	//erste Bloecke braucht man fuer Datenstrukturen
+	/*for (int i = 0; i < BLOCKS_START; i++)
+			dmap[i] = -1;
+
+	for (int i = BLOCKS_START; i < BLOCK_NUMBER; i++)
+		dmap[i] = 1;*/
 
 	//printf("Konstruktor von dMap ist beendet \n");
 }

@@ -49,7 +49,7 @@ public  :
 	char** readBlocks(BlockDevice blocks);
 
 	//Tanja's funktionen , um Root in BlockDevice zu schreiben
-	void writeBlocksTanja(BlockDevice * blocks, int start);
+	void writeBlockDevice(BlockDevice * blocks, int start);
 	void resize(char * text, int oldSize, int newSize);
 	MyRoot(BlockDevice * b, int start);
 	friend bool operator ==(MyRoot const &f, MyRoot const& f2);
