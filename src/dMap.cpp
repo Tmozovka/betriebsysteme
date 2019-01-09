@@ -30,22 +30,6 @@ dMap::dMap() {
 		setUsed(i);
 	}
 
-
-
-	//erste Bloecke braucht man fuer Datenstrukturen
-	/*for (int i = 0; i < BLOCKS_START; i++)
-	 dmap[i] = -1;
-
-<<<<<<< HEAD
-	 for (int i = BLOCKS_START; i < BLOCK_NUMBER; i++)
-	 dmap[i] = 1;*/
-
-	firstFreeBlock = 0;
-
-	//firstFreeBlock = BLOCKS_START;
-=======
->>>>>>> 7d3dae5ef997dee2cfe7b1c1235ee43d24e8c0f2
-	//printf("Konstruktor von dMap ist beendet \n");
 }
 
 dMap::~dMap() {
@@ -130,11 +114,9 @@ int dMap::init(int startingBlock, BlockDevice *blocks) {
 				c &= ~(1 << charBit); //unset charbit
 			}
 
-<<<<<<< HEAD
 	int pufferLength = BD_BLOCK_SIZE; //512
 	char * puffer = new char[pufferLength];
 
-=======
 		}
 		puffer[byteNr] = c;
 	}
@@ -142,7 +124,6 @@ int dMap::init(int startingBlock, BlockDevice *blocks) {
 	blocks->write(startingBlock++, puffer);
 	//***********************************************************************************
 	//Nun dmap inhalt in Blockdevice schreiben
->>>>>>> 7d3dae5ef997dee2cfe7b1c1235ee43d24e8c0f2
 	int bitsLeft = BLOCK_NUMBER;
 	int CurrentStartOfPufferInDmap = 0;
 
@@ -217,10 +198,8 @@ int dMap::read(int startingBlock, BlockDevice* blocks) {
 	int currentBlock = startingBlock;
 	int currentDmapIndex = 0;
 	char * puffer = new char[BD_BLOCK_SIZE];
-<<<<<<< HEAD
 
 	//todo aus erstem block firstFreeBlock auslesen
-=======
 
 	// aus erstem block firstFreeBlock auslesen
 	blocks->read(currentBlock++, puffer);
@@ -240,7 +219,6 @@ int dMap::read(int startingBlock, BlockDevice* blocks) {
 	printf("Dmap->firstFreeBlock lautet nach dem Lesen %d\n",firstFreeBlock);
 
 	//dmap Blöcke auslesen
->>>>>>> 7d3dae5ef997dee2cfe7b1c1235ee43d24e8c0f2
 	while (currentDmapIndex < BLOCK_NUMBER) {
 
 		blocks->read(currentBlock++, puffer); //currentBlock auslesen
@@ -267,7 +245,6 @@ int dMap::read(int startingBlock, BlockDevice* blocks) {
 	return -1;
 }
 
-<<<<<<< HEAD
 bool operator ==(dMap const &d1, dMap const& d2) {
 
 	for (int i = 0; i < BLOCK_NUMBER; i++)
@@ -281,5 +258,4 @@ bool operator !=(dMap const &d1, dMap const& d2) {
 	return !(d1==d2);
 }
 
-=======
->>>>>>> 7d3dae5ef997dee2cfe7b1c1235ee43d24e8c0f2
+
