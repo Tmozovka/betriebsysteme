@@ -10,6 +10,11 @@ TEST_CASE( " Set/unset/find Blocks", "[dMap]" ) {
 
 	dMap* dmap = new dMap();
 
+	//alles Null setzen, damit ohne für datenstrukturen reservierte blöcke getestet wird
+	for(int i = 0; i<BLOCK_NUMBER;i++){
+		dmap->setUnused(i);
+	}
+
 	SECTION("get 3 Blocks"){
 	dmap->setUsed(1);
 

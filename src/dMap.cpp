@@ -24,23 +24,34 @@ void dMap::showDmap() {
 
 dMap::dMap() {
 
+	firstFreeBlock = 0;
+	//Erste BLOCKS_START Blöcke besetzt markieren
+	for (int i = 0; i < BLOCKS_START; i++) {
+		setUsed(i);
+	}
+
+
+
 	//erste Bloecke braucht man fuer Datenstrukturen
 	/*for (int i = 0; i < BLOCKS_START; i++)
 	 dmap[i] = -1;
 
+<<<<<<< HEAD
 	 for (int i = BLOCKS_START; i < BLOCK_NUMBER; i++)
 	 dmap[i] = 1;*/
 
 	firstFreeBlock = 0;
 
 	//firstFreeBlock = BLOCKS_START;
+=======
+>>>>>>> 7d3dae5ef997dee2cfe7b1c1235ee43d24e8c0f2
 	//printf("Konstruktor von dMap ist beendet \n");
 }
 
 dMap::~dMap() {
 
-	for (int i = 0; i < BLOCK_NUMBER; i++)
-		dmap[i] = -1;
+	//for (int i = 0; i < BLOCK_NUMBER; i++)
+	//dmap[i] = -1;
 	//printf("Destruktor von dMap ist beendet \n");
 }
 
@@ -70,6 +81,11 @@ int dMap::setUsed(int blockNumber) {
 		return -1;
 
 	dmap[blockNumber] = 1;
+
+	if(blockNumber==firstFreeBlock){
+		firstFreeBlock++;
+	}
+
 	return 0;
 
 }
@@ -98,11 +114,35 @@ int dMap::init(int startingBlock, BlockDevice *blocks) {
 
 	//Anzahl an Benötigten Bytes / 512 = Anzahl an Benötigten Blöcken
 
-	//TODO in den ersten block von 15 die variable firstFreeBlock speichern
-
 	int pufferLength = BD_BLOCK_SIZE; //512
 	char * puffer = new char[pufferLength];
 
+	printf("Dmap->firstFreeBlock lautet vor dem Schreiben %d\n",firstFreeBlock);
+	//firstFreeBlock in ersten Block schreiben
+
+	for (int byteNr = 0; byteNr < 4; byteNr++) {
+		char c = 'a';
+		for (int charBit = 0; charBit < 8; charBit++) {
+			if ((firstFreeBlock >> (byteNr * 8 + charBit)) & 1) { //Ist Bit von firstFreeBlock gesetzt?
+				c |= 1 << charBit; //set charbit
+
+			} else {
+				c &= ~(1 << charBit); //unset charbit
+			}
+
+<<<<<<< HEAD
+	int pufferLength = BD_BLOCK_SIZE; //512
+	char * puffer = new char[pufferLength];
+
+=======
+		}
+		puffer[byteNr] = c;
+	}
+
+	blocks->write(startingBlock++, puffer);
+	//***********************************************************************************
+	//Nun dmap inhalt in Blockdevice schreiben
+>>>>>>> 7d3dae5ef997dee2cfe7b1c1235ee43d24e8c0f2
 	int bitsLeft = BLOCK_NUMBER;
 	int CurrentStartOfPufferInDmap = 0;
 
@@ -177,8 +217,30 @@ int dMap::read(int startingBlock, BlockDevice* blocks) {
 	int currentBlock = startingBlock;
 	int currentDmapIndex = 0;
 	char * puffer = new char[BD_BLOCK_SIZE];
+<<<<<<< HEAD
 
 	//todo aus erstem block firstFreeBlock auslesen
+=======
+
+	// aus erstem block firstFreeBlock auslesen
+	blocks->read(currentBlock++, puffer);
+	firstFreeBlock= 0;
+
+
+	//todo das noch testen
+	for (int byteNr = 0; byteNr < 4; byteNr++) {
+		char c = puffer[byteNr];
+		for(int charBit= 0; charBit<8; charBit++){
+			if((c>>(8*byteNr+charBit))&1){
+				firstFreeBlock |= 1 << (8* byteNr +charBit);
+			}
+
+		}
+	}
+	printf("Dmap->firstFreeBlock lautet nach dem Lesen %d\n",firstFreeBlock);
+
+	//dmap Blöcke auslesen
+>>>>>>> 7d3dae5ef997dee2cfe7b1c1235ee43d24e8c0f2
 	while (currentDmapIndex < BLOCK_NUMBER) {
 
 		blocks->read(currentBlock++, puffer); //currentBlock auslesen
@@ -205,6 +267,7 @@ int dMap::read(int startingBlock, BlockDevice* blocks) {
 	return -1;
 }
 
+<<<<<<< HEAD
 bool operator ==(dMap const &d1, dMap const& d2) {
 
 	for (int i = 0; i < BLOCK_NUMBER; i++)
@@ -218,3 +281,5 @@ bool operator !=(dMap const &d1, dMap const& d2) {
 	return !(d1==d2);
 }
 
+=======
+>>>>>>> 7d3dae5ef997dee2cfe7b1c1235ee43d24e8c0f2
