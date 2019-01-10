@@ -517,6 +517,10 @@ int MyFS::fuseWrite(const char *path, const char *buf, size_t size,
 	LOGM();
 	//TODO MODE prueffen
 	// TODO: Implement this!
+
+
+
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	LOGF("fusewrite %s \n", path);LOGF("fusewrite buf %s \n", buf);LOGF("in fuseWrite size : %i offset: %i \n", size, offset);
 
 	string* s = root->getArray();
@@ -541,6 +545,7 @@ int MyFS::fuseWrite(const char *path, const char *buf, size_t size,
 	int blocksNumber = (flink->getSize() / BD_BLOCK_SIZE);
 	int currentBlock = flink->getFirstBlock();
 	LOGF("erste Block am Anfang : %i \n",currentBlock);
+	LOGF("blocksNumber alt: %i \n", blocksNumber);
 
 	while (blocksNumber != 0 && currentBlock != -1) {
 		if (this->blocks->write(currentBlock, text) == -1) {
@@ -578,6 +583,7 @@ int MyFS::fuseWrite(const char *path, const char *buf, size_t size,
 	LOG("5");
 
 	blocksNumber = (newSizeFile / BD_BLOCK_SIZE);
+	LOGF("blocksNumber new: %i \n", blocksNumber);
 	int * blocksUse = new int[blocksNumber];
 
 	//blocksUse[blocksNumber] = 0;
@@ -591,12 +597,14 @@ int MyFS::fuseWrite(const char *path, const char *buf, size_t size,
 		LOGF("flink->getFirstBlock() : %i \n", flink->getFirstBlock());
 
 
-		currentBlock = flink->getFirstBlock();
+		//currentBlock = flink->getFirstBlock();
+		int tempCount=0;
 		for (int i = 0; i < blocksNumber; i++) {
 			LOGF("bearbeite Block nr %i \n", blocksUse[i]);
 			dmap->setUsed(blocksUse[i]);
 
 			if (i + 1 != blocksNumber) {
+				LOGF("%i != blocksNumber \n", i+1);
 				if (fat->link(blocksUse[i], &blocksUse[i + 1]) == -1) {
 					RETURN(-1);
 					printf(
@@ -605,11 +613,17 @@ int MyFS::fuseWrite(const char *path, const char *buf, size_t size,
 			}
 			char * buffer = new char[BD_BLOCK_SIZE];
 			int count = 0;
-			while (*buf != '\0' || count != BD_BLOCK_SIZE - 2) {
+			while (*buf != '\0' ) {
+				//LOG("start while\n");
 				*buffer = *buf;
 				buf++;
 				buffer++;
 				count++;
+				tempCount++;
+				if( count == BD_BLOCK_SIZE - 2)
+					break;
+				if(tempCount == (int)size)
+					break;
 			}
 			*(buffer++) = char(0);
 			count++;
@@ -634,78 +648,6 @@ int MyFS::fuseWrite(const char *path, const char *buf, size_t size,
 	//LOGF("currentBlock: %i \n", currentBlock);
 	LOG("6");
 ////////////////beschreiben/////////////////////////////////////////////////////////////
-	/*blocksNumber = (newSizeFile / BD_BLOCK_SIZE);
-	 currentBlock = flink->getFirstBlock();
-	 while (currentBlock != -1 || blocksNumber != 0) {
-	 char * buffer = new char[BD_BLOCK_SIZE];
-	 int count = 0;
-	 while (*buf != '\0') {
-	 *buffer = *buf;
-	 buf++;
-	 buffer++;
-	 count++;
-	 }
-	 *(buffer++) = char(0);
-	 count++;
-	 buffer -= count;
-	 LOGF("write buffer %s in current block %i \n", buffer, currentBlock);
-	 blocks->write(currentBlock, buffer);
-	 if (fat->getNext(currentBlock, &currentBlock) == -1) {
-	 printf(
-	 "error in fuseWrite fat.getNext(currentBlock,&currentBlock)");
-	 RETURN(-ENOENT);
-	 }LOGF("next Block: %i \n",currentBlock);
-	 blocksNumber--;
-	 LOGF("blocksNumber : %i \n", blocksNumber);
-	 delete[] buffer;
-	 }*/
-
-	writeBlockDevice();
-
-	//write in blocks
-	/*int count = offset;
-	 while (count != 0) {
-	 buffer++;
-	 count--;
-	 }*/
-
-	/*while (*buf != '\n') {
-	 *(buffer++) = *(buf++);
-	 }
-
-	 LOG("6");
-
-	 //rewrite buffer in the same file in blocks
-
-	 int blocksNumber = (newSizeFile / BD_BLOCK_SIZE);
-	 int currentBlock = flink->getFirstBlock();
-	 LOGF("currentBlock: %i \n", currentBlock);
-	 LOG("7");
-	 while (currentBlock != -1 && blocksNumber != 0 && *buffer != '\0') {
-	 LOG("8");
-	 if (blocks->write(currentBlock, buffer) == 0) {
-	 LOG("9");
-	 // how much buffer could i write in block?
-	 int c = BD_BLOCK_SIZE;
-	 while (c != 0 || *buffer != '\0') {
-	 buffer++;
-	 c--;
-	 }
-
-	 } else {
-	 printf("error in fuseWRITE blocks.write(currentBlock, buffer) ");
-	 RETURN(-EPERM);
-	 }
-
-	 if (fat->getNext(currentBlock, &currentBlock) == -1) {
-	 printf(
-	 "error in fuseWrite fat.getNext(currentBlock,&currentBlock)");
-	 RETURN(-ENOENT);
-	 }
-	 LOG("end");
-	 blocksNumber--;
-
-	 }*/
 
 	RETURN(0);
 }
