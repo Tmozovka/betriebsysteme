@@ -165,12 +165,12 @@ TEST_CASE( "my Funktionen in myfs testen", "[myfs]" ) {
 			fs->addFile(argv[i],st.st_mode,st.st_mtime,size,pufferAdd);
 			//printf("ADDED! \n");
 			sizeRoot++;
-
+			fs->writeBlockDevice();
 			delete [] pufferAdd;
 		}
 	}
 
-	fs->writeBlockDevice();
+
 	MyFS * newFs = new MyFS("containerTest2.bin");
 
 	remove("containerTest2.bin");
@@ -179,6 +179,18 @@ TEST_CASE( "my Funktionen in myfs testen", "[myfs]" ) {
 
 
 }
+
+	SECTION("test MKnod")
+	{
+		MyFS * fs = new MyFS();
+
+		int * blocks[1];
+		//LOG("0\n");
+		REQUIRE(fs->dmap->getFreeBlocks(1, blocks)==0);
+		REQUIRE(fs->root->addFile("text3.txt", 512, 1000, time(NULL), *blocks[0])==0);
+
+		delete fs;
+	}
 
 }
 

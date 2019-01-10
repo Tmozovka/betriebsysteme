@@ -159,14 +159,14 @@ void MyRoot::showRoot() {
 
 int MyRoot::getFile(string name, MyFile * f) {
 
-	LOGF("Starting to look for file in root");
+	//LOG("Starting to look for file in root");
 	std::list<MyFile>::iterator it = files.begin();
 
 	while (it->getName() != name) {
-		LOGF("Found this file:%s",it->getName());
+		//LOGF("Found this file:%s",it->getName());
 		it++;
 		if (it == files.end()) {
-			printf("no such file in root \n");
+			//printf("no such file in root \n");
 			return -1;
 		}
 	}

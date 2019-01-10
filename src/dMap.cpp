@@ -41,6 +41,7 @@ dMap::~dMap() {
 
 int dMap::getFreeBlocks(int neededBlocks, int** returnArray) {
 
+	//LOG("start getFreeBlocks \n");
 	int * array = *returnArray;
 	int j = 0;
 	for (int i = firstFreeBlock; i < BLOCK_NUMBER; i++) {
