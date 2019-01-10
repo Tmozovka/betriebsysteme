@@ -66,24 +66,25 @@ MyFile& MyFile::operator =(const MyFile &f) {
 }
 
 //to Blocks
-char * MyFile::writeBlock(){
-	char * buf = new char [512];
-			char * readBuf = new char [512];
-			buf = this->writeFileChar();
+char * MyFile::writeBlock() {
+	char * buf = new char[512];
+	char * readBuf = new char[512];
+	buf = this->writeFileChar();
 
-			//printf("buf mit tryFile: %s \n", buf);
-			//printf("write to block \n");
+	//printf("buf mit tryFile: %s \n", buf);
+	//printf("write to block \n");
 
-			BlockDevice  blocks ;
+	BlockDevice blocks;
 
-			blocks.create("containerFileTest.bin");
-			blocks.write(0,buf);
-			blocks.read(0,readBuf);
-			if(strcmp(buf, readBuf)!=0){
-				throw std::invalid_argument( "Differences between written and read Blocks" );
-			}
-			remove("containerFileTest.bin");
-			return readBuf;
+	blocks.create("containerFileTest.bin");
+	blocks.write(0, buf);
+	blocks.read(0, readBuf);
+	if (strcmp(buf, readBuf) != 0) {
+		throw std::invalid_argument(
+				"Differences between written and read Blocks");
+	}
+	remove("containerFileTest.bin");
+	return readBuf;
 }
 
 char * MyFile::writeFileChar() {
@@ -144,9 +145,9 @@ char * MyFile::writeFileChar() {
 	return block;
 
 }
-char * MyFile::readBlock(int blockNo, BlockDevice blocks){
-	char * buf = new char [512];
-	blocks.read(blockNo,buf);
+char * MyFile::readBlock(int blockNo, BlockDevice blocks) {
+	char * buf = new char[512];
+	blocks.read(blockNo, buf);
 	return buf;
 }
 
@@ -274,6 +275,10 @@ void MyFile::setName(string n) {
 }
 void MyFile::setLastAccess(time_t t) {
 	lastAccess = t;
+}
+
+void MyFile::setFirstBlock(int i) {
+	firstBlock = i;
 }
 
 void MyFile::resize(char * text, int oldSize, int newSize) {

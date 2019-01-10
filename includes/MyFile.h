@@ -43,6 +43,7 @@ public:
 	void setSize(off_t s);
 	void setName(string n);
 	void setLastAccess(time_t t);
+	void setFirstBlock(int i);
 
 	void showFile();
 
