@@ -496,11 +496,10 @@ int MyFS::fuseRead(const char *path, char *buf, size_t size, off_t offset,
 	//RETURN(size);
 	LOGF("buf in fuseRead: %s", buf);
 
-	int count=0;
-	while(*(buf++)!='\0')
+	int count = 0;
+	while (*(buf++) != '\0')
 		count++;
-	buf-=count;
-
+	buf -= count;
 
 	//size = fcopy->getSize();
 	delete fcopy;
@@ -518,14 +517,13 @@ int MyFS::fuseWrite(const char *path, const char *buf, size_t size,
 	//TODO MODE prueffen
 	// TODO: Implement this!
 
-
-
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	LOGF("fusewrite %s \n", path);LOGF("fusewrite buf %s \n", buf);LOGF("in fuseWrite size : %i offset: %i \n", size, offset);
 
 	string* s = root->getArray();
 
-	LOGF("s:  %s \n", s[0].c_str());LOGF("s:  %s \n", s[1].c_str());LOGF("s:  %s \n", s[2].c_str());
+	for (int i = 0; i < root->getSize(); i++)
+		LOGF("s:  %s \n", s[i].c_str());
 
 	MyFile *flink = new MyFile();
 	LOGF("try to get %s \n", path+1);
@@ -535,17 +533,62 @@ int MyFS::fuseWrite(const char *path, const char *buf, size_t size,
 		printf("error in fuseWrite in root.getFile( path, &fcopy)");
 		RETURN(-EPERM);
 	}LOG("2");
+	int blocksNumber;
+	size_t newSizeFile;
+	char * newBuf;
+	int newBufCount=0;
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	if (offset != 0) {
+		newSizeFile =
+				ceil(
+						(double) size + flink->getSize() / BD_BLOCK_SIZE) * BD_BLOCK_SIZE;
+
+		newBuf = new char[newSizeFile];
+		readFile(path + 1, newBuf, size, offset, fileInfo);
+
+		int newCount = 0;
+		for (int i = 0; *newBuf!=char(0); i++) {
+			newBuf++;
+			newCount++;
+		}
+
+		*(newBuf++)='\0';
+		newCount++;
+
+
+		for (int i = 0; i < (int)size; i++) {
+			*(newBuf++) = *(buf++);
+			newCount++;
+		}
+
+		newBuf -= newCount;
+	} else {
+		newSizeFile =
+				ceil(
+						(double) size / BD_BLOCK_SIZE) * BD_BLOCK_SIZE;
+
+		newBuf = new char[newSizeFile];
+		int newCount = 0;
+		for (int i = 0; i < (int)size; i++) {
+			*(newBuf++) = *(buf++);
+			newCount++;
+		}
+
+		newBuf -= newCount;
+	}
+
+	LOGF("newBuf: %s \n", newBuf);
 ///////////////////////////////////////alte parameter loeschen////////////////////////////////////////////////////////
+	//if (offset == 0) {
 	char * text = new char[ BD_BLOCK_SIZE];
 	for (int i = 0; i < BD_BLOCK_SIZE; i++)
 		*(text++) = char(0);
 	text -= BD_BLOCK_SIZE;
 ///////////////////////////////////////////////////
-	int blocksNumber = (flink->getSize() / BD_BLOCK_SIZE);
+	blocksNumber = (flink->getSize() / BD_BLOCK_SIZE);
 	int currentBlock = flink->getFirstBlock();
-	LOGF("erste Block am Anfang : %i \n",currentBlock);
-	LOGF("blocksNumber alt: %i \n", blocksNumber);
+	LOGF("erste Block am Anfang : %i \n",currentBlock);LOGF("blocksNumber alt: %i \n", blocksNumber);
 
 	while (blocksNumber != 0 && currentBlock != -1) {
 		if (this->blocks->write(currentBlock, text) == -1) {
@@ -573,8 +616,33 @@ int MyFS::fuseWrite(const char *path, const char *buf, size_t size,
 	}
 
 	delete[] text;
+	newSizeFile = ceil((double) size / BD_BLOCK_SIZE) * BD_BLOCK_SIZE;
+//	}
 //////////////////////////////neu parameter angeben////////////////////////////////////////////
-	size_t newSizeFile = ceil((double) size / BD_BLOCK_SIZE) * BD_BLOCK_SIZE;
+	/*	else {
+	 newSizeFile =ceil((double) size + flink->getSize() / BD_BLOCK_SIZE) * BD_BLOCK_SIZE;
+
+	 char * newBuf = new char[newSizeFile];
+	 readFile(path+1, newBuf, size, offset,fileInfo);
+
+	 int newCount=0;
+	 for(int i=0; i<flink->getSize();i++)
+	 {
+	 newBuf++;
+	 newCount++;
+	 }
+
+	 for(int i=0;i<size;i++)
+	 {
+	 *(newBuf++)=*(buf++);
+	 newCount++;
+	 }
+
+	 newBuf-=newCount;
+
+
+	 }*/
+
 	LOGF("newSize: %i \n", newSizeFile);
 	flink->setSize(newSizeFile);
 	LOGF("flink->getSize() : %i \n", flink->getSize());
@@ -596,9 +664,8 @@ int MyFS::fuseWrite(const char *path, const char *buf, size_t size,
 		flink->setFirstBlock(blocksUse[0]);
 		LOGF("flink->getFirstBlock() : %i \n", flink->getFirstBlock());
 
-
 		//currentBlock = flink->getFirstBlock();
-		int tempCount=0;
+		int tempCount = 0;
 		for (int i = 0; i < blocksNumber; i++) {
 			LOGF("bearbeite Block nr %i \n", blocksUse[i]);
 			dmap->setUsed(blocksUse[i]);
@@ -613,16 +680,17 @@ int MyFS::fuseWrite(const char *path, const char *buf, size_t size,
 			}
 			char * buffer = new char[BD_BLOCK_SIZE];
 			int count = 0;
-			while (*buf != '\0' ) {
+			while (*newBuf != '\0') {
 				//LOG("start while\n");
-				*buffer = *buf;
-				buf++;
+				*buffer = *newBuf;
+				newBuf++;
 				buffer++;
 				count++;
 				tempCount++;
-				if( count == BD_BLOCK_SIZE - 2)
+				newBufCount++;
+				if (count == BD_BLOCK_SIZE - 2)
 					break;
-				if(tempCount == (int)size)
+				if (tempCount == (int) size)
 					break;
 			}
 			*(buffer++) = char(0);
@@ -644,7 +712,8 @@ int MyFS::fuseWrite(const char *path, const char *buf, size_t size,
 		//no more place
 	}
 	delete[] blocksUse;
-
+	newBuf-=newBufCount;
+	delete [] newBuf;
 	//LOGF("currentBlock: %i \n", currentBlock);
 	LOG("6");
 ////////////////beschreiben/////////////////////////////////////////////////////////////
