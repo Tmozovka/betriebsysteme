@@ -39,6 +39,22 @@ MyFile::MyFile() {
 	//printf("Konstruktor von MyFile ist beendet \n");
 }
 
+int MyFile::init(MyFile * f) {
+
+	name=f->name;
+	user = f->user;
+	group = f->group;
+	size = f->size;
+	mode = f->mode;
+	lastAccess = f->lastAccess;
+	lastMod = f->lastMod; //letzte Ver�nderung (mtime)
+	lastStatusChange = f->lastStatusChange; //letzter Status�nderung (ctime)
+	firstBlock = f->firstBlock; //Zeiger auf ersten Block (u_int32_t BlockNo)
+
+	return 1;
+
+}
+
 void MyFile::showFile() {
 	printf(
 			"File's name: %s, user id: %i, group id: %i, size: %i , firstBlock: %i \n \n",
@@ -47,7 +63,7 @@ void MyFile::showFile() {
 
 //operators
 bool operator ==(MyFile const &f, MyFile const &f2) {
-	return ((f2.name == f.name) && f2.firstBlock == f.firstBlock);
+	return ((f2.name == f.name) && f2.firstBlock == f.firstBlock && f2.size==f.size);
 
 }
 

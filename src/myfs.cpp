@@ -140,6 +140,7 @@ int MyFS::readFile(const char *path, char *buf, size_t size, off_t offset,
 		RETURN(-ENOENT);
 	}
 	int fileSize = ft->getSize();
+	LOGF("readFile fileSize= ft->getSize() %i  \n", fileSize);
 	//int blocksNumber = ceil(fcopy.getSize() / BD_BLOCK_SIZE);
 	if (fileSize % BD_BLOCK_SIZE != 0) {
 		printf("File's size is false  fcopy.getSize() mod D_BLOCK_SIZE!=0 \n");
@@ -469,6 +470,7 @@ int MyFS::fuseOpen(const char *path, struct fuse_file_info *fileInfo) { // How t
 int MyFS::fuseRead(const char *path, char *buf, size_t size, off_t offset,
 		struct fuse_file_info *fileInfo) {
 	LOGF("fuseRead start path: %s \n",path);
+	LOGF("size: %i", size);
 
 	LOGF("root->existName(%s) == %i \n", path+1, root->existName(path+1));
 
@@ -711,14 +713,31 @@ int MyFS::fuseWrite(const char *path, const char *buf, size_t size,
 		RETURN(-EPERM);
 		//no more place
 	}
+
+	/////////////////////
+	MyFile *ftr = new MyFile();
+		//LOGF("try to get %s \n", path+1);
+
+		string temp2(path + 1);
+		root->copyFile(temp2, flink);
+		if (root->getFile(temp2, ftr) == -1);
+		LOGF("flink->getSize() : %i \n", flink->getSize());
+		LOGF("ftr->getSize() : %i \n", ftr->getSize());
+
+	/////////////////////
+
+
+	LOG("root->copyFile(path, flink); ready \n");
+	writeBlockDevice();
 	delete[] blocksUse;
 	newBuf-=newBufCount;
 	delete [] newBuf;
+	delete flink;
 	//LOGF("currentBlock: %i \n", currentBlock);
 	LOG("6");
 ////////////////beschreiben/////////////////////////////////////////////////////////////
 
-	RETURN(0);
+	RETURN(size);
 }
 
 int MyFS::fuseRelease(const char *path, struct fuse_file_info *fileInfo) {

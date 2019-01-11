@@ -297,4 +297,29 @@ SECTION("Klein Test fuer das Block Beschreiben")
 		delete r4;
 	}
 
+	SECTION("test root copyFile"){
+			MyRoot* r1 = new MyRoot("testdrei.txt",12244,16,50003);
+			MyRoot* r2 = new MyRoot("testdrei.txt",12244,16,50003);
+			//std::list<MyFile>::iterator it = r1->files.begin();
+
+			//r1->addFile("secondFile.txt",10300,12005,1000001,59999);
+
+			MyFile * f1 = new MyFile(*(r1->getAdr()));
+			f1->setSize(1234);
+
+			r1->copyFile("testdrei.txt", f1);
+			MyRoot* r3 = new MyRoot(*f1);
+			r1->showRoot();
+			r2->showRoot();
+			r3->showRoot();
+			REQUIRE(*r3==*r1);
+			REQUIRE(*r2!=*r1);
+
+
+			delete r1;
+			delete r2;
+			delete r3;
+			delete f1;
+		}
+
 }

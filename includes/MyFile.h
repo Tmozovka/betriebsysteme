@@ -59,6 +59,7 @@ public:
 	void convertS(string & var, char * varT);
 	template<class T>
 	void convertI(T & var, char * varT);
+	int init(MyFile * f);
 
 
 

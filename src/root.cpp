@@ -176,6 +176,23 @@ int MyRoot::getFile(string name, MyFile * f) {
 
 }
 
+int MyRoot::copyFile(string name, MyFile* file) {
+
+	std::list<MyFile>::iterator it = files.begin();
+
+		while (it->getName() != name) {
+			//LOGF("Found this file:%s",it->getName());
+			it++;
+			if (it == files.end()) {
+				//printf("no such file in root \n");
+				return -1;
+			}
+		}
+
+	return(it->init(file));
+
+}
+
 int MyRoot::deleteFile(string name) {
 	//In Root Verzeichnis Datei loeschen
 	if (files.size() != 0) {
@@ -295,11 +312,9 @@ void MyRoot::writeBlockDevice(BlockDevice * blocks, int start) {
 	printf("buf %i : %s \n", start, buf);
 	blocks->write(start++, buf);
 
-
-
 	std::list<MyFile>::iterator it = files.begin();
 
-	while ( it != files.end()) {
+	while (it != files.end()) {
 		buf = it->writeFileChar();
 		printf("buf %i : %s \n", start, buf);
 		blocks->write(start++, buf);
@@ -308,90 +323,76 @@ void MyRoot::writeBlockDevice(BlockDevice * blocks, int start) {
 
 }
 
-
-
-MyRoot::MyRoot(BlockDevice * blocks, int start)
-{
+MyRoot::MyRoot(BlockDevice * blocks, int start) {
 	printf("start MyRoot(BlockDevice * blocks, int start) \n");
-	char * buf = new char [512];
-	blocks->read(start++,buf);
-	sizeRoot=atoi(buf);
+	char * buf = new char[512];
+	blocks->read(start++, buf);
+	sizeRoot = atoi(buf);
 
-	if(sizeRoot!=0)
-	{
+	if (sizeRoot != 0) {
 
-	for(int i=0;i<sizeRoot;i++)
-	{
-		blocks->read(start++,buf);
-		printf("blocks.read buf %i : %s \n", start-1, buf);
-		MyFile * f= new MyFile(buf);
-		files.push_back(*f);
+		for (int i = 0; i < sizeRoot; i++) {
+			blocks->read(start++, buf);
+			printf("blocks.read buf %i : %s \n", start - 1, buf);
+			MyFile * f = new MyFile(buf);
+			files.push_back(*f);
 
-	}
+		}
 
-	std::list<MyFile>::iterator it = files.begin();
-	addressRoot=&(*it);
+		std::list<MyFile>::iterator it = files.begin();
+		addressRoot = &(*it);
 
-	}
-	else
-		addressRoot=NULL;
+	} else
+		addressRoot = NULL;
 
-	delete [] buf;
+	delete[] buf;
 
 }
 
-void MyRoot::read( int start, BlockDevice * blocks)
-{
+void MyRoot::read(int start, BlockDevice * blocks) {
 	printf("start MyRoot(BlockDevice * blocks, int start) \n");
-	char * buf = new char [512];
-	blocks->read(start++,buf);
-	sizeRoot=atoi(buf);
+	char * buf = new char[512];
+	blocks->read(start++, buf);
+	sizeRoot = atoi(buf);
 
-	if(sizeRoot!=0)
-	{
+	if (sizeRoot != 0) {
 
-	for(int i=0;i<sizeRoot;i++)
-	{
-		blocks->read(start++,buf);
-		printf("blocks.read buf %i : %s \n", start-1, buf);
-		MyFile * f= new MyFile(buf);
-		files.push_back(*f);
+		for (int i = 0; i < sizeRoot; i++) {
+			blocks->read(start++, buf);
+			printf("blocks.read buf %i : %s \n", start - 1, buf);
+			MyFile * f = new MyFile(buf);
+			files.push_back(*f);
 
-	}
+		}
 
-	std::list<MyFile>::iterator it = files.begin();
-	addressRoot=&(*it);
+		std::list<MyFile>::iterator it = files.begin();
+		addressRoot = &(*it);
 
-	}
-	else
-		addressRoot=NULL;
+	} else
+		addressRoot = NULL;
 
-	delete [] buf;
+	delete[] buf;
 
 }
 
-bool operator ==(MyRoot const &r1, MyRoot const& r2)
-{
-	if(r1.sizeRoot!=r2.sizeRoot)
+bool operator ==(MyRoot const &r1, MyRoot const& r2) {
+	if (r1.sizeRoot != r2.sizeRoot)
 		return false;
 
 	std::list<MyFile>::const_iterator it1 = r1.files.begin();
 	std::list<MyFile>::const_iterator it2 = r2.files.begin();
 
-		for (int i = 0; it1 != r1.files.end(); it1++, i++, it2++)
-		{
-			if(!(*it1==*it2))
-				return false;
-		}
+	for (int i = 0; it1 != r1.files.end(); it1++, i++, it2++) {
+		if (!(*it1 == *it2))
+			return false;
+	}
 
 	return true;
 }
 
-bool operator !=(MyRoot const &r1, MyRoot const& r2)
-		{
-	return !(r1==r2);
-		}
-
+bool operator !=(MyRoot const &r1, MyRoot const& r2) {
+	return !(r1 == r2);
+}
 
 void MyRoot::resize(char * text, int oldSize, int newSize) {
 

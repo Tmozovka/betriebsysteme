@@ -29,6 +29,8 @@ public  :
 	int addFile(string name, off_t size, mode_t mode, time_t t, int firstBlock);
 	int deleteFile(string name);
 	int getFile(string name, MyFile* file);
+	MyFile* getAdr(){return addressRoot;};
+	int copyFile(string name, MyFile* file);
 
 	/*int getFileTry(int number);
 	 MyFile getFile(int number);*/
