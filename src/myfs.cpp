@@ -552,9 +552,9 @@ int MyFS::fuseWrite(const char *path, const char *buf, size_t size,
 			newBuf++;
 			newCount++;
 		}
-
-		*(newBuf++)='\0';
-		newCount++;
+		size+=newCount;
+		/**(newBuf++)='\0';
+		newCount++;*/
 
 
 		for (int i = 0; i < (int)size; i++) {

@@ -6,6 +6,18 @@ src/myfs.cpp:837:fuseInit()
 
 fuseInit() returned 0
 src/myfs.cpp:312:fuseGetattr()
+	Requested path = /.Trash 
+	1
+	2
+	Cant find a file with path: /.Trash
+fuseGetattr() returned -2
+src/myfs.cpp:312:fuseGetattr()
+	Requested path = /.Trash-1000 
+	1
+	2
+	Cant find a file with path: /.Trash-1000
+fuseGetattr() returned -2
+src/myfs.cpp:312:fuseGetattr()
 	Requested path = /.xdg-volume-info 
 	1
 	2
@@ -16,25 +28,19 @@ src/myfs.cpp:738:fuseOpendir()
 	strcmp(path, "/") returns: 0
 fuseOpendir() returned 0
 src/myfs.cpp:312:fuseGetattr()
-	Requested path = / 
-	1
-src/myfs.cpp:312:fuseGetattr()
 	Requested path = /autorun.inf 
-	2
-	Now starting to set attributes
-	Path == /
-	fuseGetattr erfolgreich beendet
-fuseGetattr() returned 0
 	1
 	2
 	Cant find a file with path: /autorun.inf
 fuseGetattr() returned -2
 src/myfs.cpp:312:fuseGetattr()
-	Requested path = /.Trash 
+	Requested path = / 
 	1
 	2
-	Cant find a file with path: /.Trash
-fuseGetattr() returned -2
+	Now starting to set attributes
+	Path == /
+	fuseGetattr erfolgreich beendet
+fuseGetattr() returned 0
 	start fuseReaddir 
 
 	--> Getting The List of Files of /
@@ -51,12 +57,6 @@ fuseGetattr() returned -2
 	readDir success
 
 fuseReaddir() returned 0
-src/myfs.cpp:312:fuseGetattr()
-	Requested path = /.Trash-1000 
-	1
-	2
-	Cant find a file with path: /.Trash-1000
-fuseGetattr() returned -2
 src/myfs.cpp:312:fuseGetattr()
 	Requested path = /text1.txt 
 	1
@@ -735,10 +735,10 @@ fuseGetattr() returned 0
 	readDir success
 
 fuseReaddir() returned 0
-src/myfs.cpp:312:fuseGetattr()
-	Requested path = /autorun.inf 
 src/myfs.cpp:803:fuseReleasedir()
 fuseReleasedir() returned 0
+src/myfs.cpp:312:fuseGetattr()
+	Requested path = /autorun.inf 
 	1
 	2
 	Cant find a file with path: /autorun.inf
@@ -884,7 +884,6 @@ src/myfs.cpp:516:fuseWrite()
 
 readFile() returned 0
 	newBuf: Helloooo9
-
 Helloooo9999
  
 
@@ -904,8 +903,192 @@ Helloooo9999
 	bearbeite Block nr 891 
 
 	write buffer Helloooo9
+Helloooo9999
+ in  block 891 
 
-He in  block 891 
+	6
+fuseWrite() returned 0
+src/myfs.cpp:920:fuseFlush()
+src/myfs.cpp:725:fuseRelease()
+fuseRelease() returned 0
+src/myfs.cpp:312:fuseGetattr()
+	Requested path = /text3.txt 
+	1
+	2
+	Now starting to set attributes
+	Anderere Path als "/" wurde abgefragt
+	size from /text3.txt is 512
+	fuseGetattr erfolgreich beendet
+fuseGetattr() returned 0
+src/myfs.cpp:430:fuseOpen()
+	Requested path in Fuse Open = /text3.txt 
+	1
+	root->existName(text3.txt) == 1 
+	name /text3.txt exist 
+
+fuseOpen() returned 0
+	fuseRead start path: /text3.txt 
+
+	root->existName(text3.txt) == 1 
+
+	1
+	2
+	********************************************************************************************** 
+	readFile start 
+	offset: 0, size: 4096
+	buffer in currentBlock 891 is : Helloooo9
+Helloooo9999
+ 
+
+	sizewrite: 23 
+
+	fcopy->getSize() 512 
+
+	sizeWrite==fileSize false 
+
+	all buf is  : Helloooo9
+Helloooo9999
+ 
+
+	readFile success 
+
+readFile() returned 0
+	buf in fuseRead: Helloooo9
+Helloooo9999
+
+src/myfs.cpp:312:fuseGetattr()
+	Requested path = /text3.txt 
+	1
+	2
+	Now starting to set attributes
+	Anderere Path als "/" wurde abgefragt
+	size from /text3.txt is 512
+	fuseGetattr erfolgreich beendet
+fuseGetattr() returned 0
+	fuseRead start path: /text3.txt 
+
+	root->existName(text3.txt) == 1 
+
+	1
+	2
+	********************************************************************************************** 
+	readFile start 
+	offset: 0, size: 4096
+	buffer in currentBlock 891 is : Helloooo9
+Helloooo9999
+ 
+
+	sizewrite: 23 
+
+	fcopy->getSize() 512 
+
+	sizeWrite==fileSize false 
+
+	all buf is  : Helloooo9
+Helloooo9999
+ 
+
+	readFile success 
+
+readFile() returned 0
+	buf in fuseRead: Helloooo9
+Helloooo9999
+
+src/myfs.cpp:920:fuseFlush()
+src/myfs.cpp:725:fuseRelease()
+fuseRelease() returned 0
+src/myfs.cpp:312:fuseGetattr()
+	Requested path = /text3.txt 
+	1
+	2
+	Now starting to set attributes
+	Anderere Path als "/" wurde abgefragt
+	size from /text3.txt is 512
+	fuseGetattr erfolgreich beendet
+fuseGetattr() returned 0
+src/myfs.cpp:430:fuseOpen()
+	Requested path in Fuse Open = /text3.txt 
+	1
+	root->existName(text3.txt) == 1 
+	name /text3.txt exist 
+
+fuseOpen() returned 0
+src/myfs.cpp:920:fuseFlush()
+src/myfs.cpp:971:fuseGetxattr()
+fuseGetxattr() returned 0
+src/myfs.cpp:516:fuseWrite()
+	fusewrite /text3.txt 
+
+	fusewrite buf Helloooo999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo99999
+ 
+
+	in fuseWrite size : 1057 offset: 512 
+
+	s:  text1.txt 
+
+	s:  text2.txt 
+
+	s:  text3.txt 
+
+	try to get text3.txt 
+
+	2
+	********************************************************************************************** 
+	readFile start 
+	offset: 512, size: 1057
+	buffer in currentBlock 891 is : Helloooo9
+Helloooo9999
+ 
+
+	sizewrite: 23 
+
+	fcopy->getSize() 512 
+
+	sizeWrite==fileSize false 
+
+	all buf is  : Helloooo9
+Helloooo9999
+ 
+
+	readFile success 
+
+readFile() returned 0
+	newBuf: Helloooo9
+Helloooo9999
+Helloooo999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo99999
+ 
+
+	erste Block am Anfang : 891 
+
+	blocksNumber alt: 1 
+
+	newSize: 1536 
+
+	flink->getSize() : 1536 
+
+	5
+	blocksNumber new: 3 
+
+	flink->getFirstBlock() : 891 
+
+	bearbeite Block nr 891 
+
+	1 != blocksNumber 
+
+	write buffer Helloooo9
+Helloooo9999
+Helloooo999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo in  block 891 
+
+	bearbeite Block nr 892 
+
+	2 != blocksNumber 
+
+	write buffer 9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999He in  block 892 
+
+	bearbeite Block nr 893 
+
+	write buffer lloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo99999
+ in  block 893 
 
 	6
 fuseWrite() returned 0
@@ -946,25 +1129,25 @@ fuseOpen() returned 0
 	readFile start 
 	offset: 0, size: 4096
 	buffer in currentBlock 891 is : Helloooo9
+Helloooo9999
+Helloooo999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo 
 
-He 
-
-	sizewrite: 13 
+	sizewrite: 510 
 
 	fcopy->getSize() 512 
 
 	sizeWrite==fileSize false 
 
 	all buf is  : Helloooo9
-
-He 
+Helloooo9999
+Helloooo999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo 
 
 	readFile success 
 
 readFile() returned 0
 	buf in fuseRead: Helloooo9
-
-He
+Helloooo9999
+Helloooo999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo
 src/myfs.cpp:312:fuseGetattr()
 	Requested path = /text3.txt 
 	1
@@ -984,28 +1167,127 @@ fuseGetattr() returned 0
 	readFile start 
 	offset: 0, size: 4096
 	buffer in currentBlock 891 is : Helloooo9
+Helloooo9999
+Helloooo999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo 
 
-He 
-
-	sizewrite: 13 
+	sizewrite: 510 
 
 	fcopy->getSize() 512 
 
 	sizeWrite==fileSize false 
 
 	all buf is  : Helloooo9
-
-He 
+Helloooo9999
+Helloooo999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo 
 
 	readFile success 
 
 readFile() returned 0
 	buf in fuseRead: Helloooo9
+Helloooo9999
+Helloooo999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo
+src/myfs.cpp:312:fuseGetattr()
+	Requested path = /text3.txt 
+	1
+	2
+	Now starting to set attributes
+	Anderere Path als "/" wurde abgefragt
+	size from /text3.txt is 512
+	fuseGetattr erfolgreich beendet
+fuseGetattr() returned 0
+	fuseRead start path: /text3.txt 
 
-He
+	root->existName(text3.txt) == 1 
+
+	1
+	2
+	********************************************************************************************** 
+	readFile start 
+	offset: 0, size: 4096
+	buffer in currentBlock 891 is : Helloooo9
+Helloooo9999
+Helloooo999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo 
+
+	sizewrite: 510 
+
+	fcopy->getSize() 512 
+
+	sizeWrite==fileSize false 
+
+	all buf is  : Helloooo9
+Helloooo9999
+Helloooo999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo 
+
+	readFile success 
+
+readFile() returned 0
+	buf in fuseRead: Helloooo9
+Helloooo9999
+Helloooo999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo9999Helloooo
 src/myfs.cpp:920:fuseFlush()
 src/myfs.cpp:725:fuseRelease()
 fuseRelease() returned 0
+src/myfs.cpp:738:fuseOpendir()
+	Requested path in Fuse Open dir = / 
+	strcmp(path, "/") returns: 0
+fuseOpendir() returned 0
+src/myfs.cpp:312:fuseGetattr()
+	Requested path = / 
+	1
+	2
+	Now starting to set attributes
+	Path == /
+	fuseGetattr erfolgreich beendet
+fuseGetattr() returned 0
+	start fuseReaddir 
+
+	--> Getting The List of Files of /
+
+	 ready with filler
+	name 0 : text1.txt 
+
+	filler success 
+
+	name 1 : text2.txt 
+
+	filler success 
+
+	name 2 : text3.txt 
+
+	filler success 
+
+	readDir success
+
+fuseReaddir() returned 0
+src/myfs.cpp:312:fuseGetattr()
+	Requested path = /text1.txt 
+	1
+	2
+	Now starting to set attributes
+	Anderere Path als "/" wurde abgefragt
+	size from /text1.txt is 512
+	fuseGetattr erfolgreich beendet
+fuseGetattr() returned 0
+src/myfs.cpp:312:fuseGetattr()
+	Requested path = /text2.txt 
+	1
+	2
+	Now starting to set attributes
+	Anderere Path als "/" wurde abgefragt
+	size from /text2.txt is 1024
+	fuseGetattr erfolgreich beendet
+fuseGetattr() returned 0
+src/myfs.cpp:312:fuseGetattr()
+	Requested path = /text3.txt 
+	1
+	2
+	Now starting to set attributes
+	Anderere Path als "/" wurde abgefragt
+	size from /text3.txt is 512
+	fuseGetattr erfolgreich beendet
+fuseGetattr() returned 0
+src/myfs.cpp:803:fuseReleasedir()
+fuseReleasedir() returned 0
 src/myfs.cpp:312:fuseGetattr()
 	Requested path = / 
 	1
@@ -1015,11 +1297,65 @@ src/myfs.cpp:312:fuseGetattr()
 	fuseGetattr erfolgreich beendet
 fuseGetattr() returned 0
 src/myfs.cpp:312:fuseGetattr()
-	Requested path = /.git 
+	Requested path = /text3.txt 
 	1
 	2
-	Cant find a file with path: /.git
-fuseGetattr() returned -2
+	Now starting to set attributes
+	Anderere Path als "/" wurde abgefragt
+	size from /text3.txt is 512
+	fuseGetattr erfolgreich beendet
+fuseGetattr() returned 0
+src/myfs.cpp:422:fuseUnlink()
+deleteFile() returned 0
+fuseUnlink() returned 0
+src/myfs.cpp:738:fuseOpendir()
+	Requested path in Fuse Open dir = / 
+	strcmp(path, "/") returns: 0
+fuseOpendir() returned 0
+src/myfs.cpp:312:fuseGetattr()
+	Requested path = / 
+	1
+	2
+	Now starting to set attributes
+	Path == /
+	fuseGetattr erfolgreich beendet
+fuseGetattr() returned 0
+	start fuseReaddir 
+
+	--> Getting The List of Files of /
+
+	 ready with filler
+	name 0 : text1.txt 
+
+	filler success 
+
+	name 1 : text2.txt 
+
+	filler success 
+
+	readDir success
+
+fuseReaddir() returned 0
+src/myfs.cpp:312:fuseGetattr()
+	Requested path = /text1.txt 
+	1
+	2
+	Now starting to set attributes
+	Anderere Path als "/" wurde abgefragt
+	size from /text1.txt is 512
+	fuseGetattr erfolgreich beendet
+fuseGetattr() returned 0
+src/myfs.cpp:312:fuseGetattr()
+	Requested path = /text2.txt 
+	1
+	2
+	Now starting to set attributes
+	Anderere Path als "/" wurde abgefragt
+	size from /text2.txt is 1024
+	fuseGetattr erfolgreich beendet
+fuseGetattr() returned 0
+src/myfs.cpp:803:fuseReleasedir()
+fuseReleasedir() returned 0
 src/myfs.cpp:312:fuseGetattr()
 	Requested path = / 
 	1
