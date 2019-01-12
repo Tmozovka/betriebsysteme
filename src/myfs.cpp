@@ -22,6 +22,9 @@
 #include "superBlock.h"
 #include "myfs.h"
 
+#include <string.h>
+#include <stdlib.h>
+
 // fragen zur Folie 31
 //TODO Wie kann ich die anzahl geoefnete Dateien abrufen?
 // wann soll ich die Bloecke schliessen? Nach dem oeffnen oder nach dem Lesen auch
@@ -259,13 +262,7 @@ int MyFS::addFile(const char * name, mode_t mode, time_t mtime, off_t size,
 //int fuseUnlink(const char *path);
 int MyFS::deleteFile(const char *name) {
 
-	// TODO: Implement this!
-	// Tanja's comments:
-	//How to unlink file?
-	//1 delete file from root
-	//2 set bloks unused (change FAT, this changes are executed in Dmap.setUnused funktion)
 
-	//TODO MODE prueffen
 	MyFile fcopy;
 	if (root->getFile(name, &fcopy) == -1 || root->deleteFile(name) == -1) {
 		printf(
@@ -311,9 +308,6 @@ int MyFS::deleteFile(const char *name) {
 
 int MyFS::fuseGetattr(const char *path, struct stat *st) {
 	LOGM();
-	//TODO
-	//printf("[getattr] Called\n");
-	//printf("\tAttributes of %s requested\n", path);
 
 	//Ist es hier genau so wie in Aufgabestellung?
 	//Dateinamen werden in path mit „/“ am Anfang übergeben – ggf. beachten
@@ -386,35 +380,49 @@ int MyFS::fuseGetattr(const char *path, struct stat *st) {
 
 }
 
-int MyFS::fuseMknod(const char *path, mode_t mode, dev_t dev) { //??? wir brauchen das nicht
+int MyFS::fuseMknod(const char *path, mode_t mode, dev_t dev) {
 	LOGM();
 
 	LOGF("fuseMKnod start , path : %s \n ", path);
 
-	// TODO: Implement this!
+	if (root->getSize() >= NUM_DIR_ENTRIES) {
+		LOG("es gibt schon zu viel Dateien \n");
+		RETURN(-EPERM);
+	}
 
-	// How to create Inode?
-	// add new file to the Root
-	// Information about the file is saved in the objekt File 
-	// dev_t dev muss ID von unsere file system sein
+	if (root->existName(path + 1)) {
+		LOG("DATEINAME EXISTIERT SCHON \n");
+		RETURN(-EEXIST);
+	}
+	string t(path + 1);
+	if (t.length() > 255) {
+		LOG("DATEINAME ZU GROSS \n");
+		printf("DATEINAME ZU GROSS \n");
+		RETURN(-EPERM);
+	}
 
 	int * blocks = new int[1];
 
 	LOG("0\n");LOGF("dmap->getFreeBlocks(1, blocks) : %i \n", dmap->getFreeBlocks(1, &blocks));
 	if (dmap->getFreeBlocks(1, &blocks) == -1) {
-		LOG("can't add file in root dmap is full. Error in dmap.getFreeBlocks(1,blocks)");
-		RETURN(-1);
+		LOG("can't add file in root dmap is full. Error in dmap.getFreeBlocks(1,blocks) \n");
+		RETURN(-EPERM);
 	}
 
 	LOG("1\n");
 
-	if (root->addFile(path + 1, 512, mode, time(NULL), blocks[0])) {
-		LOG("can't add file in root. Error in root.addFile(path, 512, S_IFREG | 0444)");
+	if (root->addFile(path + 1, 512, mode, time(NULL), blocks[0]) == -1) {
+		LOG("can't add file in root. Error in root.addFile(path, 512, S_IFREG | 0444) \n");
 		RETURN(-EPERM);
 
 		LOG("2\n");
 	}
-//dmap? fat?
+
+	if (dmap->setUsed(blocks[0]) == -1) {
+		LOG("can't add file in root. Error in dmap->setUsed(blocks[0]) \n");
+		RETURN(-EPERM);
+	}
+
 	writeBlockDevice();
 	RETURN(0);
 }
@@ -433,12 +441,13 @@ int MyFS::fuseOpen(const char *path, struct fuse_file_info *fileInfo) { // How t
 	//TODO funktioniert falsh
 	LOGF("Requested path in Fuse Open = %s ",path);
 
-	if (sp->getOpen() > NUM_OPEN_FILES) {
-		LOG("too many files are opened");
-		RETURN(-EPERM);
-	}
-//sp
-	sp->addOpen();
+	//wir brauchen open nicht ? weil es nur 64 dateien existieren kaann
+	/*if (sp->getOpen() > NUM_OPEN_FILES) {
+	 LOG("too many files are opened");
+	 RETURN(-EPERM);
+	 }
+	 //sp
+	 sp->addOpen();*/
 	LOG("1");LOGF("root->existName(%s) == %i ", path+1, root->existName(path+1));
 	if (root->existName(path + 1)) {
 		/*	MyFile fcopy;
@@ -469,13 +478,12 @@ int MyFS::fuseOpen(const char *path, struct fuse_file_info *fileInfo) { // How t
 
 int MyFS::fuseRead(const char *path, char *buf, size_t size, off_t offset,
 		struct fuse_file_info *fileInfo) {
-	LOGF("fuseRead start path: %s \n",path);
-	LOGF("size: %i", size);
+	LOGF("fuseRead start path: %s \n",path); LOGF("size: %i", size);
 
 	LOGF("root->existName(%s) == %i \n", path+1, root->existName(path+1));
 
-	if (root->existName(path + 1) == 0) {
-		RETURN(-1);LOG("root->existName(path+1)==0 \n");
+	if (!root->existName(path + 1)) {
+		RETURN(-ENOENT);LOG("root->existName(path+1)==0 \n");
 	}LOG("1");
 
 	MyFile * fcopy = new MyFile();
@@ -538,7 +546,7 @@ int MyFS::fuseWrite(const char *path, const char *buf, size_t size,
 	int blocksNumber;
 	size_t newSizeFile;
 	char * newBuf;
-	int newBufCount=0;
+	int newBufCount = 0;
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	if (offset != 0) {
@@ -550,29 +558,26 @@ int MyFS::fuseWrite(const char *path, const char *buf, size_t size,
 		readFile(path + 1, newBuf, size, offset, fileInfo);
 
 		int newCount = 0;
-		for (int i = 0; *newBuf!=char(0); i++) {
+		for (int i = 0; *newBuf != char(0); i++) {
 			newBuf++;
 			newCount++;
 		}
-		size+=newCount;
+		size += newCount;
 		/**(newBuf++)='\0';
-		newCount++;*/
+		 newCount++;*/
 
-
-		for (int i = 0; i < (int)size; i++) {
+		for (int i = 0; i < (int) size; i++) {
 			*(newBuf++) = *(buf++);
 			newCount++;
 		}
 
 		newBuf -= newCount;
 	} else {
-		newSizeFile =
-				ceil(
-						(double) size / BD_BLOCK_SIZE) * BD_BLOCK_SIZE;
+		newSizeFile = ceil((double) size / BD_BLOCK_SIZE) * BD_BLOCK_SIZE;
 
 		newBuf = new char[newSizeFile];
 		int newCount = 0;
-		for (int i = 0; i < (int)size; i++) {
+		for (int i = 0; i < (int) size; i++) {
 			*(newBuf++) = *(buf++);
 			newCount++;
 		}
@@ -716,22 +721,20 @@ int MyFS::fuseWrite(const char *path, const char *buf, size_t size,
 
 	/////////////////////
 	MyFile *ftr = new MyFile();
-		//LOGF("try to get %s \n", path+1);
+	//LOGF("try to get %s \n", path+1);
 
-		string temp2(path + 1);
-		root->copyFile(temp2, flink);
-		if (root->getFile(temp2, ftr) == -1);
-		LOGF("flink->getSize() : %i \n", flink->getSize());
-		LOGF("ftr->getSize() : %i \n", ftr->getSize());
+	string temp2(path + 1);
+	root->copyFile(temp2, flink);
+	if (root->getFile(temp2, ftr) == -1)
+		; LOGF("flink->getSize() : %i \n", flink->getSize()); LOGF("ftr->getSize() : %i \n", ftr->getSize());
 
 	/////////////////////
-
 
 	LOG("root->copyFile(path, flink); ready \n");
 	writeBlockDevice();
 	delete[] blocksUse;
-	newBuf-=newBufCount;
-	delete [] newBuf;
+	newBuf -= newBufCount;
+	delete[] newBuf;
 	delete flink;
 	//LOGF("currentBlock: %i \n", currentBlock);
 	LOG("6");
@@ -746,7 +749,7 @@ int MyFS::fuseRelease(const char *path, struct fuse_file_info *fileInfo) {
 	// TODO: Implement this!
 	//temporeres Zeug loeschen
 	fileInfo->fh = NULL;
-	sp->closeOpen();
+	//sp->closeOpen();
 
 	//sonst noch was?
 
@@ -830,13 +833,52 @@ int MyFS::fuseReleasedir(const char *path, struct fuse_file_info *fileInfo) {
 }
 
 int MyFS::fuseCreate(const char *path, mode_t mode,
-		struct fuse_file_info *fileInfo) { // Was wird es hier gemacht? Sien hier fat dmap superblock und root erstellt?
+		struct fuse_file_info *fileInfo) {
 	LOGM();
 
-	// TODO: Implement this!
-	//add empty File
-	char * c;
-	RETURN(addFile(path,mode,time(NULL),0, c));
+	LOGF("fuseMKnod start , path : %s \n ", path);
+
+	if (root->getSize() >= NUM_DIR_ENTRIES) {
+		LOG("es gibt schon zu viel Dateien \n");
+		RETURN(-EPERM);
+	}
+
+	if (root->existName(path + 1)) {
+		LOG("DATEINAME EXISTIERT SCHON \n");
+		RETURN(-EEXIST);
+	}
+	string t(path + 1);
+	if (t.length() > 255) {
+		LOG("DATEINAME ZU GROSS \n");
+		printf("DATEINAME ZU GROSS \n");
+		RETURN(-EPERM);
+	}
+
+	int * blocks = new int[1];
+
+	LOG("0\n");LOGF("dmap->getFreeBlocks(1, blocks) : %i \n", dmap->getFreeBlocks(1, &blocks));
+	if (dmap->getFreeBlocks(1, &blocks) == -1) {
+		LOG("can't add file in root dmap is full. Error in dmap.getFreeBlocks(1,blocks) \n");
+		RETURN(-EPERM);
+	}
+
+	LOG("1\n");
+
+
+	if (root->addFile(path + 1, 512, mode, time(NULL), blocks[0]) == -1) {
+		LOG("can't add file in root. Error in root.addFile(path, 512, S_IFREG | 0444) \n");
+		RETURN(-EPERM);
+
+		LOG("2\n");
+	}
+
+	if (dmap->setUsed(blocks[0]) == -1) {
+		LOG("can't add file in root. Error in dmap->setUsed(blocks[0]) \n");
+		RETURN(-EPERM);
+	}
+
+	writeBlockDevice();
+	RETURN(0);
 
 }
 

@@ -1,2 +1,88 @@
 1234567890
 43356
+In  einem  Unternehmen  konnte  die  folgende  Entwicklung  beobachtet  werden.
+  Im  Vorjahr  
+erwirtschaftete  das  Unternehmen  bei  einem  Umsatz  von  50
+  Tausend  Euro  (TEUR)  einen  
+Gewinn in Höhe von 10 TEUR. Zu Jahresbeginn betrug das Eigenkapital 150 
+TEUR. 
+Neben 
+einer  Beteiligung  an  einem  anderen  Unternehmen  in  einem  Wert  von  50  TEUR  wies  
+die 
+Schlussbilanz   2012   noch   ein   Sachanlagevermögen   von   150   TEUR   aus.   Während   das   
+Bankguthaben  bei  nur  10  TEUR  lag,  beliefen  sich  die  Forderungen  gegenüber  Kunden  auf  
+50    TEUR    und    die    Vorräte    hatten    einen    Wert    von    40    TEUR.    Die    offenen    
+Lieferantenrechnungen  s
+ummierten  sich  auf  100  TEUR  und  langfristige  Kredite  auf  50  
+TEUR.  
+a)
+Erstellen Sie aus den angegebenen Werten eine Bilanz zum 1.1.2013.  
+b)
+Eröffnen Sie die notwendigen Bestandskonten.
+c)
+Folgende   Geschäftsvorfälle   werden   im   Laufe   des   Jahres   gebucht   (Bitte   auf   den
+ent
+sprechenden T
+-Konten buchen und die Buchungssätze angeben.)
+: 
+i.
+Es werden Abschreibungen auf die Sachanlagen in Höhe von 20 TEUR gebucht.  
+ii.
+Aufgrund  der  angespannten  Liquiditätssituation  verkaufen  sie  Forderungen  in    
+Höhe  von  30  TEUR  an  die  Bank.  Diese  übe
+rweist  ihnen  25  TEUR  und  behält  5  
+TEUR als Gebühren ein.
+iii.
+Es  fällt  Materialaufwand  in  Höhe  von  10  TEUR  an.  Das  Material  wird  aus  den  
+Vorräten entnommen.  
+iv.
+Lieferantenrechnungen   in   einem   Wert   von   20   TEUR   begleichen   sie   per   
+Banküberweisung.
+v.
+Sie  tätigen  Umsätze 
+in  einem  Volumen  von  60  TEUR  und  schicken  dem  Kunden  
+eine Rechnung.  
+vi.
+Sie müssen ihre Beteiligung reduzieren und verkaufen Anteile in einem Wert von 
+30 TEUR, die ihnen der Käufer überweist.
+vii.
+Eine  Kreditrate  in  Höhe  von  30  TEUR  wird  von  ihrem  Konto  abgebucht.  Hierin  
+sind eine Tilgung in Höhe von 25 TEUR sowie 5 TEUR für Kreditzinsen enthalten.
+d)
+Erstellen Sie den Jahresabschluss
+. 
+e)
+Wie  beurteilen  Sie  nach  der  Durchsicht  der  Unterlagen  die  Unternehm
+ensentwicklung 
+2012? Berücksichtigen sie dabei auch die Umsatzrentabilität.
+(16 Pkte.)
+2)
+Was versteht man unter der im Buchungssatz ii. vorgenommenen Transaktion aus Sicht der 
+Finanzierung?
+ Welche 2 Varianten sind hier möglich?
+(8 Pkte.)
+2
+3)
+Sie  müssen  in  Ihrem  Unternehmen  eine  Maschine  ersetzen  und  
+haben  3  Alternativen  zur  
+Auswahl.  Maschine  1  weist  fixe  Kosten  von  10.000  Euro  und  variable  Stückkosten  von  12  
+Euro auf. Bei Maschine 2 liegen die Fixkosten bei 20.000 Euro und die variablen Stückkosten 
+bei  1
+0  Euro.  Bei  der  dritten  Alternative  fallen  Kosten  in  Höhe  von  8  Euro  pro  Stück  und  
+Fixkosten von 40.000 Euro an.  
+a)   Ermitteln Sie die kritischen Mengen rechnerisch und stellen Sie diese grafisch dar.
+b)  Sie  gehen  von  einer  Produktionsmenge  von  6
+.000  St
+ück  pro  Jahr  aus.  Welche  der  
+Maschinen wählen Sie aus und wie hoch liegen die Kosten pro Jahr bei den 3 Alternativen?
+c)   Sie können einen Verkaufspreis von 13 Euro erzielen. Bitte ermitteln Sie:
+i) 
+Den Deckungsbeitrag pro Stück der 3 Alternativen.
+ii) 
+Den absoluten Deckungsbeitrag bei der erwarteten Produktionsmenge.
+iii)
+Die Break
+-Even
+-Punkte der 3 Alternativen.
+d) Bitte beurteilen Sie Ihre in b) ermittelte Lösung vor dem Hintergrund von c).
+(16 Pkt
