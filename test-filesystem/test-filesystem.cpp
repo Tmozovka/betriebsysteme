@@ -4,35 +4,44 @@
 TestFilesytem::TestFilesytem() {
 }
 
-int TestFilesytem::compareLists(std::list<char*> list1,
-		std::list<char*> list2) {
+int TestFilesytem::compareLists(std::list<char*> list1, std::list<char*> list2) {
+	int errorOccured = 0;
 
 	if (list1.size() != list2.size()) {
-		std::cout << "ERROR: files have different sizes" << std::endl;
+		std::cout << "\033[1;31mERROR: files have different sizes\033[0m" << std::endl;
+		errorOccured++;
 		return -1;
 	}
 
 	std::list<char*>::iterator it1 = list1.begin();
 	std::list<char*>::iterator it2 = list1.begin();
 
+	int noListElement = 0;
 	while (it1 != list1.end()) {
 		if ((*it1) != (*it2)) {
-			std::cout << "ERROR: content is different" << std::endl;
-			return -1;
+			errorOccured++;
+			std::cout << "\033[1;31m" << "ERROR: content is different" << "\033[0m" << std::endl;
+			std::cout << "Bytes " << BUFFERSIZE * noListElement << " to " << (BUFFERSIZE * (noListElement + 1)) - 1
+					<< "are different: " << std::endl;
+			std::cout << "\nContent first file:" << std::endl;
+			std::cout << *it1 << std::endl;
+			std::cout << "\nContent second file:" << std::endl;
+			std::cout << *it2 << std::endl;
+
+			//return -1;
 		}
+		noListElement++;
 		it1++;
 		it2++;
 	}
-	std::cout << "SUCCESS: Compared files are identical" << std::endl;
-
+	if (errorOccured == 0) {
+		std::cout << "\033[1;32m" << "SUCCESS: Compared files are identical" << "\033[0m" << std::endl;
+	}
 	return 1;
 }
 
 std::list<char*> TestFilesytem::readFile(char* filename) {
 	int fileDescr = myOpen(filename);
-
-
-
 
 	std::list<char*> list;
 
@@ -44,8 +53,7 @@ std::list<char*> TestFilesytem::readFile(char* filename) {
 		bytesRead = read(fileDescr, buffer, BUFFERSIZE);
 
 		if (bytesRead == -1) {
-			std::cerr << "Error: Could not read from file, code " << errno
-					<< std::endl;
+			std::cerr << "Error: Could not read from file, code " << errno << std::endl;
 			exit(-1);
 		}
 
@@ -76,48 +84,48 @@ int TestFilesytem::myOpen(char* filename) {
 	return fileDescr;
 }
 
-
 /*
  * bytesToWrite = Number of Bytes to write
  * offset = Offset in bytes
  */
 void TestFilesytem::myWrite(char* filename, int bytesToWrite, int offset) {
-	//int fileDescr = myOpen(filename);
 
-
-
-	int fileDescr = open(filename, O_CREAT | O_RDWR, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
-		if(fileDescr == -1) {
-				std::cerr << "Error: Could not open file, code " << errno << std::endl;
-				exit(-1);
-			}
-
-	ssize_t bytesWritten;
-
-	int MAX_LENGTH= bytesToWrite;
-	char stringToWrite[MAX_LENGTH];
-	int i = 0;
-	char c = '0';
-	while(i<MAX_LENGTH){
-		stringToWrite[i]= c ;
-		i++;
-		c++;
-		c = c%100;
-	}
-
-
-	lseek(fileDescr, offset, SEEK_SET);
-	std::cerr << "Offset is now set to "<< offset << std::endl;
-	bytesWritten = write(fileDescr, stringToWrite, bytesToWrite);
-
-	if (bytesWritten == -1) {
-		std::cerr << "Error: Could not write to file, code " << errno
-				<< std::endl;
+	int fileDescr = open(filename, O_CREAT | O_RDWR,
+	S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+	if (fileDescr == -1) {
+		std::cerr << "Error: Could not open file, code " << errno << std::endl;
 		exit(-1);
 	}
 
-	std::cerr << "Wrote " << bytesWritten << " bytes" << std::endl;
+	std::cerr << "Offset is now set to " << offset << ". There are " << bytesToWrite << " Bytes to write" << std::endl;
 
+	//Initializing String to write
+	int MAX_LENGTH = bytesToWrite;
+	char stringToWrite[MAX_LENGTH];
+	int i = 0;
+	char c = '0';
+	while (i < MAX_LENGTH) {
+		stringToWrite[i] = c;
+		i++;
+		c++;
+		c = c % 100;
+	}
+
+	ssize_t bytesWritten;
+	lseek(fileDescr, offset, SEEK_SET);
+
+	bytesWritten = write(fileDescr, stringToWrite, bytesToWrite);
+
+	if (bytesWritten == -1) {
+		std::cerr << "Error: Could not write to file, code " << errno << std::endl;
+		exit(-1);
+	}
+
+	std::cerr << "Wrote " << bytesWritten << " bytes.";
+	if (bytesToWrite != bytesWritten) {
+		std::cerr << " Expected were " << bytesToWrite << " Bytes";
+	}
+	std::cerr << std::endl;
 	myClose(fileDescr);
 
 }
@@ -132,12 +140,22 @@ void TestFilesytem::myClose(int fileDescr) {
 	std::cerr << "File closed successfully!" << std::endl;
 }
 
+void TestFilesytem::printFile(std::list<char*> list) {
+
+	std::list<char*>::iterator it = list.begin();
+
+	int noListElement = 0;
+	while (it != list.end()) {
+		std::cerr << *it << std::endl;
+		it++;
+	}
+	std::cerr << std::endl;
+
+}
 int main(int argc, char *argv[]) {
 	TestFilesytem test1;
 
-
 	//Zusamenfügen von path von Datei
-
 
 	//for mount-dir
 	std::string path("../mount-dir/");
@@ -151,19 +169,23 @@ int main(int argc, char *argv[]) {
 		pathChar[i] = path[i];
 	}
 
-	std::cerr << "Mit Datei: " << pathChar << " werden nun Tests ausgeführt"
-			<< std::endl;
+	std::cerr << "Mit Datei: " << pathChar << " werden nun Tests ausgeführt" << std::endl;
 
-	std::cerr << "Test1: identisch nach mehrmals lesen" << std::endl;
+	std::cerr << "\033[0;45m" << "Test: identisch nach mehrmals lesen" << "\033[1;0m" << std::endl;
 	std::list<char*> list1 = test1.readFile(pathChar);
 	std::list<char*> list2 = test1.readFile(pathChar);
+	test1.printFile(list1);
 	test1.compareLists(list1, list2);
 
-	std::cerr << "Test1: Schreiben  mit offset" << std::endl;
-	test1.myWrite(pathChar,200,5);
-	test1.readFile(pathChar);
+	std::cerr << "\033[0;45m" << "Test: Schreiben ohne offset" << "\033[1;0m" << std::endl;
+	test1.myWrite(pathChar, 200, 0);
+	std::list<char*> list3 = test1.readFile(pathChar);
 
+	std::cerr << "\033[0;45m" << "Test: Schreiben  mit offset" << "\033[1;0m" << std::endl;
+	test1.myWrite(pathChar, 200, 5);
+	std::list<char*> list4 = test1.readFile(pathChar);
 
+	test1.compareLists(list3, list4);
 	return 0;
 }
 ;

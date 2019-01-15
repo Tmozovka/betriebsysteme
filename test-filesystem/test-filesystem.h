@@ -22,4 +22,6 @@ public:
 	void myWrite(char* filename, int bytesToWrite, int offset);
 
 	int myOpen(char* Filename);
+
+	void printFile(std::list<char*> list);
 };
