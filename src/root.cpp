@@ -59,21 +59,22 @@ int MyRoot::addFile(string name, off_t size, mode_t mode, time_t st_mtime,
 //Wird das uebergebene Size abgefragt oder das des Roots?
 //Es sollte ja das des roots angesprochen werden
 //Und muesste es nicht >= heissen?
-	if (sizeRoot > NUM_DIR_ENTRIES) {
+	if (sizeRoot+1 > NUM_DIR_ENTRIES) {
 		printf("too many files in Root \n");
 		return -1;
 	}
 
 	sizeRoot++;
+	if (existName(name)) {
+		printf("File's %s name is already exist \n", name.c_str());
+		return -1;
+	}
 	if (name.length() > NAME_LENGTH) {
 		printf("File's %s name is too big \n", name.c_str());
 		return -1;
 	}
 
-	if (existName(name)) {
-		printf("File's %s name is already exist \n", name.c_str());
-		return -1;
-	}
+
 
 	//Speichern von Name, Dateigroesse und Zugriffsrechte pro Datei
 	const MyFile * f = new MyFile(name, getuid(), getgid(), size, mode,
