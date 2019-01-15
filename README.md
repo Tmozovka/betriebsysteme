@@ -13,3 +13,15 @@ Fehle beim Speicher Allockeren anschauen :
 2)valgrind ./mkfs.myfs container.bin text1.txt text2.txt
 
 
+Test-filesystem ausführen
+1)Filesystem mounten
+2)Im Ordner test-fileesystem Terminal Öffen
+ 	g++ test-filesystem.cpp 
+3)dann, text1.txt ist datei im mountordner, auf der Tests ausgeführt werden 
+	./a.out text1.txt
+
+
+
+
+
+
