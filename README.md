@@ -21,3 +21,15 @@ system testen
 5) cd ..
 6)fusermount --unmount ./mount
 
+Test-filesystem ausführen
+1)Filesystem mounten
+2)Im Ordner test-fileesystem Terminal Öffen
+ 	g++ test-filesystem.cpp 
+3)dann, text1.txt ist datei im mountordner, auf der Tests ausgeführt werden 
+	./a.out text1.txt
+
+
+
+
+
+

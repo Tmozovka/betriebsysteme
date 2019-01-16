@@ -218,6 +218,8 @@ int dMap::read(int startingBlock, BlockDevice* blocks) {
 		}
 	}
 	printf("Dmap->firstFreeBlock lautet nach dem Lesen %d\n",firstFreeBlock);
+	//todo das entfernen, sobald es richtig funktioniert
+	firstFreeBlock= 0;
 
 	//dmap Blöcke auslesen
 	while (currentDmapIndex < BLOCK_NUMBER) {
