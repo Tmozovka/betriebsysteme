@@ -262,7 +262,6 @@ int MyFS::addFile(const char * name, mode_t mode, time_t mtime, off_t size,
 //int fuseUnlink(const char *path);
 int MyFS::deleteFile(const char *name) {
 
-
 	MyFile fcopy;
 	if (root->getFile(name, &fcopy) == -1 || root->deleteFile(name) == -1) {
 		printf(
@@ -478,7 +477,7 @@ int MyFS::fuseOpen(const char *path, struct fuse_file_info *fileInfo) { // How t
 
 int MyFS::fuseRead(const char *path, char *buf, size_t size, off_t offset,
 		struct fuse_file_info *fileInfo) {
-	LOGF("fuseRead start path: %s \n",path); LOGF("size: %i", size);
+	LOGF("fuseRead start path: %s \n",path);LOGF("size: %i", size);
 
 	LOGF("root->existName(%s) == %i \n", path+1, root->existName(path+1));
 
@@ -526,7 +525,7 @@ int MyFS::fuseWrite(const char *path, const char *buf, size_t size,
 	LOGM();
 	//TODO MODE prueffen
 	// TODO: Implement this!
-
+//long endSizeBuf=size;
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	LOGF("fusewrite %s \n", path);LOGF("fusewrite buf %s \n", buf);LOGF("in fuseWrite size : %i offset: %i \n", size, offset);
 
@@ -550,28 +549,95 @@ int MyFS::fuseWrite(const char *path, const char *buf, size_t size,
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	if (offset != 0) {
-		newSizeFile =
-				ceil(
-						(double) size + flink->getSize() / BD_BLOCK_SIZE) * BD_BLOCK_SIZE;
+		int temp = ceil(
+				(double) flink->getSize() / BD_BLOCK_SIZE) * BD_BLOCK_SIZE;
+		if (offset == temp) {
+			LOGF("offset ist gleich anzahl an Bloecke %i == %i \n",offset, temp );
 
-		newBuf = new char[newSizeFile];
-		readFile(path + 1, newBuf, size, offset, fileInfo);
+			newSizeFile =
+					ceil(
+							(double) size + flink->getSize() / BD_BLOCK_SIZE) * BD_BLOCK_SIZE;
 
-		int newCount = 0;
-		for (int i = 0; *newBuf != char(0); i++) {
-			newBuf++;
-			newCount++;
+			newBuf = new char[newSizeFile];
+			readFile(path + 1, newBuf, size, 0, fileInfo);
+
+			int newCount = 0;
+			for (int i = 0; *newBuf != char(0); i++) {
+				newBuf++;
+				newCount++;
+			}
+			size += newCount;
+			/**(newBuf++)='\0';
+			 newCount++;*/
+
+			for (int i = 0; i < (int) size; i++) {
+				*(newBuf++) = *(buf++);
+				newCount++;
+			}
+
+			newBuf -= newCount;
+		} else {
+			int newAddSize = ((int) size + (int) offset);
+			if (newAddSize > temp) {
+				//die Datei wird groesse nach der ueberschreibung
+
+				//groeese die hinzuegefugt wird finden
+				int countBufForSize = 0;
+				//countBufForSize - groesse von buf
+				while (*buf != char(0)) {
+					buf++;
+					countBufForSize++;
+				}
+
+				/*int countFileSize = 0;
+				 //countFileSize - groesse von den text in der datei
+				 char * readBufTemp = new char[temp];
+				 readFile(path + 1, readBufTemp, size, 0, fileInfo);
+				 while (readBufTemp != char(0)) {
+				 readBufTemp++;
+				 countFileSize++;
+				 }*/
+
+				newSizeFile =
+						ceil(
+								(double) (offset + countBufForSize)
+										/ BD_BLOCK_SIZE) * BD_BLOCK_SIZE;
+				int newCount=0;
+				newBuf = new char[newSizeFile];
+				readFile(path + 1, newBuf, size, 0, fileInfo);
+				//buf bis offset auslesen
+				while (newCount < offset) {
+					newBuf++;
+					newCount++;
+				}
+
+				while (*buf != char(0)) {
+					*(newBuf++) = *(buf++);
+					newCount++;
+				}
+
+				newBuf -= newCount;
+
+			} else {
+				int newCount = 0;
+				//die Groesse bleibt gleich
+				newSizeFile = temp;
+				newBuf = new char[newSizeFile];
+				readFile(path + 1, newBuf, size, 0, fileInfo);
+				//buf bis offset auslesen
+				for (int j = 0; j++; j < offset) {
+					newBuf++;
+					newCount++;
+				}
+
+				while (*buf != char(0)) {
+					*(newBuf++) = *(buf++);
+					newCount++;
+				}
+
+				newBuf -= newCount;
+			}
 		}
-		size += newCount;
-		/**(newBuf++)='\0';
-		 newCount++;*/
-
-		for (int i = 0; i < (int) size; i++) {
-			*(newBuf++) = *(buf++);
-			newCount++;
-		}
-
-		newBuf -= newCount;
 	} else {
 		newSizeFile = ceil((double) size / BD_BLOCK_SIZE) * BD_BLOCK_SIZE;
 
@@ -726,7 +792,7 @@ int MyFS::fuseWrite(const char *path, const char *buf, size_t size,
 	string temp2(path + 1);
 	root->copyFile(temp2, flink);
 	if (root->getFile(temp2, ftr) == -1)
-		; LOGF("flink->getSize() : %i \n", flink->getSize()); LOGF("ftr->getSize() : %i \n", ftr->getSize());
+		;LOGF("flink->getSize() : %i \n", flink->getSize());LOGF("ftr->getSize() : %i \n", ftr->getSize());
 
 	/////////////////////
 
@@ -738,7 +804,6 @@ int MyFS::fuseWrite(const char *path, const char *buf, size_t size,
 	delete flink;
 	//LOGF("currentBlock: %i \n", currentBlock);
 	LOG("6");
-////////////////beschreiben/////////////////////////////////////////////////////////////
 
 	RETURN(size);
 }
@@ -863,7 +928,6 @@ int MyFS::fuseCreate(const char *path, mode_t mode,
 	}
 
 	LOG("1\n");
-
 
 	if (root->addFile(path + 1, 512, mode, time(NULL), blocks[0]) == -1) {
 		LOG("can't add file in root. Error in root.addFile(path, 512, S_IFREG | 0444) \n");
