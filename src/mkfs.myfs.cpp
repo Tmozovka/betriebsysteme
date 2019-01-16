@@ -43,9 +43,58 @@ int main(int argc, char *argv[]) {
 
 		FILE *fin;
 		LOGF("open File: %s \n", argv[i]);
+
+
+
+
 		fin = fopen(argv[i], "rwb");
 		if (fin) {
 			LOGF("successful open File: %s \n", argv[i]);LOGF("successful open File: %s \n", argv[i]);
+
+			printf("first name %s \n", argv[i]);
+			//////////////////////NAME AUSLESEN UND BEARBEITEN//////////////////////////////////////////////
+					if((*(argv[i])=='.')&&(*(argv[i]+1)=='/'))
+					{
+						argv[i]+=2;
+					}
+
+					int countArg=0;
+					int schiebCount=0;
+					while(*(argv[i])!=char(0))
+					{
+						printf("*argv[i] : %c  \n", *argv[i]);
+						if(*argv[i]=='/')
+						{
+							schiebCount++;
+						}
+
+						argv[i]++;
+						countArg++;
+
+					}
+					argv[i]-=countArg;
+					countArg=0;
+					printf("schiebCount : %i \n", schiebCount);
+					if(schiebCount!=0)
+					{
+						for(int j=0;j<schiebCount;j++)
+						{
+
+							while(*argv[i]!='/'){argv[i]++;
+								//countArg++;
+								}
+							argv[i]++;
+						}
+					}
+
+					argv[i]-=countArg;
+					countArg=0;
+
+
+			/////////////////////////////////////////////////////////////////////////////////
+					printf("name zum bearbeiten %s \n", argv[i]);
+
+
 			struct stat st;
 			st.st_mode = S_IFREG | 0444;
 			stat(argv[i], &st);

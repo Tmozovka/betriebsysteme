@@ -26,719 +26,9 @@ fuseGetattr() returned -2
 src/myfs.cpp:825:fuseOpendir()
 	Requested path in Fuse Open dir = / 
 	strcmp(path, "/") returns: 0
-fuseOpendir() returned 0
 src/myfs.cpp:309:fuseGetattr()
 	Requested path = /autorun.inf 
-src/myfs.cpp:309:fuseGetattr()
-	Requested path = / 
-	1
-	2
-	Now starting to set attributes
-	Path == /
-	fuseGetattr erfolgreich beendet
-fuseGetattr() returned 0
-	1
-	2
-	Cant find a file with path: /autorun.inf
-fuseGetattr() returned -2
-	start fuseReaddir 
-
-	--> Getting The List of Files of /
-
-	 ready with filler
-	name 0 : text1.txt 
-
-	filler success 
-
-	name 1 : text2.txt 
-
-	filler success 
-
-	readDir success
-
-fuseReaddir() returned 0
-src/myfs.cpp:309:fuseGetattr()
-	Requested path = /text1.txt 
-	1
-	2
-	Now starting to set attributes
-	Anderere Path als "/" wurde abgefragt
-	size from /text1.txt is 1024
-	fuseGetattr erfolgreich beendet
-fuseGetattr() returned 0
-src/myfs.cpp:309:fuseGetattr()
-	Requested path = /text2.txt 
-	1
-	2
-	Now starting to set attributes
-	Anderere Path als "/" wurde abgefragt
-	size from /text2.txt is 1024
-	fuseGetattr erfolgreich beendet
-fuseGetattr() returned 0
-src/myfs.cpp:890:fuseReleasedir()
-fuseReleasedir() returned 0
-src/myfs.cpp:825:fuseOpendir()
-	Requested path in Fuse Open dir = / 
-	strcmp(path, "/") returns: 0
 fuseOpendir() returned 0
-src/myfs.cpp:309:fuseGetattr()
-	Requested path = / 
-	1
-	2
-	Now starting to set attributes
-	Path == /
-	fuseGetattr erfolgreich beendet
-fuseGetattr() returned 0
-	start fuseReaddir 
-
-	--> Getting The List of Files of /
-
-	 ready with filler
-	name 0 : text1.txt 
-
-	filler success 
-
-	name 1 : text2.txt 
-
-	filler success 
-
-	readDir success
-
-fuseReaddir() returned 0
-src/myfs.cpp:890:fuseReleasedir()
-fuseReleasedir() returned 0
-src/myfs.cpp:825:fuseOpendir()
-	Requested path in Fuse Open dir = / 
-	strcmp(path, "/") returns: 0
-fuseOpendir() returned 0
-src/myfs.cpp:309:fuseGetattr()
-	Requested path = / 
-	1
-	2
-	Now starting to set attributes
-	Path == /
-	fuseGetattr erfolgreich beendet
-fuseGetattr() returned 0
-	start fuseReaddir 
-
-	--> Getting The List of Files of /
-
-	 ready with filler
-	name 0 : text1.txt 
-
-	filler success 
-
-	name 1 : text2.txt 
-
-	filler success 
-
-	readDir success
-
-fuseReaddir() returned 0
-src/myfs.cpp:890:fuseReleasedir()
-fuseReleasedir() returned 0
-src/myfs.cpp:825:fuseOpendir()
-	Requested path in Fuse Open dir = / 
-	strcmp(path, "/") returns: 0
-fuseOpendir() returned 0
-src/myfs.cpp:309:fuseGetattr()
-	Requested path = / 
-	1
-	2
-	Now starting to set attributes
-	Path == /
-	fuseGetattr erfolgreich beendet
-fuseGetattr() returned 0
-	start fuseReaddir 
-
-	--> Getting The List of Files of /
-
-	 ready with filler
-	name 0 : text1.txt 
-
-	filler success 
-
-	name 1 : text2.txt 
-
-	filler success 
-
-	readDir success
-
-fuseReaddir() returned 0
-src/myfs.cpp:890:fuseReleasedir()
-fuseReleasedir() returned 0
-src/myfs.cpp:825:fuseOpendir()
-	Requested path in Fuse Open dir = / 
-	strcmp(path, "/") returns: 0
-fuseOpendir() returned 0
-src/myfs.cpp:309:fuseGetattr()
-	Requested path = / 
-	1
-	2
-	Now starting to set attributes
-	Path == /
-	fuseGetattr erfolgreich beendet
-fuseGetattr() returned 0
-	start fuseReaddir 
-
-	--> Getting The List of Files of /
-
-	 ready with filler
-	name 0 : text1.txt 
-
-	filler success 
-
-	name 1 : text2.txt 
-
-	filler success 
-
-	readDir success
-
-fuseReaddir() returned 0
-src/myfs.cpp:890:fuseReleasedir()
-fuseReleasedir() returned 0
-src/myfs.cpp:825:fuseOpendir()
-	Requested path in Fuse Open dir = / 
-	strcmp(path, "/") returns: 0
-fuseOpendir() returned 0
-src/myfs.cpp:309:fuseGetattr()
-	Requested path = / 
-	1
-	2
-	Now starting to set attributes
-	Path == /
-	fuseGetattr erfolgreich beendet
-fuseGetattr() returned 0
-	start fuseReaddir 
-
-	--> Getting The List of Files of /
-
-	 ready with filler
-	name 0 : text1.txt 
-
-	filler success 
-
-	name 1 : text2.txt 
-
-	filler success 
-
-	readDir success
-
-fuseReaddir() returned 0
-src/myfs.cpp:890:fuseReleasedir()
-fuseReleasedir() returned 0
-src/myfs.cpp:825:fuseOpendir()
-	Requested path in Fuse Open dir = / 
-	strcmp(path, "/") returns: 0
-fuseOpendir() returned 0
-src/myfs.cpp:309:fuseGetattr()
-	Requested path = / 
-	1
-	2
-	Now starting to set attributes
-	Path == /
-	fuseGetattr erfolgreich beendet
-fuseGetattr() returned 0
-	start fuseReaddir 
-
-	--> Getting The List of Files of /
-
-	 ready with filler
-	name 0 : text1.txt 
-
-	filler success 
-
-	name 1 : text2.txt 
-
-	filler success 
-
-	readDir success
-
-fuseReaddir() returned 0
-src/myfs.cpp:890:fuseReleasedir()
-fuseReleasedir() returned 0
-src/myfs.cpp:825:fuseOpendir()
-	Requested path in Fuse Open dir = / 
-	strcmp(path, "/") returns: 0
-fuseOpendir() returned 0
-src/myfs.cpp:309:fuseGetattr()
-	Requested path = / 
-	1
-	2
-	Now starting to set attributes
-	Path == /
-	fuseGetattr erfolgreich beendet
-fuseGetattr() returned 0
-	start fuseReaddir 
-
-	--> Getting The List of Files of /
-
-	 ready with filler
-	name 0 : text1.txt 
-
-	filler success 
-
-	name 1 : text2.txt 
-
-	filler success 
-
-	readDir success
-
-fuseReaddir() returned 0
-src/myfs.cpp:890:fuseReleasedir()
-fuseReleasedir() returned 0
-src/myfs.cpp:825:fuseOpendir()
-	Requested path in Fuse Open dir = / 
-	strcmp(path, "/") returns: 0
-fuseOpendir() returned 0
-src/myfs.cpp:309:fuseGetattr()
-	Requested path = / 
-	1
-	2
-	Now starting to set attributes
-	Path == /
-	fuseGetattr erfolgreich beendet
-fuseGetattr() returned 0
-	start fuseReaddir 
-
-	--> Getting The List of Files of /
-
-	 ready with filler
-	name 0 : text1.txt 
-
-	filler success 
-
-	name 1 : text2.txt 
-
-	filler success 
-
-	readDir success
-
-fuseReaddir() returned 0
-src/myfs.cpp:890:fuseReleasedir()
-fuseReleasedir() returned 0
-src/myfs.cpp:825:fuseOpendir()
-	Requested path in Fuse Open dir = / 
-	strcmp(path, "/") returns: 0
-fuseOpendir() returned 0
-src/myfs.cpp:309:fuseGetattr()
-	Requested path = / 
-	1
-	2
-	Now starting to set attributes
-	Path == /
-	fuseGetattr erfolgreich beendet
-fuseGetattr() returned 0
-	start fuseReaddir 
-
-	--> Getting The List of Files of /
-
-	 ready with filler
-	name 0 : text1.txt 
-
-	filler success 
-
-	name 1 : text2.txt 
-
-	filler success 
-
-	readDir success
-
-fuseReaddir() returned 0
-src/myfs.cpp:890:fuseReleasedir()
-fuseReleasedir() returned 0
-src/myfs.cpp:825:fuseOpendir()
-	Requested path in Fuse Open dir = / 
-	strcmp(path, "/") returns: 0
-fuseOpendir() returned 0
-src/myfs.cpp:309:fuseGetattr()
-	Requested path = / 
-	1
-	2
-	Now starting to set attributes
-	Path == /
-	fuseGetattr erfolgreich beendet
-fuseGetattr() returned 0
-	start fuseReaddir 
-
-	--> Getting The List of Files of /
-
-	 ready with filler
-	name 0 : text1.txt 
-
-	filler success 
-
-	name 1 : text2.txt 
-
-	filler success 
-
-	readDir success
-
-fuseReaddir() returned 0
-src/myfs.cpp:890:fuseReleasedir()
-fuseReleasedir() returned 0
-src/myfs.cpp:825:fuseOpendir()
-	Requested path in Fuse Open dir = / 
-	strcmp(path, "/") returns: 0
-fuseOpendir() returned 0
-src/myfs.cpp:309:fuseGetattr()
-	Requested path = / 
-	1
-	2
-	Now starting to set attributes
-	Path == /
-	fuseGetattr erfolgreich beendet
-fuseGetattr() returned 0
-	start fuseReaddir 
-
-	--> Getting The List of Files of /
-
-	 ready with filler
-	name 0 : text1.txt 
-
-	filler success 
-
-	name 1 : text2.txt 
-
-	filler success 
-
-	readDir success
-
-fuseReaddir() returned 0
-src/myfs.cpp:890:fuseReleasedir()
-fuseReleasedir() returned 0
-src/myfs.cpp:825:fuseOpendir()
-	Requested path in Fuse Open dir = / 
-	strcmp(path, "/") returns: 0
-fuseOpendir() returned 0
-src/myfs.cpp:309:fuseGetattr()
-	Requested path = / 
-	1
-	2
-	Now starting to set attributes
-	Path == /
-	fuseGetattr erfolgreich beendet
-fuseGetattr() returned 0
-	start fuseReaddir 
-
-	--> Getting The List of Files of /
-
-	 ready with filler
-	name 0 : text1.txt 
-
-	filler success 
-
-	name 1 : text2.txt 
-
-	filler success 
-
-	readDir success
-
-fuseReaddir() returned 0
-src/myfs.cpp:890:fuseReleasedir()
-fuseReleasedir() returned 0
-src/myfs.cpp:825:fuseOpendir()
-	Requested path in Fuse Open dir = / 
-	strcmp(path, "/") returns: 0
-fuseOpendir() returned 0
-src/myfs.cpp:309:fuseGetattr()
-	Requested path = / 
-	1
-	2
-	Now starting to set attributes
-	Path == /
-	fuseGetattr erfolgreich beendet
-fuseGetattr() returned 0
-	start fuseReaddir 
-
-	--> Getting The List of Files of /
-
-	 ready with filler
-	name 0 : text1.txt 
-
-	filler success 
-
-	name 1 : text2.txt 
-
-	filler success 
-
-	readDir success
-
-fuseReaddir() returned 0
-src/myfs.cpp:890:fuseReleasedir()
-fuseReleasedir() returned 0
-src/myfs.cpp:825:fuseOpendir()
-	Requested path in Fuse Open dir = / 
-	strcmp(path, "/") returns: 0
-fuseOpendir() returned 0
-src/myfs.cpp:309:fuseGetattr()
-	Requested path = / 
-	1
-	2
-	Now starting to set attributes
-	Path == /
-	fuseGetattr erfolgreich beendet
-fuseGetattr() returned 0
-	start fuseReaddir 
-
-	--> Getting The List of Files of /
-
-	 ready with filler
-	name 0 : text1.txt 
-
-	filler success 
-
-	name 1 : text2.txt 
-
-	filler success 
-
-	readDir success
-
-fuseReaddir() returned 0
-src/myfs.cpp:890:fuseReleasedir()
-fuseReleasedir() returned 0
-src/myfs.cpp:825:fuseOpendir()
-	Requested path in Fuse Open dir = / 
-	strcmp(path, "/") returns: 0
-fuseOpendir() returned 0
-src/myfs.cpp:309:fuseGetattr()
-	Requested path = / 
-	1
-	2
-	Now starting to set attributes
-	Path == /
-	fuseGetattr erfolgreich beendet
-fuseGetattr() returned 0
-	start fuseReaddir 
-
-	--> Getting The List of Files of /
-
-	 ready with filler
-	name 0 : text1.txt 
-
-	filler success 
-
-	name 1 : text2.txt 
-
-	filler success 
-
-	readDir success
-
-fuseReaddir() returned 0
-src/myfs.cpp:890:fuseReleasedir()
-fuseReleasedir() returned 0
-src/myfs.cpp:825:fuseOpendir()
-	Requested path in Fuse Open dir = / 
-	strcmp(path, "/") returns: 0
-fuseOpendir() returned 0
-src/myfs.cpp:309:fuseGetattr()
-	Requested path = / 
-	1
-	2
-	Now starting to set attributes
-	Path == /
-	fuseGetattr erfolgreich beendet
-fuseGetattr() returned 0
-	start fuseReaddir 
-
-	--> Getting The List of Files of /
-
-	 ready with filler
-	name 0 : text1.txt 
-
-	filler success 
-
-	name 1 : text2.txt 
-
-	filler success 
-
-	readDir success
-
-fuseReaddir() returned 0
-src/myfs.cpp:890:fuseReleasedir()
-fuseReleasedir() returned 0
-src/myfs.cpp:825:fuseOpendir()
-	Requested path in Fuse Open dir = / 
-	strcmp(path, "/") returns: 0
-fuseOpendir() returned 0
-src/myfs.cpp:309:fuseGetattr()
-	Requested path = / 
-	1
-	2
-	Now starting to set attributes
-	Path == /
-	fuseGetattr erfolgreich beendet
-fuseGetattr() returned 0
-	start fuseReaddir 
-
-	--> Getting The List of Files of /
-
-	 ready with filler
-	name 0 : text1.txt 
-
-	filler success 
-
-	name 1 : text2.txt 
-
-	filler success 
-
-	readDir success
-
-fuseReaddir() returned 0
-src/myfs.cpp:890:fuseReleasedir()
-fuseReleasedir() returned 0
-src/myfs.cpp:825:fuseOpendir()
-	Requested path in Fuse Open dir = / 
-	strcmp(path, "/") returns: 0
-fuseOpendir() returned 0
-src/myfs.cpp:309:fuseGetattr()
-	Requested path = / 
-	1
-	2
-	Now starting to set attributes
-	Path == /
-	fuseGetattr erfolgreich beendet
-fuseGetattr() returned 0
-	start fuseReaddir 
-
-	--> Getting The List of Files of /
-
-	 ready with filler
-	name 0 : text1.txt 
-
-	filler success 
-
-	name 1 : text2.txt 
-
-	filler success 
-
-	readDir success
-
-fuseReaddir() returned 0
-src/myfs.cpp:890:fuseReleasedir()
-fuseReleasedir() returned 0
-src/myfs.cpp:825:fuseOpendir()
-	Requested path in Fuse Open dir = / 
-	strcmp(path, "/") returns: 0
-fuseOpendir() returned 0
-src/myfs.cpp:309:fuseGetattr()
-	Requested path = / 
-	1
-	2
-	Now starting to set attributes
-	Path == /
-	fuseGetattr erfolgreich beendet
-fuseGetattr() returned 0
-	start fuseReaddir 
-
-	--> Getting The List of Files of /
-
-	 ready with filler
-	name 0 : text1.txt 
-
-	filler success 
-
-	name 1 : text2.txt 
-
-	filler success 
-
-	readDir success
-
-fuseReaddir() returned 0
-src/myfs.cpp:890:fuseReleasedir()
-fuseReleasedir() returned 0
-src/myfs.cpp:825:fuseOpendir()
-	Requested path in Fuse Open dir = / 
-	strcmp(path, "/") returns: 0
-fuseOpendir() returned 0
-src/myfs.cpp:309:fuseGetattr()
-	Requested path = / 
-	1
-	2
-	Now starting to set attributes
-	Path == /
-	fuseGetattr erfolgreich beendet
-fuseGetattr() returned 0
-	start fuseReaddir 
-
-	--> Getting The List of Files of /
-
-	 ready with filler
-	name 0 : text1.txt 
-
-	filler success 
-
-	name 1 : text2.txt 
-
-	filler success 
-
-	readDir success
-
-fuseReaddir() returned 0
-src/myfs.cpp:890:fuseReleasedir()
-fuseReleasedir() returned 0
-src/myfs.cpp:825:fuseOpendir()
-	Requested path in Fuse Open dir = / 
-	strcmp(path, "/") returns: 0
-fuseOpendir() returned 0
-src/myfs.cpp:309:fuseGetattr()
-	Requested path = / 
-	1
-	2
-	Now starting to set attributes
-	Path == /
-	fuseGetattr erfolgreich beendet
-fuseGetattr() returned 0
-	start fuseReaddir 
-
-	--> Getting The List of Files of /
-
-	 ready with filler
-	name 0 : text1.txt 
-
-	filler success 
-
-	name 1 : text2.txt 
-
-	filler success 
-
-	readDir success
-
-fuseReaddir() returned 0
-src/myfs.cpp:890:fuseReleasedir()
-fuseReleasedir() returned 0
-src/myfs.cpp:825:fuseOpendir()
-	Requested path in Fuse Open dir = / 
-	strcmp(path, "/") returns: 0
-fuseOpendir() returned 0
-src/myfs.cpp:309:fuseGetattr()
-	Requested path = / 
-	1
-	2
-	Now starting to set attributes
-	Path == /
-	fuseGetattr erfolgreich beendet
-fuseGetattr() returned 0
-	start fuseReaddir 
-
-	--> Getting The List of Files of /
-
-	 ready with filler
-	name 0 : text1.txt 
-
-	filler success 
-
-	name 1 : text2.txt 
-
-	filler success 
-
-	readDir success
-
-fuseReaddir() returned 0
-src/myfs.cpp:890:fuseReleasedir()
-fuseReleasedir() returned 0
-src/myfs.cpp:309:fuseGetattr()
-	Requested path = /autorun.inf 
 	1
 	2
 	Cant find a file with path: /autorun.inf
@@ -751,18 +41,6 @@ src/myfs.cpp:309:fuseGetattr()
 	Path == /
 	fuseGetattr erfolgreich beendet
 fuseGetattr() returned 0
-src/myfs.cpp:825:fuseOpendir()
-	Requested path in Fuse Open dir = / 
-	strcmp(path, "/") returns: 0
-fuseOpendir() returned 0
-src/myfs.cpp:309:fuseGetattr()
-	Requested path = / 
-	1
-	2
-	Now starting to set attributes
-	Path == /
-	fuseGetattr erfolgreich beendet
-fuseGetattr() returned 0
 	start fuseReaddir 
 
 	--> Getting The List of Files of /
@@ -799,222 +77,648 @@ src/myfs.cpp:309:fuseGetattr()
 fuseGetattr() returned 0
 src/myfs.cpp:890:fuseReleasedir()
 fuseReleasedir() returned 0
-src/myfs.cpp:309:fuseGetattr()
-	Requested path = /text2.txt 
-	1
-	2
-	Now starting to set attributes
-	Anderere Path als "/" wurde abgefragt
-	size from /text2.txt is 1024
-	fuseGetattr erfolgreich beendet
-fuseGetattr() returned 0
-src/myfs.cpp:438:fuseOpen()
-	Requested path in Fuse Open = /text2.txt 
-	1
-	root->existName(text2.txt) == 1 
-	name /text2.txt exist 
-
-fuseOpen() returned 0
-src/myfs.cpp:1045:fuseFlush()
-src/myfs.cpp:1096:fuseGetxattr()
-fuseGetxattr() returned 0
-src/myfs.cpp:525:fuseWrite()
-	fusewrite /text2.txt 
-
-	fusewrite buf 123456789
- 
-
-	in fuseWrite size : 10 offset: 1024 
-
-	s:  text1.txt 
-
-	s:  text2.txt 
-
-	try to get text2.txt 
-
-	2
-	offset ist gleich anzahl an Bloecke 1024 == 1024 
-
-	********************************************************************************************** 
-	readFile start 
-	offset: 0, size: 10
-	readFile fileSize= ft->getSize() 1024  
-
-	buffer in currentBlock 890 is : 11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111 
-
-	buffer in currentBlock 891 is : 111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111 
-
-	sizewrite: 743 
-
-	fcopy->getSize() 1024 
-
-	sizeWrite==fileSize false 
-
-	all buf is  : 11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111 
-
-	readFile success 
-
-readFile() returned 0
-	newBuf: 11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111123456789
- 
-
-	erste Block am Anfang : 890 
-
-	blocksNumber alt: 2 
-
-	newSize: 1024 
-
-	flink->getSize() : 1024 
-
-	5
-	blocksNumber new: 2 
-
-	flink->getFirstBlock() : 890 
-
-	bearbeite Block nr 890 
-
-	1 != blocksNumber 
-
-	write buffer 111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111 in  block 890 
-
-	bearbeite Block nr 891 
-
-	write buffer 11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111123456789
- in  block 891 
-
-	flink->getSize() : 1024 
-
-	ftr->getSize() : 1024 
-
-	root->copyFile(path, flink); ready 
-
-	6
-fuseWrite() returned 753
-src/myfs.cpp:1045:fuseFlush()
-src/myfs.cpp:812:fuseRelease()
-fuseRelease() returned 0
-src/myfs.cpp:309:fuseGetattr()
-	Requested path = /text2.txt 
-	1
-	2
-	Now starting to set attributes
-	Anderere Path als "/" wurde abgefragt
-	size from /text2.txt is 1024
-	fuseGetattr erfolgreich beendet
-fuseGetattr() returned 0
-src/myfs.cpp:438:fuseOpen()
-	Requested path in Fuse Open = /text2.txt 
-	1
-	root->existName(text2.txt) == 1 
-	name /text2.txt exist 
-
-fuseOpen() returned 0
-	fuseRead start path: /text2.txt 
-
-	size: 4096
-	root->existName(text2.txt) == 1 
-
-	1
-	2
-	********************************************************************************************** 
-	readFile start 
-	offset: 0, size: 4096
-	readFile fileSize= ft->getSize() 1024  
-
-	buffer in currentBlock 890 is : 111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111 
-
-	buffer in currentBlock 891 is : 11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111123456789
- 
-
-	sizewrite: 753 
-
-	fcopy->getSize() 1024 
-
-	sizeWrite==fileSize false 
-
-	all buf is  : 11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111123456789
- 
-
-	readFile success 
-
-readFile() returned 0
-	buf in fuseRead: 11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111123456789
-
-src/myfs.cpp:309:fuseGetattr()
-	Requested path = /text2.txt 
-	1
-	2
-	Now starting to set attributes
-	Anderere Path als "/" wurde abgefragt
-	size from /text2.txt is 1024
-	fuseGetattr erfolgreich beendet
-fuseGetattr() returned 0
-	fuseRead start path: /text2.txt 
-
-	size: 4096
-	root->existName(text2.txt) == 1 
-
-	1
-	2
-	********************************************************************************************** 
-	readFile start 
-	offset: 0, size: 4096
-	readFile fileSize= ft->getSize() 1024  
-
-	buffer in currentBlock 890 is : 111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111 
-
-	buffer in currentBlock 891 is : 11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111123456789
- 
-
-	sizewrite: 753 
-
-	fcopy->getSize() 1024 
-
-	sizeWrite==fileSize false 
-
-	all buf is  : 11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111123456789
- 
-
-	readFile success 
-
-readFile() returned 0
-	buf in fuseRead: 11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111123456789
-
-src/myfs.cpp:1045:fuseFlush()
-src/myfs.cpp:812:fuseRelease()
-fuseRelease() returned 0
-src/myfs.cpp:309:fuseGetattr()
-	Requested path = / 
-	1
-	2
-	Now starting to set attributes
-	Path == /
-	fuseGetattr erfolgreich beendet
-fuseGetattr() returned 0
-src/myfs.cpp:309:fuseGetattr()
-	Requested path = /.git 
-	1
-	2
-	Cant find a file with path: /.git
-fuseGetattr() returned -2
-src/myfs.cpp:309:fuseGetattr()
-	Requested path = /.git 
-	1
-	2
-	Cant find a file with path: /.git
-fuseGetattr() returned -2
-src/myfs.cpp:309:fuseGetattr()
-	Requested path = / 
-	1
-	2
-	Now starting to set attributes
-	Path == /
-	fuseGetattr erfolgreich beendet
-fuseGetattr() returned 0
 src/myfs.cpp:825:fuseOpendir()
 	Requested path in Fuse Open dir = / 
 	strcmp(path, "/") returns: 0
 fuseOpendir() returned 0
+src/myfs.cpp:309:fuseGetattr()
+	Requested path = / 
+	1
+	2
+	Now starting to set attributes
+	Path == /
+	fuseGetattr erfolgreich beendet
+fuseGetattr() returned 0
+	start fuseReaddir 
+
+	--> Getting The List of Files of /
+
+	 ready with filler
+	name 0 : text1.txt 
+
+	filler success 
+
+	name 1 : text2.txt 
+
+	filler success 
+
+	readDir success
+
+fuseReaddir() returned 0
+src/myfs.cpp:890:fuseReleasedir()
+fuseReleasedir() returned 0
+src/myfs.cpp:825:fuseOpendir()
+	Requested path in Fuse Open dir = / 
+	strcmp(path, "/") returns: 0
+fuseOpendir() returned 0
+src/myfs.cpp:309:fuseGetattr()
+	Requested path = / 
+	1
+	2
+	Now starting to set attributes
+	Path == /
+	fuseGetattr erfolgreich beendet
+fuseGetattr() returned 0
+	start fuseReaddir 
+
+	--> Getting The List of Files of /
+
+	 ready with filler
+	name 0 : text1.txt 
+
+	filler success 
+
+	name 1 : text2.txt 
+
+	filler success 
+
+	readDir success
+
+fuseReaddir() returned 0
+src/myfs.cpp:890:fuseReleasedir()
+fuseReleasedir() returned 0
+src/myfs.cpp:825:fuseOpendir()
+	Requested path in Fuse Open dir = / 
+	strcmp(path, "/") returns: 0
+fuseOpendir() returned 0
+src/myfs.cpp:309:fuseGetattr()
+	Requested path = / 
+	1
+	2
+	Now starting to set attributes
+	Path == /
+	fuseGetattr erfolgreich beendet
+fuseGetattr() returned 0
+	start fuseReaddir 
+
+	--> Getting The List of Files of /
+
+	 ready with filler
+	name 0 : text1.txt 
+
+	filler success 
+
+	name 1 : text2.txt 
+
+	filler success 
+
+	readDir success
+
+fuseReaddir() returned 0
+src/myfs.cpp:890:fuseReleasedir()
+fuseReleasedir() returned 0
+src/myfs.cpp:825:fuseOpendir()
+	Requested path in Fuse Open dir = / 
+	strcmp(path, "/") returns: 0
+fuseOpendir() returned 0
+src/myfs.cpp:309:fuseGetattr()
+	Requested path = / 
+	1
+	2
+	Now starting to set attributes
+	Path == /
+	fuseGetattr erfolgreich beendet
+fuseGetattr() returned 0
+	start fuseReaddir 
+
+	--> Getting The List of Files of /
+
+	 ready with filler
+	name 0 : text1.txt 
+
+	filler success 
+
+	name 1 : text2.txt 
+
+	filler success 
+
+	readDir success
+
+fuseReaddir() returned 0
+src/myfs.cpp:890:fuseReleasedir()
+fuseReleasedir() returned 0
+src/myfs.cpp:825:fuseOpendir()
+	Requested path in Fuse Open dir = / 
+	strcmp(path, "/") returns: 0
+fuseOpendir() returned 0
+src/myfs.cpp:309:fuseGetattr()
+	Requested path = / 
+	1
+	2
+	Now starting to set attributes
+	Path == /
+	fuseGetattr erfolgreich beendet
+fuseGetattr() returned 0
+	start fuseReaddir 
+
+	--> Getting The List of Files of /
+
+	 ready with filler
+	name 0 : text1.txt 
+
+	filler success 
+
+	name 1 : text2.txt 
+
+	filler success 
+
+	readDir success
+
+fuseReaddir() returned 0
+src/myfs.cpp:890:fuseReleasedir()
+fuseReleasedir() returned 0
+src/myfs.cpp:825:fuseOpendir()
+	Requested path in Fuse Open dir = / 
+	strcmp(path, "/") returns: 0
+fuseOpendir() returned 0
+src/myfs.cpp:309:fuseGetattr()
+	Requested path = / 
+	1
+	2
+	Now starting to set attributes
+	Path == /
+	fuseGetattr erfolgreich beendet
+fuseGetattr() returned 0
+	start fuseReaddir 
+
+	--> Getting The List of Files of /
+
+	 ready with filler
+	name 0 : text1.txt 
+
+	filler success 
+
+	name 1 : text2.txt 
+
+	filler success 
+
+	readDir success
+
+fuseReaddir() returned 0
+src/myfs.cpp:890:fuseReleasedir()
+fuseReleasedir() returned 0
+src/myfs.cpp:825:fuseOpendir()
+	Requested path in Fuse Open dir = / 
+	strcmp(path, "/") returns: 0
+fuseOpendir() returned 0
+src/myfs.cpp:309:fuseGetattr()
+	Requested path = / 
+	1
+	2
+	Now starting to set attributes
+	Path == /
+	fuseGetattr erfolgreich beendet
+fuseGetattr() returned 0
+	start fuseReaddir 
+
+	--> Getting The List of Files of /
+
+	 ready with filler
+	name 0 : text1.txt 
+
+	filler success 
+
+	name 1 : text2.txt 
+
+	filler success 
+
+	readDir success
+
+fuseReaddir() returned 0
+src/myfs.cpp:890:fuseReleasedir()
+fuseReleasedir() returned 0
+src/myfs.cpp:825:fuseOpendir()
+	Requested path in Fuse Open dir = / 
+	strcmp(path, "/") returns: 0
+fuseOpendir() returned 0
+src/myfs.cpp:309:fuseGetattr()
+	Requested path = / 
+	1
+	2
+	Now starting to set attributes
+	Path == /
+	fuseGetattr erfolgreich beendet
+fuseGetattr() returned 0
+	start fuseReaddir 
+
+	--> Getting The List of Files of /
+
+	 ready with filler
+	name 0 : text1.txt 
+
+	filler success 
+
+	name 1 : text2.txt 
+
+	filler success 
+
+	readDir success
+
+fuseReaddir() returned 0
+src/myfs.cpp:890:fuseReleasedir()
+fuseReleasedir() returned 0
+src/myfs.cpp:825:fuseOpendir()
+	Requested path in Fuse Open dir = / 
+	strcmp(path, "/") returns: 0
+fuseOpendir() returned 0
+src/myfs.cpp:309:fuseGetattr()
+	Requested path = / 
+	1
+	2
+	Now starting to set attributes
+	Path == /
+	fuseGetattr erfolgreich beendet
+fuseGetattr() returned 0
+	start fuseReaddir 
+
+	--> Getting The List of Files of /
+
+	 ready with filler
+	name 0 : text1.txt 
+
+	filler success 
+
+	name 1 : text2.txt 
+
+	filler success 
+
+	readDir success
+
+fuseReaddir() returned 0
+src/myfs.cpp:890:fuseReleasedir()
+fuseReleasedir() returned 0
+src/myfs.cpp:825:fuseOpendir()
+	Requested path in Fuse Open dir = / 
+	strcmp(path, "/") returns: 0
+fuseOpendir() returned 0
+src/myfs.cpp:309:fuseGetattr()
+	Requested path = / 
+	1
+	2
+	Now starting to set attributes
+	Path == /
+	fuseGetattr erfolgreich beendet
+fuseGetattr() returned 0
+	start fuseReaddir 
+
+	--> Getting The List of Files of /
+
+	 ready with filler
+	name 0 : text1.txt 
+
+	filler success 
+
+	name 1 : text2.txt 
+
+	filler success 
+
+	readDir success
+
+fuseReaddir() returned 0
+src/myfs.cpp:890:fuseReleasedir()
+fuseReleasedir() returned 0
+src/myfs.cpp:825:fuseOpendir()
+	Requested path in Fuse Open dir = / 
+	strcmp(path, "/") returns: 0
+fuseOpendir() returned 0
+src/myfs.cpp:309:fuseGetattr()
+	Requested path = / 
+	1
+	2
+	Now starting to set attributes
+	Path == /
+	fuseGetattr erfolgreich beendet
+fuseGetattr() returned 0
+	start fuseReaddir 
+
+	--> Getting The List of Files of /
+
+	 ready with filler
+	name 0 : text1.txt 
+
+	filler success 
+
+	name 1 : text2.txt 
+
+	filler success 
+
+	readDir success
+
+fuseReaddir() returned 0
+src/myfs.cpp:890:fuseReleasedir()
+fuseReleasedir() returned 0
+src/myfs.cpp:825:fuseOpendir()
+	Requested path in Fuse Open dir = / 
+	strcmp(path, "/") returns: 0
+fuseOpendir() returned 0
+src/myfs.cpp:309:fuseGetattr()
+	Requested path = / 
+	1
+	2
+	Now starting to set attributes
+	Path == /
+	fuseGetattr erfolgreich beendet
+fuseGetattr() returned 0
+	start fuseReaddir 
+
+	--> Getting The List of Files of /
+
+	 ready with filler
+	name 0 : text1.txt 
+
+	filler success 
+
+	name 1 : text2.txt 
+
+	filler success 
+
+	readDir success
+
+fuseReaddir() returned 0
+src/myfs.cpp:890:fuseReleasedir()
+fuseReleasedir() returned 0
+src/myfs.cpp:825:fuseOpendir()
+	Requested path in Fuse Open dir = / 
+	strcmp(path, "/") returns: 0
+fuseOpendir() returned 0
+src/myfs.cpp:309:fuseGetattr()
+	Requested path = / 
+	1
+	2
+	Now starting to set attributes
+	Path == /
+	fuseGetattr erfolgreich beendet
+fuseGetattr() returned 0
+	start fuseReaddir 
+
+	--> Getting The List of Files of /
+
+	 ready with filler
+	name 0 : text1.txt 
+
+	filler success 
+
+	name 1 : text2.txt 
+
+	filler success 
+
+	readDir success
+
+fuseReaddir() returned 0
+src/myfs.cpp:890:fuseReleasedir()
+fuseReleasedir() returned 0
+src/myfs.cpp:825:fuseOpendir()
+	Requested path in Fuse Open dir = / 
+	strcmp(path, "/") returns: 0
+fuseOpendir() returned 0
+src/myfs.cpp:309:fuseGetattr()
+	Requested path = / 
+	1
+	2
+	Now starting to set attributes
+	Path == /
+	fuseGetattr erfolgreich beendet
+fuseGetattr() returned 0
+	start fuseReaddir 
+
+	--> Getting The List of Files of /
+
+	 ready with filler
+	name 0 : text1.txt 
+
+	filler success 
+
+	name 1 : text2.txt 
+
+	filler success 
+
+	readDir success
+
+fuseReaddir() returned 0
+src/myfs.cpp:890:fuseReleasedir()
+fuseReleasedir() returned 0
+src/myfs.cpp:825:fuseOpendir()
+	Requested path in Fuse Open dir = / 
+	strcmp(path, "/") returns: 0
+fuseOpendir() returned 0
+src/myfs.cpp:309:fuseGetattr()
+	Requested path = / 
+	1
+	2
+	Now starting to set attributes
+	Path == /
+	fuseGetattr erfolgreich beendet
+fuseGetattr() returned 0
+	start fuseReaddir 
+
+	--> Getting The List of Files of /
+
+	 ready with filler
+	name 0 : text1.txt 
+
+	filler success 
+
+	name 1 : text2.txt 
+
+	filler success 
+
+	readDir success
+
+fuseReaddir() returned 0
+src/myfs.cpp:890:fuseReleasedir()
+fuseReleasedir() returned 0
+src/myfs.cpp:825:fuseOpendir()
+	Requested path in Fuse Open dir = / 
+	strcmp(path, "/") returns: 0
+fuseOpendir() returned 0
+src/myfs.cpp:309:fuseGetattr()
+	Requested path = / 
+	1
+	2
+	Now starting to set attributes
+	Path == /
+	fuseGetattr erfolgreich beendet
+fuseGetattr() returned 0
+	start fuseReaddir 
+
+	--> Getting The List of Files of /
+
+	 ready with filler
+	name 0 : text1.txt 
+
+	filler success 
+
+	name 1 : text2.txt 
+
+	filler success 
+
+	readDir success
+
+fuseReaddir() returned 0
+src/myfs.cpp:890:fuseReleasedir()
+fuseReleasedir() returned 0
+src/myfs.cpp:825:fuseOpendir()
+	Requested path in Fuse Open dir = / 
+	strcmp(path, "/") returns: 0
+fuseOpendir() returned 0
+src/myfs.cpp:309:fuseGetattr()
+	Requested path = / 
+	1
+	2
+	Now starting to set attributes
+	Path == /
+	fuseGetattr erfolgreich beendet
+fuseGetattr() returned 0
+	start fuseReaddir 
+
+	--> Getting The List of Files of /
+
+	 ready with filler
+	name 0 : text1.txt 
+
+	filler success 
+
+	name 1 : text2.txt 
+
+	filler success 
+
+	readDir success
+
+fuseReaddir() returned 0
+src/myfs.cpp:890:fuseReleasedir()
+fuseReleasedir() returned 0
+src/myfs.cpp:825:fuseOpendir()
+	Requested path in Fuse Open dir = / 
+	strcmp(path, "/") returns: 0
+fuseOpendir() returned 0
+src/myfs.cpp:309:fuseGetattr()
+	Requested path = / 
+	1
+	2
+	Now starting to set attributes
+	Path == /
+	fuseGetattr erfolgreich beendet
+fuseGetattr() returned 0
+	start fuseReaddir 
+
+	--> Getting The List of Files of /
+
+	 ready with filler
+	name 0 : text1.txt 
+
+	filler success 
+
+	name 1 : text2.txt 
+
+	filler success 
+
+	readDir success
+
+fuseReaddir() returned 0
+src/myfs.cpp:890:fuseReleasedir()
+fuseReleasedir() returned 0
+src/myfs.cpp:825:fuseOpendir()
+	Requested path in Fuse Open dir = / 
+	strcmp(path, "/") returns: 0
+fuseOpendir() returned 0
+src/myfs.cpp:309:fuseGetattr()
+	Requested path = / 
+	1
+	2
+	Now starting to set attributes
+	Path == /
+	fuseGetattr erfolgreich beendet
+fuseGetattr() returned 0
+	start fuseReaddir 
+
+	--> Getting The List of Files of /
+
+	 ready with filler
+	name 0 : text1.txt 
+
+	filler success 
+
+	name 1 : text2.txt 
+
+	filler success 
+
+	readDir success
+
+fuseReaddir() returned 0
+src/myfs.cpp:890:fuseReleasedir()
+fuseReleasedir() returned 0
+src/myfs.cpp:825:fuseOpendir()
+	Requested path in Fuse Open dir = / 
+	strcmp(path, "/") returns: 0
+fuseOpendir() returned 0
+src/myfs.cpp:309:fuseGetattr()
+	Requested path = / 
+	1
+	2
+	Now starting to set attributes
+	Path == /
+	fuseGetattr erfolgreich beendet
+fuseGetattr() returned 0
+	start fuseReaddir 
+
+	--> Getting The List of Files of /
+
+	 ready with filler
+	name 0 : text1.txt 
+
+	filler success 
+
+	name 1 : text2.txt 
+
+	filler success 
+
+	readDir success
+
+fuseReaddir() returned 0
+src/myfs.cpp:890:fuseReleasedir()
+fuseReleasedir() returned 0
+src/myfs.cpp:825:fuseOpendir()
+	Requested path in Fuse Open dir = / 
+	strcmp(path, "/") returns: 0
+fuseOpendir() returned 0
+src/myfs.cpp:309:fuseGetattr()
+	Requested path = / 
+	1
+	2
+	Now starting to set attributes
+	Path == /
+	fuseGetattr erfolgreich beendet
+fuseGetattr() returned 0
+	start fuseReaddir 
+
+	--> Getting The List of Files of /
+
+	 ready with filler
+	name 0 : text1.txt 
+
+	filler success 
+
+	name 1 : text2.txt 
+
+	filler success 
+
+	readDir success
+
+fuseReaddir() returned 0
+src/myfs.cpp:890:fuseReleasedir()
+fuseReleasedir() returned 0
+src/myfs.cpp:825:fuseOpendir()
+	Requested path in Fuse Open dir = / 
+	strcmp(path, "/") returns: 0
+fuseOpendir() returned 0
+src/myfs.cpp:309:fuseGetattr()
+	Requested path = / 
+	1
+	2
+	Now starting to set attributes
+	Path == /
+	fuseGetattr erfolgreich beendet
+fuseGetattr() returned 0
 	start fuseReaddir 
 
 	--> Getting The List of Files of /
@@ -1034,21 +738,18 @@ fuseReaddir() returned 0
 src/myfs.cpp:890:fuseReleasedir()
 fuseReleasedir() returned 0
 src/myfs.cpp:309:fuseGetattr()
-	Requested path = /text1.txt 
+	Requested path = /autorun.inf 
 	1
 	2
-	Now starting to set attributes
-	Anderere Path als "/" wurde abgefragt
-	size from /text1.txt is 1024
-	fuseGetattr erfolgreich beendet
-fuseGetattr() returned 0
+	Cant find a file with path: /autorun.inf
+fuseGetattr() returned -2
+src/myfs.cpp:1040:fuseStatfs()
 src/myfs.cpp:309:fuseGetattr()
-	Requested path = /text2.txt 
+	Requested path = / 
 	1
 	2
 	Now starting to set attributes
-	Anderere Path als "/" wurde abgefragt
-	size from /text2.txt is 1024
+	Path == /
 	fuseGetattr erfolgreich beendet
 fuseGetattr() returned 0
 src/myfs.cpp:309:fuseGetattr()
@@ -1060,34 +761,6 @@ src/myfs.cpp:309:fuseGetattr()
 	fuseGetattr erfolgreich beendet
 fuseGetattr() returned 0
 src/myfs.cpp:309:fuseGetattr()
-	Requested path = /.git 
-	1
-	2
-	Cant find a file with path: /.git
-fuseGetattr() returned -2
-src/myfs.cpp:825:fuseOpendir()
-	Requested path in Fuse Open dir = / 
-	strcmp(path, "/") returns: 0
-fuseOpendir() returned 0
-	start fuseReaddir 
-
-	--> Getting The List of Files of /
-
-	 ready with filler
-	name 0 : text1.txt 
-
-	filler success 
-
-	name 1 : text2.txt 
-
-	filler success 
-
-	readDir success
-
-fuseReaddir() returned 0
-src/myfs.cpp:890:fuseReleasedir()
-fuseReleasedir() returned 0
-src/myfs.cpp:309:fuseGetattr()
 	Requested path = / 
 	1
 	2
@@ -1096,11 +769,13 @@ src/myfs.cpp:309:fuseGetattr()
 	fuseGetattr erfolgreich beendet
 fuseGetattr() returned 0
 src/myfs.cpp:309:fuseGetattr()
-	Requested path = /.git 
+	Requested path = / 
 	1
 	2
-	Cant find a file with path: /.git
-fuseGetattr() returned -2
+	Now starting to set attributes
+	Path == /
+	fuseGetattr erfolgreich beendet
+fuseGetattr() returned 0
 src/myfs.cpp:309:fuseGetattr()
 	Requested path = / 
 	1

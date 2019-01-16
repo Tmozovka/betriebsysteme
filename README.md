@@ -15,9 +15,9 @@ Fehle beim Speicher Allockeren anschauen :
 System mounten:
 1) rm container.bin
 
-2)./mkfs.myfs container.bin text1.txt text2.txt
+2)  ./mkfs.myfs container.bin text1.txt text2.txt
 
-3)./mount.myfs container.bin logfile ./mount
+3)  ./mount.myfs container.bin logfile ./mount
 
 4) cd mount
 
@@ -25,7 +25,9 @@ system testen
 
 5) cd ..
 
-6)fusermount --unmount ./mount
+6) fusermount --unmount ./mount
+
+
 
 
 
