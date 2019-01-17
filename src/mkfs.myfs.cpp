@@ -15,8 +15,6 @@
 
 int main(int argc, char *argv[]) {
 
-
-
 	// TODO: Implement file system generation & copying of files here
 
 	printf("start \n");
@@ -43,32 +41,73 @@ int main(int argc, char *argv[]) {
 
 		FILE *fin;
 		LOGF("open File: %s \n", argv[i]);
+
 		fin = fopen(argv[i], "rwb");
 		if (fin) {
 			LOGF("successful open File: %s \n", argv[i]);LOGF("successful open File: %s \n", argv[i]);
+
 			struct stat st;
 			st.st_mode = S_IFREG | 0444;
 			stat(argv[i], &st);
+
+			printf("first name %s \n", argv[i]);
+			//////////////////////NAME AUSLESEN UND BEARBEITEN//////////////////////////////////////////////
+			if ((*(argv[i]) == '.') && (*(argv[i] + 1) == '/')) {
+				argv[i] += 2;
+			}
+
+			int countArg = 0;
+			int schiebCount = 0;
+			while (*(argv[i]) != char(0)) {
+				printf("*argv[i] : %c  \n", *argv[i]);
+				if (*argv[i] == '/') {
+					schiebCount++;
+				}
+
+				argv[i]++;
+				countArg++;
+
+			}
+			argv[i] -= countArg;
+			countArg = 0;
+			printf("schiebCount : %i \n", schiebCount);
+			if (schiebCount != 0) {
+				for (int j = 0; j < schiebCount; j++) {
+
+					while (*argv[i] != '/') {
+						argv[i]++;
+						//countArg++;
+					}
+					argv[i]++;
+				}
+			}
+
+			argv[i] -= countArg;
+			countArg = 0;
+
+			/////////////////////////////////////////////////////////////////////////////////
+			printf("name zum bearbeiten %s \n", argv[i]);
+
 			off_t size = ceil((double) st.st_size / BD_BLOCK_SIZE) //ceil(2/512)=1  ceil(513/512)=2
 			* BD_BLOCK_SIZE;
+			printf("size von der Datei: %i st.st_size : %i \n", size, st.st_size );
 			pufferAdd = new char[size];
 			fread(pufferAdd, size, 1, fin);
 			fs->resize(pufferAdd, st.st_size, size);
 			LOGF("File: %s ,size: %i, puffer: %s  \n",argv[i],size, pufferAdd );
 
 			/*char * name = new char [255];
-			name[0]='/';
-			int j=1;
-			while(argv[i][j-1]!='\0')
-			{
-				name[j]=argv[i][j-1];
-				j++;
-			}
-			name[j]='\0';
+			 name[0]='/';
+			 int j=1;
+			 while(argv[i][j-1]!='\0')
+			 {
+			 name[j]=argv[i][j-1];
+			 j++;
+			 }
+			 name[j]='\0';
 
-			fs->addFile(name, st.st_mode, st.st_mtime, size, pufferAdd);*/
-		fs->addFile(argv[i], st.st_mode, st.st_mtime, size, pufferAdd);
-
+			 fs->addFile(name, st.st_mode, st.st_mtime, size, pufferAdd);*/
+			fs->addFile(argv[i], st.st_mode, st.st_mtime, size, pufferAdd);
 
 		} else {
 			//printf("can't open File: %s \n", argv[i]);
@@ -88,32 +127,27 @@ int main(int argc, char *argv[]) {
 	ar = fs->root->getArray();
 	printf("FIRST NAME: %s", ar[0].c_str());
 
-
 	fs->writeBlockDevice();
 
 	//////////////////////// Hinzufügen der Datenstrukturen//////////////////
 
 	/*int nextBlockToWrite = 5; //TODO: Sinnvollen Wert nehmen
-							  //Julia: Ich weiß noch nicht welcher block der richtige ist
-							  // Deshalb teste ich es mit 5
+	 //Julia: Ich weiß noch nicht welcher block der richtige ist
+	 // Deshalb teste ich es mit 5
 
-	//Superblock hinzufügen
-	nextBlockToWrite = fs->sp->init(nextBlockToWrite, fs->blocks);
-	if(nextBlockToWrite==-1){
-		LOG("Error occured while trying to add Superblock to Blockdevice");
-		return -1;
-		}
+	 //Superblock hinzufügen
+	 nextBlockToWrite = fs->sp->init(nextBlockToWrite, fs->blocks);
+	 if(nextBlockToWrite==-1){
+	 LOG("Error occured while trying to add Superblock to Blockdevice");
+	 return -1;
+	 }
 
-	//Dmap hinzufügen
-	nextBlockToWrite = fs->dmap->init(nextBlockToWrite, fs->blocks);
-	if(nextBlockToWrite==-1){
-		LOG("Error occured while trying to add dmap to Blockdevice");
-		return -1;
-	}*/
-
-
-
-
+	 //Dmap hinzufügen
+	 nextBlockToWrite = fs->dmap->init(nextBlockToWrite, fs->blocks);
+	 if(nextBlockToWrite==-1){
+	 LOG("Error occured while trying to add dmap to Blockdevice");
+	 return -1;
+	 }*/
 
 	/*	 fs->fat->showFat();
 	 fs->dmap->showDmap();
