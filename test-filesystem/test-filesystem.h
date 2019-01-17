@@ -19,9 +19,14 @@ public:
 	int compareLists(std::list<char*> list1, std::list<char*> list2);
 
 	std::list<char*> readFile(char* filename);
+
+
+
 	void myWrite(char* filename, int bytesToWrite, int offset);
 
-	int myOpen(char* Filename);
+	int myOpen(char* filename);
 
 	void printFile(std::list<char*> list);
+
+	void writeListToFile(std::list<char*> list, char* filename);
 };
