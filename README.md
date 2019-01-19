@@ -12,7 +12,7 @@ Fehle beim Speicher Allockeren anschauen :
 1)sudo apt-get install valgrind
 2)valgrind ./mkfs.myfs container.bin text1.txt text2.txt
 
-System mounten:
+**System mounten:**
 1) rm container.bin
 
 2)  ./mkfs.myfs container.bin text1.txt text2.txt
@@ -29,16 +29,18 @@ system testen
 
 
 
+**Test-filesystem ausführen**
 
+1)Filesystem mounten; der Ordner muss mount-dir heißen
 
-Test-filesystem ausführen
-1)Filesystem mounten
-
-2)Im Ordner test-fileesystem Terminal Öffen
- 	g++ test-filesystem.cpp 
+2)Im Ordner test-fileesystem Terminal Öffen und compilieren mit:
+ 	*g++ test-filesystem.cpp*
  	
-3)dann, text1.txt ist datei im mountordner, auf der Tests ausgeführt werden 
-	./a.out text1.txt
+3)A) Zum ausführen ohne Ausgabe der Files:
+	*./a.out text1.txt*
+
+3)B) Zum ausführen mit Ausgabe der Files:
+	*./a.out text1.txt 1*
 	
 
 
