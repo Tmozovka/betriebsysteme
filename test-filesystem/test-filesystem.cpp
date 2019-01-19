@@ -10,7 +10,7 @@ int TestFilesytem::compareLists(MyList list1, MyList list2) {
 	//std::cerr << "list1.list.size()" << list1.list.size() << "list2.list.size()" << list2.list.size();
 
 	if (list1.list.size() != list2.list.size()) {
-		std::cout << "\033[1;31mERROR: files have different sizes\033[0m" << std::endl;
+		std::cout << "\033[1;31m"<<"ERROR: files have different sizes"<<"\033[0m" << std::endl;
 		return -1;
 	}
 
@@ -44,7 +44,7 @@ void TestFilesytem::readFile(char* filename, MyList* list) {
 		bytesRead = read(fileDescr, buffer, BUFFERSIZE);
 		buffer[BUFFERSIZE] = '\0';
 		if (bytesRead == -1) {
-			std::cerr << "Error: Could not read from file, code " << errno << std::endl;
+			std::cerr << "\033[1;31m"<<"Error: Could not read from file, code " << "\033[0m" <<errno << std::endl;
 			exit(-1);
 		}
 
@@ -71,11 +71,8 @@ int TestFilesytem::myOpen(char* filename) {
 	fileDescr = open(filename, O_RDONLY);
 
 	if (fileDescr == -1) {
-		std::cerr << "Error: Could not open file, code " << errno << std::endl;
+		std::cerr <<"\033[1;31m"<< "Error: Could not open file, code " << errno <<"\033[0m" << std::endl;
 		exit(-1);
-	}
-	if (printingFiles) {
-		std::cerr << "File opened successfully!" << std::endl;
 	}
 	return fileDescr;
 }
@@ -89,7 +86,7 @@ void TestFilesytem::myWrite(char* filename, int bytesToWrite, int offset) {
 	int fileDescr = open(filename, O_CREAT | O_RDWR,
 	S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
 	if (fileDescr == -1) {
-		std::cerr << "Error: Could not open file, code " << errno << std::endl;
+		std::cerr << "\033[1;31m"<<"Error: Could not open file, code " << errno << "\033[0m" <<std::endl;
 		exit(-1);
 	}
 
@@ -113,7 +110,7 @@ void TestFilesytem::myWrite(char* filename, int bytesToWrite, int offset) {
 	bytesWritten = write(fileDescr, stringToWrite, bytesToWrite);
 
 	if (bytesWritten == -1) {
-		std::cerr << "Error: Could not write to file, code " << errno << std::endl;
+		std::cerr <<"\033[1;31m"<< "Error: Could not write to file, code " << errno << "\033[0m" <<std::endl;
 		exit(-1);
 	}
 
@@ -130,12 +127,8 @@ void TestFilesytem::myClose(int fileDescr) {
 	int ret;
 	ret = close(fileDescr);
 	if (ret == -1) {
-		std::cerr << "Error: Could not close file, code " << errno << std::endl;
+		std::cerr << "\033[1;31m"<<"Error: Could not close file, code " << errno << "\033[0m" <<std::endl;
 		exit(-1);
-	}
-	if (printingFiles) {
-		std::cerr << "File closed successfully!" << std::endl;
-
 	}
 }
 
@@ -144,7 +137,7 @@ void TestFilesytem::writeListToFile(MyList list, char* filename) {
 	int fileDescr = open(filename, O_CREAT | O_TRUNC | O_RDWR,
 	S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
 	if (fileDescr == -1) {
-		std::cerr << "Error: Could not open file, code " << errno << std::endl;
+		std::cerr <<"\033[1;31m"<< "Error: Could not open file, code " << errno << "\033[0m" <<std::endl;
 		exit(-1);
 	}
 
@@ -187,7 +180,7 @@ void TestFilesytem::writeListToFile(MyList list, char* filename) {
 		//std::cerr << "Anzahl Bytes in Puffer: " << noBytesInPuffer << std::endl;
 		bytesWritten = write(fileDescr, buffer, noBytesInPuffer);
 		if (bytesWritten == -1) {
-			std::cerr << "Error: Could not write list to file, code " << errno << std::endl;
+			std::cerr << "\033[1;31m"<<"Error: Could not write list to file, code " << errno <<"\033[0m" << std::endl;
 			exit(-1);
 		}
 
