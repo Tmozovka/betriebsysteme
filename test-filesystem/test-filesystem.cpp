@@ -74,7 +74,9 @@ int TestFilesytem::myOpen(char* filename) {
 		std::cerr << "Error: Could not open file, code " << errno << std::endl;
 		exit(-1);
 	}
-	std::cerr << "File opened successfully!" << std::endl;
+	if (printingFiles) {
+		std::cerr << "File opened successfully!" << std::endl;
+	}
 	return fileDescr;
 }
 
@@ -131,7 +133,10 @@ void TestFilesytem::myClose(int fileDescr) {
 		std::cerr << "Error: Could not close file, code " << errno << std::endl;
 		exit(-1);
 	}
-	std::cerr << "File closed successfully!" << std::endl;
+	if (printingFiles) {
+		std::cerr << "File closed successfully!" << std::endl;
+
+	}
 }
 
 void TestFilesytem::writeListToFile(MyList list, char* filename) {
@@ -236,13 +241,11 @@ int main(int argc, char *argv[]) {
 //for testing in test-filessytem folder
 //std::string path("");
 
-
-	 pathToMountFile += argv[1];
-	 char FileInMount[pathToMountFile.length() + 1];
-	 for (int i = 0; i <= pathToMountFile.length(); i++) {
-	 FileInMount[i] = pathToMountFile[i];
-	 }
-
+	pathToMountFile += argv[1];
+	char FileInMount[pathToMountFile.length() + 1];
+	for (int i = 0; i <= pathToMountFile.length(); i++) {
+		FileInMount[i] = pathToMountFile[i];
+	}
 
 	//char * FileInMount = (char*) "file2.txt";
 
@@ -337,7 +340,6 @@ int main(int argc, char *argv[]) {
 	listMount.list.clear();
 	listCompare.list.clear();
 
-
 	//***************************************************************************************************
 	std::cerr << "\033[0;45m" << "Test: Schreiben  mit offset" << "\033[1;0m" << std::endl;
 	test1.myWrite(FileInMount, 200, 1000);
@@ -351,9 +353,6 @@ int main(int argc, char *argv[]) {
 	test1.compareLists(listMount, listCompare);
 	listMount.list.clear();
 	listCompare.list.clear();
-
-
-
 
 	return 0;
 
