@@ -61,9 +61,6 @@ public:
 	void convertI(T & var, char * varT);
 	int init(MyFile * f);
 
-
-
-
 	void resize(char * text, int oldSize, int newSize);
 };
 

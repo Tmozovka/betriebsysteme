@@ -18,8 +18,7 @@ public:
 	int getNext(int current, int* next);
 	int getSize() {
 		return size;
-	}
-	;
+	};
 
 	void showFat();
 

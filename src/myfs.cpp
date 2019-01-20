@@ -972,10 +972,17 @@ void* MyFS::fuseInit(struct fuse_conn_info *conn) {
 		char * nameCont =
 				((MyFsInfo *) fuse_get_context()->private_data)->contFile;
 
+		//if(*nameCont!=char(0))
+		//{
 		blocks->open(nameCont);
 		fat->read(FAT_START, blocks);
 		root->read(ROOT_START, blocks);
 		dmap->read(DMAP_START, blocks);
+		//}
+		//else
+		//{
+		//	blocks->create("contFuse.bin");
+		//}
 		/*LOG("try blocks->open(nameCont) \n");
 		 BlockDevice * blocks = new BlockDevice();
 		 blocks->open(nameCont);*/

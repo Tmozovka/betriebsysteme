@@ -44,11 +44,11 @@ public  :
 	int getSize() {
 		return sizeRoot;
 	}
-	char** createCharArray(char** array);
+//	char** createCharArray(char** array);
 
-	char** writeRootChar();
-	char** writeBlocks(BlockDevice blocks);
-	char** readBlocks(BlockDevice blocks);
+//	char** writeRootChar();
+//	char** writeBlocks(BlockDevice blocks);
+//	char** readBlocks(BlockDevice blocks);
 
 	//Tanja's funktionen , um Root in BlockDevice zu schreiben
 	void writeBlockDevice(BlockDevice * blocks, int start);

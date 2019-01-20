@@ -221,6 +221,8 @@ int MyRoot::deleteFile(string name) {
 
 
  }*/
+
+
 string * MyRoot::getArray() {
 	string *arr = new string[sizeRoot];
 	std::list<MyFile>::iterator it = files.begin();
@@ -233,7 +235,7 @@ string * MyRoot::getArray() {
 
 	return arr;
 }
-
+/*
 char** MyRoot::writeRootChar() {
 	char ** block;		//[sizeRoot][BLOCK_SIZE];
 	block = new char *[sizeRoot];
@@ -297,7 +299,7 @@ char** MyRoot::readBlocks(BlockDevice blocks) {
 
 	return block;
 
-}
+}*/
 /////////////////////////////////Tanja's funktionen , um Root in BlockDevice zu schreiben/////////////////////////////////////////////////////
 void MyRoot::writeBlockDevice(BlockDevice * blocks, int start) {
 
