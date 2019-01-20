@@ -7,21 +7,41 @@
 #include <sys/types.h>
 
 
+class MyList{
+	public:
+	std::list<char*> list;
+	int validBytesLastEntry;
+
+};
+
+
 
 
 class TestFilesytem {
 
 public:
+	int printingFiles;
 
 	TestFilesytem();
 	void myClose(int fileDescr);
 
-	int compareLists(std::list<char*> list1, std::list<char*> list2);
+	int compareLists(MyList list1, MyList list2);
 
-	std::list<char*> readFile(char* filename);
+	void readFile(char* filename, MyList* list);
+
 	void myWrite(char* filename, int bytesToWrite, int offset);
 
-	int myOpen(char* Filename);
+	int myOpen(char* filename);
 
-	void printFile(std::list<char*> list);
+	void printFile(MyList list);
+
+
+	void printTwoFiles(char* filename1, char* filename2);
+
+	void writeListToFile(MyList list, char* filename);
 };
+
+
+
+
+
