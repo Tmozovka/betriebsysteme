@@ -93,7 +93,8 @@ int main(int argc, char *argv[]) {
 			printf("size von der Datei: %i st.st_size : %i \n", size, st.st_size );
 			pufferAdd = new char[size];
 			fread(pufferAdd, size, 1, fin);
-			fs->resize(pufferAdd, st.st_size, size);
+			pufferAdd[st.st_size]=char(10);
+			fs->resize(pufferAdd, st.st_size+1, size);
 			LOGF("File: %s ,size: %i, puffer: %s  \n",argv[i],size, pufferAdd );
 
 			/*char * name = new char [255];
