@@ -1,18 +1,1 @@
-1234567890
-43356
-In  einem  Unternehmen  konnte  die  folgende  Entwicklung  beobachtet  werden.
-  Im  Vorjahr  
-erwirtschaftete  das  Unternehmen  bei  einem  Umsatz  von  50
-  Tausend  Euro  (TEUR)  einen  
-Gewinn in Höhe von 10 TEUR. Zu Jahresbeginn betrug das Eigenkapital 150 
-TEUR. 
-Neben 
-einer  Beteiligung  an  einem  anderen  Unternehmen  in  einem  Wert  von  50  TEUR  wies  
-die 
-Schlussbilanz   2012   noch   ein   Sachanlagevermögen   von   150   TEUR   aus.   Während   das   
-Bankguthaben  bei  nur  10  TEUR  lag,  beliefen  sich  die  Forderungen  gegenüber  Kunden  auf  
-50    TEUR    und    die    Vorräte    hatten    einen    Wert    von    40    TEUR.    Die    offenen    
-Lieferantenrechnungen  s
-ummierten  sich  auf  100  TEUR  und  langfristige  Kredite  auf  50  
-TEUR.  
-
+01234

@@ -209,6 +209,7 @@ int MyFS::readFile(const char *path, char *buf, size_t size, off_t offset,
 // int fuseCreate(const char *, mode_t, struct fuse_file_info *);
 int MyFS::addFile(const char * name, mode_t mode, time_t mtime, off_t size,
 		char * text) {
+
 	LOG("********************************************************************************************** ");LOG("addFile start");
 	if (size % BD_BLOCK_SIZE != 0) {
 		LOGF("Die Datei %s wurde falsh hinzugefuegt \n", name);
@@ -506,8 +507,15 @@ int MyFS::fuseRead(const char *path, char *buf, size_t size, off_t offset,
 	LOGF("buf in fuseRead: %s", buf);
 
 	int count = 0;
-	while (*(buf++) != '\0')
+	while (*(buf) != '\0') {
+		buf++;
 		count++;
+	}
+
+	//*(buf++)=char(10);
+	//count++;
+	//*(buf)=char(0);
+
 	buf -= count;
 
 	//size = fcopy->getSize();
@@ -541,16 +549,20 @@ int MyFS::fuseWrite(const char *path, const char *buf, size_t size,
 	if (root->getFile(temp, flink) == -1) {
 		printf("error in fuseWrite in root.getFile( path, &fcopy)");
 		RETURN(-EPERM);
-	}LOG("2");
+	} LOG("2");
+
 	int blocksNumber;
 	size_t newSizeFile;
 	char * newBuf;
 	int newBufCount = 0;
+	int ret=size;
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	if (offset != 0) {
+		LOG("offset ist ungleich 0 \n");
 		int temp = ceil(
 				(double) flink->getSize() / BD_BLOCK_SIZE) * BD_BLOCK_SIZE;
+		LOGF("anzahl der Bloecke in alte Datei: %i \n", temp);
 		if (offset == temp) {
 			LOGF("offset ist gleich anzahl an Bloecke %i == %i \n",offset, temp );
 
@@ -576,9 +588,14 @@ int MyFS::fuseWrite(const char *path, const char *buf, size_t size,
 			}
 
 			newBuf -= newCount;
+			ret=newCount;
 		} else {
+			LOGF("offset ist ungleich anzahl an Bloecke %i == %i \n",offset, temp );
 			int newAddSize = ((int) size + (int) offset);
+			LOGF("so viel Bytes muessen hinzuegefuegt werden: size(%i) + offset(%i) = %i \n",size, offset, newAddSize);
 			if (newAddSize > temp) {
+
+				LOGF("es muss mehr Bytes(%) hinzuegefugt werden, als die Groesse der Datei (%i) \n", newAddSize, temp);
 				//die Datei wird groesse nach der ueberschreibung
 
 				//groeese die hinzuegefugt wird finden
@@ -588,7 +605,7 @@ int MyFS::fuseWrite(const char *path, const char *buf, size_t size,
 					buf++;
 					countBufForSize++;
 				}
-
+				buf -= countBufForSize;
 				/*int countFileSize = 0;
 				 //countFileSize - groesse von den text in der datei
 				 char * readBufTemp = new char[temp];
@@ -598,11 +615,10 @@ int MyFS::fuseWrite(const char *path, const char *buf, size_t size,
 				 countFileSize++;
 				 }*/
 
-				newSizeFile =
-						ceil(
-								(double) (offset + countBufForSize)
-										/ BD_BLOCK_SIZE) * BD_BLOCK_SIZE;
-				int newCount=0;
+				newSizeFile = ceil(
+						(double) newAddSize / BD_BLOCK_SIZE) * BD_BLOCK_SIZE;
+
+				int newCount = 0;
 				newBuf = new char[newSizeFile];
 				readFile(path + 1, newBuf, size, 0, fileInfo);
 				//buf bis offset auslesen
@@ -617,15 +633,17 @@ int MyFS::fuseWrite(const char *path, const char *buf, size_t size,
 				}
 
 				newBuf -= newCount;
+				ret=newCount;
 
 			} else {
+				LOGF("es muss weniger Bytes(%i) hinzuegefugt werden, als die Groesse der Datei (%i) \n", newAddSize, temp);
 				int newCount = 0;
 				//die Groesse bleibt gleich
 				newSizeFile = temp;
 				newBuf = new char[newSizeFile];
 				readFile(path + 1, newBuf, size, 0, fileInfo);
 				//buf bis offset auslesen
-				for (int j = 0; j++; j < offset) {
+				while (newCount < offset) {
 					newBuf++;
 					newCount++;
 				}
@@ -635,10 +653,18 @@ int MyFS::fuseWrite(const char *path, const char *buf, size_t size,
 					newCount++;
 				}
 
+				while(*newBuf!=char(0))
+				{
+					newBuf++;
+					newCount++;
+				}
+
 				newBuf -= newCount;
+				ret=newCount;
 			}
 		}
 	} else {
+		LOG("offset ist gleich 0 \n");
 		newSizeFile = ceil((double) size / BD_BLOCK_SIZE) * BD_BLOCK_SIZE;
 
 		newBuf = new char[newSizeFile];
@@ -649,6 +675,7 @@ int MyFS::fuseWrite(const char *path, const char *buf, size_t size,
 		}
 
 		newBuf -= newCount;
+		ret=newCount;
 	}
 
 	LOGF("newBuf: %s \n", newBuf);
@@ -661,7 +688,8 @@ int MyFS::fuseWrite(const char *path, const char *buf, size_t size,
 ///////////////////////////////////////////////////
 	blocksNumber = (flink->getSize() / BD_BLOCK_SIZE);
 	int currentBlock = flink->getFirstBlock();
-	LOGF("erste Block am Anfang : %i \n",currentBlock);LOGF("blocksNumber alt: %i \n", blocksNumber);
+	LOGF("erste Block am Anfang : %i \n",currentBlock);
+	LOGF("blocksNumber alt: %i \n", blocksNumber);
 
 	while (blocksNumber != 0 && currentBlock != -1) {
 		if (this->blocks->write(currentBlock, text) == -1) {
@@ -689,7 +717,7 @@ int MyFS::fuseWrite(const char *path, const char *buf, size_t size,
 	}
 
 	delete[] text;
-	newSizeFile = ceil((double) size / BD_BLOCK_SIZE) * BD_BLOCK_SIZE;
+	//newSizeFile = ceil((double) size / BD_BLOCK_SIZE) * BD_BLOCK_SIZE;
 //	}
 //////////////////////////////neu parameter angeben////////////////////////////////////////////
 	/*	else {
@@ -718,6 +746,7 @@ int MyFS::fuseWrite(const char *path, const char *buf, size_t size,
 
 	LOGF("newSize: %i \n", newSizeFile);
 	flink->setSize(newSizeFile);
+	root->copyFile(flink->getName(), flink);
 	LOGF("flink->getSize() : %i \n", flink->getSize());
 	flink->setLastMod(time(NULL));
 	flink->setLastAccess(time(NULL));
@@ -763,7 +792,7 @@ int MyFS::fuseWrite(const char *path, const char *buf, size_t size,
 				newBufCount++;
 				if (count == BD_BLOCK_SIZE - 2)
 					break;
-				if (tempCount == (int) size)
+				if (tempCount == (int) ret)
 					break;
 			}
 			*(buffer++) = char(0);
@@ -805,7 +834,7 @@ int MyFS::fuseWrite(const char *path, const char *buf, size_t size,
 	//LOGF("currentBlock: %i \n", currentBlock);
 	LOG("6");
 
-	RETURN(size);
+	RETURN(ret);
 }
 
 int MyFS::fuseRelease(const char *path, struct fuse_file_info *fileInfo) {
