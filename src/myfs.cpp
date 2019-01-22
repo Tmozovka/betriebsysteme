@@ -704,7 +704,9 @@ int MyFS::fuseWrite(const char *path, const char *buf, size_t size,
 		}
 	} else {
 		LOG("offset ist gleich 0 \n");
-		newSizeFile = ceil((double) size / BD_BLOCK_SIZE) * BD_BLOCK_SIZE;
+
+		 ///////////////////////////////version : den ganzen Text in alte Datei muss geloescht werden
+		 newSizeFile = ceil((double) size / BD_BLOCK_SIZE) * BD_BLOCK_SIZE;
 
 		newBuf = new char[newSizeFile];
 		int newCount = 0;
@@ -715,6 +717,8 @@ int MyFS::fuseWrite(const char *path, const char *buf, size_t size,
 
 		newBuf -= newCount;
 		ret = newCount;
+
+
 	}
 
 	LOGF("newBuf: %s \n", newBuf);

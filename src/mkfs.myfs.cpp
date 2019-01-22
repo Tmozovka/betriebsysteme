@@ -94,6 +94,7 @@ int main(int argc, char *argv[]) {
 			pufferAdd = new char[size];
 			fread(pufferAdd, size, 1, fin);
 			pufferAdd[st.st_size]=char(10);
+			printf("die Inhalt von %s : %s \n", argv[i],pufferAdd);
 			fs->resize(pufferAdd, st.st_size+1, size);
 			LOGF("File: %s ,size: %i, puffer: %s  \n",argv[i],size, pufferAdd );
 
