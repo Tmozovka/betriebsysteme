@@ -18,6 +18,7 @@ int main(int argc, char *argv[]) {
 	// TODO: Implement file system generation & copying of files here
 
 	printf("start \n");
+	printf("argc: %i \n", argc);
 
 	/*argc=4;
 	 argv[1]="container.bin";
@@ -59,7 +60,7 @@ int main(int argc, char *argv[]) {
 			int countArg = 0;
 			int schiebCount = 0;
 			while (*(argv[i]) != char(0)) {
-				printf("*argv[i] : %c  \n", *argv[i]);
+				//printf("*argv[i] : %c  \n", *argv[i]);
 				if (*argv[i] == '/') {
 					schiebCount++;
 				}
@@ -94,9 +95,9 @@ int main(int argc, char *argv[]) {
 			pufferAdd = new char[size];
 			fread(pufferAdd, size, 1, fin);
 			pufferAdd[st.st_size]=char(10);
-			printf("die Inhalt von %s : %s \n", argv[i],pufferAdd);
+			//printf("die Inhalt von %s : %s \n", argv[i],pufferAdd);
 			fs->resize(pufferAdd, st.st_size+1, size);
-			LOGF("File: %s ,size: %i, puffer: %s  \n",argv[i],size, pufferAdd );
+			//LOGF("File: %s ,size: %i, puffer: %s  \n",argv[i],size, pufferAdd );
 
 			/*char * name = new char [255];
 			 name[0]='/';
@@ -129,6 +130,7 @@ int main(int argc, char *argv[]) {
 	ar = fs->root->getArray();
 	printf("FIRST NAME: %s", ar[0].c_str());
 
+	fs->fat->showFat();
 	fs->writeBlockDevice();
 
 	//////////////////////// Hinzufügen der Datenstrukturen//////////////////

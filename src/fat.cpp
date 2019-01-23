@@ -1,3 +1,6 @@
+
+
+
 #include "fat.h"
 #include <string.h>
 #include <stdlib.h>
@@ -5,12 +8,14 @@
 #include <stdio.h>
 using namespace std;
 
+
 void MyFAT::showFat() {
 	printf(
 			"****************************************************************\n");
 	printf("FAT: \n");
-	for (int i = 0; i != 50; i++) {
+	for (int i = 900; i != 53879; i++) {
 
+		if((i+1)!=table[i])
 		printf("%i -> %i \n", i, table[i]);
 	}
 }

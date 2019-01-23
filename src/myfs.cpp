@@ -136,6 +136,7 @@ int MyFS::readFile(const char *path, char *buf, size_t size, off_t offset,
 	 RETURN(-EPERM);
 	 }*/
 
+	//TODO: mit offset betrachten
 	char * buffer1 = new char[BD_BLOCK_SIZE];
 
 	MyFile * ft = new MyFile();
@@ -180,12 +181,16 @@ int MyFS::readFile(const char *path, char *buf, size_t size, off_t offset,
 			RETURN(-EPERM);
 		}
 
-		if (fat->getNext(currentBlock, &currentBlock) == -1) {
+		int neu;
+		if (fat->getNext(currentBlock, &neu) == -1) {
 			LOG(
 					"error in fuseREAD fat.getNext(currentBlock,&currentBlock) \n");
 			RETURN(-ENOENT);
 		}
+		if(currentBlock+1!=neu)
+		LOGF("falsche verweis currentBlock : %s , neuBlock: %s",currentBlock, neu);
 
+		currentBlock=neu;
 		blocksNumber--;
 	}
 
@@ -888,7 +893,7 @@ int MyFS::fuseWrite(const char *path, const char *buf, size_t size,
 
 	delete ftr;
 	LOG("delete ftr sucess \n");
-	//delete flink;
+	delete flink;
 	LOG("delete flink sucess \n");
 
 	//LOGF("currentBlock: %i \n", currentBlock);
@@ -939,6 +944,7 @@ int MyFS::fuseReaddir(const char *path, void *buffer, fuse_fill_dir_t filler,
 		off_t offset, struct fuse_file_info *fileInfo) {
 	LOG("start fuseReaddir \n");
 
+	int count=0;
 	// TODO: Implement this!
 
 	/* if(fileInfo->fh == NULL){ //fh durch fuseopendir gesetzt-> bestaetigt existenz
@@ -966,9 +972,13 @@ int MyFS::fuseReaddir(const char *path, void *buffer, fuse_fill_dir_t filler,
 		strcpy(name, listNames[i].c_str());
 		LOGF("name %i : %s \n", i, name);
 		//////////////////////////////////////////////////////////////////////
+		count++;
 		filler(buffer, name, NULL, 0);
 		LOG("filler success \n");
+		LOGF("count : %i \n", count);
+
 		delete[] name;
+
 
 	}LOG("readDir success\n");
 	RETURN(0);
@@ -1063,10 +1073,16 @@ void* MyFS::fuseInit(struct fuse_conn_info *conn) {
 
 		//if(*nameCont!=char(0))
 		//{
+		LOG("try to open container \n");
 		blocks->open(nameCont);
-		fat->read(FAT_START, blocks);
+		LOG(" open container sucess \n");
+
 		root->read(ROOT_START, blocks);
+		LOG(" open root sucess \n");
 		dmap->read(DMAP_START, blocks);
+		LOG(" open dmap sucess \n");
+		fat->read(FAT_START, blocks);
+		LOG(" open fat sucess \n");
 		//}
 		//else
 		//{

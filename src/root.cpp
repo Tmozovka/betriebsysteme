@@ -64,7 +64,7 @@ int MyRoot::addFile(string name, off_t size, mode_t mode, time_t st_mtime,
 		return -1;
 	}
 
-	sizeRoot++;
+
 	if (existName(name)) {
 		printf("File's %s name is already exist \n", name.c_str());
 		return -1;
@@ -90,6 +90,7 @@ int MyRoot::addFile(string name, off_t size, mode_t mode, time_t st_mtime,
 				time(NULL), st_mtime, time(NULL), firstBlock);
 	}
 
+	sizeRoot++;
 	files.push_back(*f);
 	return 0;
 }
