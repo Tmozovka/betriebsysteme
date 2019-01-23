@@ -130,7 +130,7 @@ int main(int argc, char *argv[]) {
 	ar = fs->root->getArray();
 	printf("FIRST NAME: %s", ar[0].c_str());
 
-	fs->fat->showFat();
+	//fs->fat->showFat();
 	fs->writeBlockDevice();
 
 	//////////////////////// Hinzufügen der Datenstrukturen//////////////////

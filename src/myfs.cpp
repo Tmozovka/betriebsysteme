@@ -141,7 +141,6 @@ int MyFS::readFile(const char *path, char *buf, size_t size, off_t offset,
 
 	MyFile * ft = new MyFile();
 	if (root->getFile(path, ft) == -1) {
-
 		//printf("can't get file from root root.getFile(path, &fcopy) \n");
 		LOG("can't get file from root root.getFile(path, &fcopy) \n");
 		RETURN(-ENOENT);
@@ -160,6 +159,18 @@ int MyFS::readFile(const char *path, char *buf, size_t size, off_t offset,
 	int currentBlock = ft->getFirstBlock();
 	int countBuf = 0;
 	int temp = 0;
+////////////////////////////////////////////////////////////////////////
+	LOG(
+				"****************************************************************\n");
+		LOG("FAT: \n");
+		for (int i = 900; i != 950; i++) {
+
+			int next;
+			fat->getNext(i, &next);
+			//if((i+1)!=next)
+			LOGF("%i -> %i \n", i, next);
+		}
+	//////////////////////////////////////////////////////////////////////
 	while (currentBlock != -1 && blocksNumber != 0) {
 		if (blocks->read(currentBlock, buffer1) == 0) {
 			LOGF("buffer in currentBlock %i is : %s \n",currentBlock, buffer1);
@@ -181,16 +192,16 @@ int MyFS::readFile(const char *path, char *buf, size_t size, off_t offset,
 			RETURN(-EPERM);
 		}
 
-		int neu;
+		int neu=0;
 		if (fat->getNext(currentBlock, &neu) == -1) {
 			LOG(
 					"error in fuseREAD fat.getNext(currentBlock,&currentBlock) \n");
 			RETURN(-ENOENT);
 		}
-		if(currentBlock+1!=neu)
-		LOGF("falsche verweis currentBlock : %s , neuBlock: %s",currentBlock, neu);
-
+		//if(currentBlock+1!=neu)
+		LOGF(" verweis currentBlock : %i , neuBlock: %i",currentBlock, neu);
 		currentBlock=neu;
+
 		blocksNumber--;
 	}
 

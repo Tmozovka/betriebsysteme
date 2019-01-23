@@ -9,11 +9,11 @@
 using namespace std;
 
 
-void MyFAT::showFat() {
+void MyFAT::showFat(int start, int end) {
 	printf(
 			"****************************************************************\n");
 	printf("FAT: \n");
-	for (int i = 900; i != 53879; i++) {
+	for (int i = start; i != end; i++) {
 
 		if((i+1)!=table[i])
 		printf("%i -> %i \n", i, table[i]);

@@ -11,6 +11,7 @@ git config --global user.email "your_email@domainname.com"
 Fehle beim Speicher Allockeren anschauen :
 1)sudo apt-get install valgrind
 2)valgrind ./mkfs.myfs container.bin text1.txt text2.txt
+3)valgrind ./mount.myfs container.bin logfile ./mount-dir -s -f
 
 **System mounten:**
 1) rm container.bin

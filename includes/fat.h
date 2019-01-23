@@ -20,7 +20,7 @@ public:
 		return size;
 	};
 
-	void showFat();
+	void showFat(int s, int e);
 
 	void resize(char * text, int oldSize, int newSize);
 	char * writeBlock();
