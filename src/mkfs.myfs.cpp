@@ -96,7 +96,11 @@ int main(int argc, char *argv[]) {
 			fread(pufferAdd, size, 1, fin);
 			pufferAdd[st.st_size]=char(10);
 			//printf("die Inhalt von %s : %s \n", argv[i],pufferAdd);
-			fs->resize(pufferAdd, st.st_size+1, size);
+			//fs->resize(pufferAdd, st.st_size+1, size);
+			for(int j=st.st_size+1;j<size;j++)
+			{
+				pufferAdd[j]=char(0);
+			}
 			//LOGF("File: %s ,size: %i, puffer: %s  \n",argv[i],size, pufferAdd );
 
 			/*char * name = new char [255];

@@ -145,6 +145,7 @@ char * MyFile::writeFileChar() {
 	resize(firstBlock, to_string(this->firstBlock).length(), FILE_BLOCK_SIZE);
 
 	char * block = new char[BLOCK_SIZE];
+	//printf("pointer %hd \n", ()block);
 	strcpy(block, name);
 	strcat(block, user);
 	strcat(block, group);
@@ -155,14 +156,19 @@ char * MyFile::writeFileChar() {
 	strcat(block, lastStatusChange);
 	strcat(block, firstBlock);
 
-	resize(block, MAX_FILE_SIZE, BLOCK_SIZE);
+	//resize(block, MAX_FILE_SIZE, BLOCK_SIZE);
+	string tstr(block);
+	for(int i=tstr.length();i<BLOCK_SIZE;i++)
+		block[i]=char(0);
 	printf("write to block : %s \n ", block);
+
+	printf("MAX SIZE: %i, block size: %i",MAX_FILE_SIZE,tstr.length());
 
 	return block;
 
 }
 char * MyFile::readBlock(int blockNo, BlockDevice blocks) {
-	char * buf = new char[512];
+	char * buf = new char[BLOCK_SIZE];
 	blocks.read(blockNo, buf);
 	return buf;
 }

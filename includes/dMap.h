@@ -3,6 +3,9 @@
 #include <bitset>
 #include "myfs-structs.h"
 
+#include <string>
+using namespace std;
+
 class dMap {
 
 private:

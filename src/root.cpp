@@ -314,6 +314,10 @@ void MyRoot::writeBlockDevice(BlockDevice * blocks, int start) {
 	//resize(buf, to_string(this->sizeRoot).length(), BLOCK_SIZE);
 
 	printf("buf %i : %s \n", start, buf);
+
+	for(int i=to_string(this->sizeRoot).length();i<BLOCK_SIZE;i++)
+		buf[i]=char(0);
+
 	blocks->write(start++, buf);
 
 	std::list<MyFile>::iterator it = files.begin();
@@ -329,9 +333,10 @@ void MyRoot::writeBlockDevice(BlockDevice * blocks, int start) {
 
 MyRoot::MyRoot(BlockDevice * blocks, int start) {
 	printf("start MyRoot(BlockDevice * blocks, int start) \n");
-	char * buf = new char[512];
+	char * buf = new char[BLOCK_SIZE];
 	blocks->read(start++, buf);
 	sizeRoot = atoi(buf);
+	printf("size root: %i \n", sizeRoot);
 
 	if (sizeRoot != 0) {
 
@@ -339,6 +344,7 @@ MyRoot::MyRoot(BlockDevice * blocks, int start) {
 			blocks->read(start++, buf);
 			printf("blocks.read buf %i : %s \n", start - 1, buf);
 			MyFile * f = new MyFile(buf);
+			printf("create myfile sucess \n");
 			files.push_back(*f);
 
 		}
@@ -355,7 +361,7 @@ MyRoot::MyRoot(BlockDevice * blocks, int start) {
 
 void MyRoot::read(int start, BlockDevice * blocks) {
 	printf("start MyRoot(BlockDevice * blocks, int start) \n");
-	char * buf = new char[512];
+	char * buf = new char[BLOCK_SIZE];
 	blocks->read(start++, buf);
 	sizeRoot = atoi(buf);
 

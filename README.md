@@ -6,11 +6,11 @@ how to git? information about all steps https://git-scm.com/book/de/v1/Los-geht%
 git config --global user.name "Your Name here"
 git config --global user.email "your_email@domainname.com"
 4) git clone https://github.com/Tmozovka/betriebsysteme.git
-5)https://jameschambers.co/writing/git-team-workflow-cheatsheet/
+5)https://jameschambers.co/writing/git-team-workflow-cheatsheet/valgrind ./mkfs.myfs container.bin text1.txt ./text2.txt ./input/text3.txt ./input/in/* ./input/in2/*
 
 Fehle beim Speicher Allockeren anschauen :
 1)sudo apt-get install valgrind
-2)valgrind ./mkfs.myfs container.bin text1.txt text2.txt
+2)valgrind ./mkfs.myfs container.bin text1.txt text2.txt oder valgrind ./mkfs.myfs container.bin text1.txt ./text2.txt ./input/text3.txt ./input/in/* ./input/in2/*
 3)valgrind ./mount.myfs container.bin logfile ./mount-dir -s -f
 
 **System mounten:**

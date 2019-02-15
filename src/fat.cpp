@@ -1,6 +1,4 @@
 
-
-
 #include "fat.h"
 #include <string.h>
 #include <stdlib.h>
@@ -8,15 +6,14 @@
 #include <stdio.h>
 using namespace std;
 
-
 void MyFAT::showFat(int start, int end) {
 	printf(
 			"****************************************************************\n");
 	printf("FAT: \n");
 	for (int i = start; i != end; i++) {
 
-		if((i+1)!=table[i])
-		printf("%i -> %i \n", i, table[i]);
+		if ((i + 1) != table[i])
+			printf("%i -> %i \n", i, table[i]);
 	}
 }
 
@@ -68,18 +65,26 @@ MyFAT::~MyFAT() {
 char * MyFAT::writeBlock() {
 	char * result = new char[size * 6];
 
+	char * temp = new char[1];
+	temp[0] = '_';
+
 	strcpy(result, to_string(this->table[0]).c_str());
 	strcat(result, "_");
 
 	for (int i = 1; i < size; i++) {
 
-		char * next = new char[5];
+		char * next = new char[6]; //char * next = new char[5];
 		strcpy(next, to_string(this->table[i]).c_str());
 		strcat(result, next);
 		strcat(result, "_");
 		delete[] next;
 
 	}
+
+	temp[0] = char(0);
+	strcat(result, temp);
+
+	delete[] temp;
 
 	return result;
 }
@@ -106,25 +111,26 @@ void MyFAT::read(int start, BlockDevice * blocks) {
 	}
 }
 
-
-
 MyFAT::MyFAT(BlockDevice * blocks, int start) {
 	printf("start MyFAT(BlockDevice * blocks, int start) start : %i \n", start);
 	char * buf = new char[BLOCK_NUMBER * 6];
 	this->readBlockDevice(blocks, start, buf);
+	printf("buf: %s", buf);
 
 	//printf("readBlockDevice fat : %s \n", buf);
 	//printf("readBlockDevice fat end of first Block: %s \n", buf + 510);
 	//printf("readBlockDevice fat end of second Block: %s \n", buf + 510 * 2);
 
 //MyFAT::MyFAT(char * buf)
+	int bufCount=0;
 	for (int i = 0; i < size; i++) {
 
 		char * next = new char[5];
-		for (int j = 0; *buf != '_'; j++, buf++) {
-			next[j] = *buf;
+		for (int j = 0; buf[bufCount] != '_'; j++, buf++) {
+			next[j] = buf[bufCount];
 		}
-		buf++;
+		bufCount++;
+		printf("bufCount %i \n", bufCount);
 		table[i] = atoi(next);
 		delete[] next;
 	}
@@ -164,25 +170,36 @@ int compare(MyFAT f1, MyFAT f2) {
 void MyFAT::writeBlockDevice(BlockDevice * blocks, int start) {
 	printf("start for fat writeBlockDevice  start : %i \n", start);
 	int nrBlocks = 0;
-	char * buf;
+	char * buf = new char[size * 6];
 	buf = this->writeBlock();
 	//printf("fat: %s \n", buf);
 
 	int firstBlock = start;
 	start++;
 
-	while (*buf != '\0') {
+	int countBuf = 0;
+	while (buf[countBuf] != '\0') {
 		char * writeBuf = new char[BLOCK_SIZE];
 		//	char * startWriteBuf = writeBuf;
 
 		int i = 0;
+
 		for (; i < BLOCK_SIZE - 1; i++) {
-			writeBuf[i] = *buf;
-			buf++;
+			writeBuf[i] = buf[countBuf++];
+			if (buf[countBuf] == '\0') {
+				printf("break countBuf : %i \n", countBuf);
+				break;
+			}
 		}
-		writeBuf[i] = char(0);
+
+	//	printf("i: %i \n", i);
+		//int restSize = BLOCK_SIZE - countBuf % BLOCK_SIZE;
+		//printf("restSize: %i \n", restSize);
+		for (int j = i; j < BLOCK_SIZE; j++)
+			writeBuf[j] = char(0);
 
 		//writeBuf=buf;
+		//printf("writeBuf: %s \n", writeBuf);
 		blocks->write(start++, writeBuf);
 		(nrBlocks)++;
 		//buf+=BLOCK_SIZE;
@@ -198,9 +215,14 @@ void MyFAT::writeBlockDevice(BlockDevice * blocks, int start) {
 	temp[to_string(nrBlocks).length()] = char(0);
 	//resize(buf, to_string(this->sizeRoot).length(), BLOCK_SIZE);
 
+	for(int i=to_string(nrBlocks).length();i<BLOCK_SIZE;i++)
+		temp[i]=char(0);
+
 	printf("nrBlocks write in %i : %s \n", firstBlock, temp);
+	//resize(temp,to_string(nrBlocks).length(),BLOCK_SIZE);
 	blocks->write(firstBlock, temp);
 
+	delete[] buf;
 	delete[] temp;
 }
 
@@ -209,19 +231,25 @@ void MyFAT::readBlockDevice(BlockDevice * blocks, int start, char * newBuf) {
 
 	blocks->read(start, readBuf);
 	int j = atoi(readBuf);
-	printf("nrBlocks read from %i : %i \n", start, j);
+	//printf("nrBlocks read from %i : %i \n", start, j);
 	start++;
 
 	int i = start;
 	while (j != 0) {
+		//printf("blocks->read from block %i  \n", i);
 		blocks->read(i++, readBuf);
-
+		//printf("bloks read success \n");
 		strcat(newBuf, readBuf);
+		//printf("strcat sucess \n");
 		j--;
 
 	}
-
+	//printf("sucess, readBuf: %s \n", readBuf);
 	delete[] readBuf;
+	//printf("sucess end \n");
+	string tmpstr(newBuf);
+	//printf("size: %i \n", tmpstr.length());
+
 }
 
 void MyFAT::resize(char * text, int oldSize, int newSize) {

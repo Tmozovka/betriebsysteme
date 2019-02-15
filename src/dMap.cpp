@@ -122,6 +122,10 @@ int dMap::init(int startingBlock, BlockDevice *blocks) {
 		puffer[byteNr] = c;
 	}
 
+	string tstr(puffer);
+	for(int i=tstr.length();i<BLOCK_SIZE;i++)
+		puffer[i]=char(0);
+
 	blocks->write(startingBlock++, puffer);
 	//***********************************************************************************
 	//Nun dmap inhalt in Blockdevice schreiben
