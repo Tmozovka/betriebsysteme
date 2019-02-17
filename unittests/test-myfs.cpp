@@ -56,11 +56,13 @@ TEST_CASE( "my Funktionen in myfs testen", "[myfs]" ) {
 			struct stat st;
 			st.st_mode = S_IFREG | 0444;
 			stat(argv[i], &st);
-			off_t size=ceil((double)st.st_size/BD_BLOCK_SIZE)*BD_BLOCK_SIZE;
+
+			//off_t size=ceil((double)st.st_size/BD_BLOCK_SIZE)*BD_BLOCK_SIZE;
+			off_t size = st.st_size;
 			pufferAdd = new char[size];
 			fread(pufferAdd, size, 1, fin);
 			//printf("try to resize \n");
-			fs->resize(pufferAdd,st.st_size,size);
+			//fs->resize(pufferAdd,st.st_size,size);
 			//printf("REseised! \n");
 			//printf("try to add File! \n");
 			fs->addFile(argv[i],st.st_mode,st.st_mtime,size,pufferAdd);
@@ -155,11 +157,15 @@ TEST_CASE( "my Funktionen in myfs testen", "[myfs]" ) {
 			struct stat st;
 			st.st_mode = S_IFREG | 0444;
 			stat(argv[i], &st);
-			off_t size=ceil((double)st.st_size/BD_BLOCK_SIZE)*BD_BLOCK_SIZE;
+
+			//off_t size=ceil((double)st.st_size/BD_BLOCK_SIZE)*BD_BLOCK_SIZE;
+			off_t size = st.st_size;
 			pufferAdd = new char[size];
 			fread(pufferAdd, size, 1, fin);
 			//printf("try to resize \n");
-			fs->resize(pufferAdd,st.st_size,size);
+
+			//fs->resize(pufferAdd,st.st_size,size);
+
 			//printf("REseised! \n");
 			//printf("try to add File! \n");
 			fs->addFile(argv[i],st.st_mode,st.st_mtime,size,pufferAdd);
