@@ -62,6 +62,7 @@ MyFS::MyFS(char * nameCont) {
 	fat = new MyFAT();
 	root = new MyRoot();
 
+	printf("WORK WITH CONTAINER INIT : %s \n",nameCont );
 	blocks->open(nameCont);
 	dmap->read(DMAP_START, blocks);
 	fat->read(FAT_START, blocks);
@@ -126,7 +127,9 @@ int MyFS::readFile(const char *path, char *buf, size_t size, off_t offset,
 
 	// TODO: Implement this!
 	//printf("readFile start \n"); //funktioniert nicht
-	LOG("********************************************************************************************** ");LOG("readFile start ");LOGF("offset: %i, size: %i", offset, size);
+	LOG("********************************************************************************************** ");
+	LOG("readFile start ");
+	LOGF("offset: %i, size: %i", offset, size);
 	/*if (offset > size) // not possible
 	 RETURN(-1);*/
 
@@ -137,7 +140,7 @@ int MyFS::readFile(const char *path, char *buf, size_t size, off_t offset,
 	 }*/
 
 	//TODO: mit offset betrachten
-	char * buffer1 = new char[BD_BLOCK_SIZE];
+
 
 	MyFile * ft = new MyFile();
 	if (root->getFile(path, ft) == -1) {
@@ -160,20 +163,25 @@ int MyFS::readFile(const char *path, char *buf, size_t size, off_t offset,
 	int countBuf = 0;
 	int temp = 0;
 ////////////////////////////////////////////////////////////////////////
-	LOG(
-				"****************************************************************\n");
+	LOG("****************************************************************\n");
 		LOG("FAT: \n");
 		for (int i = 900; i != 950; i++) {
 
-			int next;
+			int next=0;
 			fat->getNext(i, &next);
 			//if((i+1)!=next)
 			LOGF("%i -> %i \n", i, next);
 		}
 	//////////////////////////////////////////////////////////////////////
+
+		char * buffer1 = new char[BD_BLOCK_SIZE];
+		//buffer1="";
+		//printf("buffer1: %s \n", buffer1);
 	while (currentBlock != -1 && blocksNumber != 0) {
 		if (blocks->read(currentBlock, buffer1) == 0) {
-			LOGF("buffer in currentBlock %i is : %s \n",currentBlock, buffer1);
+		//	LOGF("buffer in currentBlock %i is : %s \n",currentBlock, buffer1);
+			string tmp(buffer1);
+		printf("size buffer: %i, buffer in currentBlock %i is : %s \n",(int)tmp.length(),currentBlock, buffer1);
 
 			temp = 0;
 			while (*(buffer1) != '\0') {
@@ -268,6 +276,16 @@ int MyFS::addFile(const char * name, mode_t mode, time_t mtime, off_t size,
 							"error in addFile in fat.link(blocks[i], &blocks[i+1] \n");
 				}
 			}
+
+			string tmp(text);
+			printf("text size:%i \n", tmp.length());
+
+			if(tmp.length()<BLOCK_SIZE)
+			{
+				for(int i=tmp.length();i<BLOCK_SIZE;i++)
+					text[i]=char(0);
+			}
+
 
 			if (this->blocks->write(blocksUse[i], text) == -1) {
 				printf("error in addFile in this->blocks.write(i, \"try\") \n");

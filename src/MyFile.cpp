@@ -216,8 +216,9 @@ void MyFile::convertI(T & var, char * varT) {
 }
 
 MyFile::MyFile(char * buf) {
-	int count = 0;
 
+	int count = 0;
+printf("start name \n");
 	//name
 	convertS(this->name, writeVar(buf, FILE_NAME_SIZE, count));
 	buf += count;

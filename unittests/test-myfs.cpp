@@ -69,6 +69,7 @@ TEST_CASE( "my Funktionen in myfs testen", "[myfs]" ) {
 
 			delete [] pufferAdd;
 		}
+
 	}
 
 	//	printf("TRY TO COMPARE   REQUIRE( sizeRoot == fs->root->getSize());! \n");
@@ -176,6 +177,9 @@ TEST_CASE( "my Funktionen in myfs testen", "[myfs]" ) {
 	remove("containerTest2.bin");
 	bool a=*fs==*newFs;
 	REQUIRE(*fs==*newFs);
+
+	delete newFs;
+	delete fs;
 
 
 }

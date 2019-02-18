@@ -364,14 +364,19 @@ void MyRoot::read(int start, BlockDevice * blocks) {
 	char * buf = new char[BLOCK_SIZE];
 	blocks->read(start++, buf);
 	sizeRoot = atoi(buf);
+	delete[] buf;
 
 	if (sizeRoot != 0) {
 
 		for (int i = 0; i < sizeRoot; i++) {
+			buf = new char[BLOCK_SIZE];
 			blocks->read(start++, buf);
 			printf("blocks.read buf %i : %s \n", start - 1, buf);
-			MyFile * f = new MyFile(buf);
-			files.push_back(*f);
+			printf("HALLOOO %s \n", buf);
+			MyFile * file = new MyFile(buf);
+			files.push_back(*file);
+			delete file;
+			delete[] buf;
 
 		}
 
@@ -381,7 +386,8 @@ void MyRoot::read(int start, BlockDevice * blocks) {
 	} else
 		addressRoot = NULL;
 
-	delete[] buf;
+
+
 
 }
 
