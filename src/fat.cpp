@@ -334,6 +334,7 @@ void MyFAT::writeBlockDevice(BlockDevice * blocks, int start) {
 	delete[] temp;
 }
 
+
 /*
  void MyFAT::readBlockDevice(BlockDevice * blocks, int start, char * newBuf) {
 
@@ -365,6 +366,7 @@ void MyFAT::writeBlockDevice(BlockDevice * blocks, int start) {
  //printf("size: %i newBuf: %s \n", tmpstr.length(), newBuf);
 
  }*/
+
 
 void MyFAT::resize(char * text, int oldSize, int newSize) {
 
