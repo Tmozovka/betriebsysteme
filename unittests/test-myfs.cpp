@@ -13,7 +13,7 @@
 #include <string.h>
 
 using namespace std;
-
+/*
 // TODO: Implement your helper functions here!
 TEST_CASE( "my Funktionen in myfs testen", "[myfs]" ) {
 	FILE *fin;
@@ -99,8 +99,8 @@ TEST_CASE( "my Funktionen in myfs testen", "[myfs]" ) {
 		{
 			struct stat st;
 			stat(argv[i], &st);
-			off_t size=ceil((double)st.st_size/BD_BLOCK_SIZE)*BD_BLOCK_SIZE;
-			//off_t size=st.st_size;
+			//off_t size=ceil((double)st.st_size/BD_BLOCK_SIZE)*BD_BLOCK_SIZE;
+			off_t size=st.st_size;
 
 			pufferRead = new char[size];
 			int t= fs->readFile(argv[i], pufferRead,size,0,new fuse_file_info);
@@ -202,5 +202,5 @@ TEST_CASE( "my Funktionen in myfs testen", "[myfs]" ) {
 		delete fs;
 	}
 
-}
+}*/
 

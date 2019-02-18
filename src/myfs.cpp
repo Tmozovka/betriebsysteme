@@ -151,10 +151,11 @@ int MyFS::readFile(const char *path, char *buf, size_t size, off_t offset, struc
 	int fileSize = ft->getSize();
 	LOGF("readFile fileSize= ft->getSize() %i  \n", fileSize);
 	//int blocksNumber = ceil(fcopy.getSize() / BD_BLOCK_SIZE);
-	if (fileSize % BD_BLOCK_SIZE != 0) {
+	/*if (fileSize % BD_BLOCK_SIZE != 0) {
 		printf("File's size is false  fcopy.getSize() mod D_BLOCK_SIZE!=0 \n");
 		RETURN(-ENOENT);
-	}
+	}*/
+	//TODO : blocksNumber falsch
 	int blocksNumber = fileSize / BD_BLOCK_SIZE;
 	LOGF("blocksnumber in readFile : %i \n", blocksNumber);
 	//buf = new char [fcopy->getSize()];
@@ -164,16 +165,8 @@ int MyFS::readFile(const char *path, char *buf, size_t size, off_t offset, struc
 	int temp = 0;
 ////////////////////////////////////////////////////////////////////////
 	LOG("****************************************************************\n");
-<<<<<<< HEAD
-		LOG("FAT: \n");
-		for (int i = 900; i != 950; i++) {
 
-			int next=0;
-			fat->getNext(i, &next);
-			//if((i+1)!=next)
-			LOGF("%i -> %i \n", i, next);
-		}
-=======
+
 	LOG("FAT: \n");
 	for (int i = 900; i != 950; i++) {
 
@@ -182,7 +175,7 @@ int MyFS::readFile(const char *path, char *buf, size_t size, off_t offset, struc
 		//if((i+1)!=next)
 		LOGF("%i -> %i \n", i, next);
 	}
->>>>>>> 9aad0a4eaa5e3eee4ee491837331aaec70032ea3
+
 	//////////////////////////////////////////////////////////////////////
 
 		char * buffer1 = new char[BD_BLOCK_SIZE];
@@ -190,13 +183,13 @@ int MyFS::readFile(const char *path, char *buf, size_t size, off_t offset, struc
 		//printf("buffer1: %s \n", buffer1);
 	while (currentBlock != -1 && blocksNumber != 0) {
 		if (blocks->read(currentBlock, buffer1) == 0) {
-<<<<<<< HEAD
+
 		//	LOGF("buffer in currentBlock %i is : %s \n",currentBlock, buffer1);
 			string tmp(buffer1);
 		printf("size buffer: %i, buffer in currentBlock %i is : %s \n",(int)tmp.length(),currentBlock, buffer1);
-=======
+
 			LOGF("buffer in currentBlock %i is : %s \n", currentBlock, buffer1);
->>>>>>> 9aad0a4eaa5e3eee4ee491837331aaec70032ea3
+
 
 			temp = 0;
 			while (*(buffer1) != '\0') {
