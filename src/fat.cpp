@@ -295,40 +295,7 @@ void MyFAT::writeBlockDevice(BlockDevice * blocks, int start) {
 	delete[] temp;
 }
 
-<<<<<<< HEAD
-void MyFAT::readBlockDevice(BlockDevice * blocks, int start, char * newBuf) {
 
-	char * readBuf = new char[BLOCK_SIZE];
-	printf("start read BlockDevice \n");
-	blocks->read(start, readBuf);
-	//string tmp( readBuf);
-	//printf("size ReadBuf : %i readBuf: %s \n",tmp.length(), readBuf);
-	char * trash;
-	int j = (int) strtol(readBuf, &trash, 10);
-	//int j = atoi(readBuf);
-	//printf("nrBlocks read from %i : %i \n", start, j);
-	start++;
-
-	int i = start;
-	while (j != 0) {
-		//printf("blocks->read from block %i  \n", i);
-		blocks->read(i++, readBuf);
-		//	printf("bloks read success readBuf:%s \n", readBuf);
-		strcat(newBuf, readBuf);
-		//	printf("strcat sucess ");
-		j--;
-
-	}
-	//printf("sucess, readBuf: %s \n", readBuf);
-	delete[] readBuf;
-	//printf("sucess end \n");
-	string tmpstr(newBuf);
-	//printf("size: %i newBuf: %s \n", tmpstr.length(), newBuf);
-
-}
-=======
-
->>>>>>> 9aad0a4eaa5e3eee4ee491837331aaec70032ea3
 
 void MyFAT::resize(char * text, int oldSize, int newSize) {
 

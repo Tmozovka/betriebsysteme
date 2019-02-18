@@ -128,75 +128,84 @@ int MyFS::readFile(const char *path, char *buf, size_t size, off_t offset, struc
 	//printf("readFile start \n"); //funktioniert nicht
 	LOG("********************************************************************************************** ");
 	LOG("readFile start ");
-	LOGF("offset: %i, size: %i", offset, size);
-	/*if (offset > size) // not possible
-	 RETURN(-1);*/
 
-	/*if(fuseOpen(path,fileInfo)==-1)
-	 {
-	 printf("error in fuseOpen \n");
-	 RETURN(-EPERM);
-	 }*/
+	//todo hier vielleicht noch irgendwas in fileInfo prüfen?
 
-	//TODO: mit offset betrachten
-
-
-	MyFile * ft = new MyFile();
-	if (root->getFile(path, ft) == -1) {
+	//Informationen zu file abrufen
+	MyFile * file = new MyFile();
+	int returnValue;
+	returnValue=root->getFile(path, file);
+	if ( returnValue == -1) {
 		//printf("can't get file from root root.getFile(path, &fcopy) \n");
 		LOG("can't get file from root root.getFile(path, &fcopy) \n");
 		RETURN(-ENOENT);
 	}
 
-	int fileSize = ft->getSize();
-	LOGF("readFile fileSize= ft->getSize() %i  \n", fileSize);
-	//int blocksNumber = ceil(fcopy.getSize() / BD_BLOCK_SIZE);
-	if (fileSize % BD_BLOCK_SIZE != 0) {
-		printf("File's size is false  fcopy.getSize() mod D_BLOCK_SIZE!=0 \n");
-		RETURN(-ENOENT);
+	int fileSize = file->getSize();
+
+	//grenzüberschreitung überprüfen
+	if(offset+size>fileSize){
+		LOG("Requested Postion not within filesize");
+		RETURN(-EINVAL);	//TODO ist das der korrekte fehlercode: (Invalid argument)?
 	}
-	int blocksNumber = fileSize / BD_BLOCK_SIZE;
-	LOGF("blocksnumber in readFile : %i \n", blocksNumber);
-	//buf = new char [fcopy->getSize()];
+
+	//Auszulesende stelle berechen
+	int blockNumber = offset/BD_BLOCK_SIZE;
+	int positionInBlock = offset%BD_BLOCK_SIZE;
+
+
+	//blocknummer des blockNummer-ten Block suchen
+	int currentBlock = file->getFirstBlock();
+	for(int i = 0; i<blockNumber; i++){ // blockNumber-mal häufig den nächsten Block suchen TODO: ist das so richtig? +-1 block?
+		int next = 0;
+		fat->getNext(currentBlock,&next);
+		currentBlock = next;
+	}
+
+	char * readBuf = new char[BD_BLOCK_SIZE];
+	int bytesRead = 0;
+	//Auslesen bis size blöcke gelesen
+	while(bytesRead<=size){
+		blocks->read(currentBlock,readBuf);
+
+		//Ausgelesene Bytes in buffer schreiben, bis readbuffer-ende oder genug gelesen
+		while(positionInBlock<BD_BLOCK_SIZE && bytesRead<=size){
+			buf[bytesRead++]=readBuf[positionInBlock++];
+		}
+		positionInBlock=0;
+
+		//Nächste Blocknummer holen
+		int next = 0;
+		fat->getNext(currentBlock,&next);
+		currentBlock = next;
+	}
+
+	delete[] readBuf;
+	delete file;
+
+	RETURN(0);
+/*
 	int sizeWrite = 0;
+
 	int currentBlock = ft->getFirstBlock();
 	int countBuf = 0;
 	int temp = 0;
-////////////////////////////////////////////////////////////////////////
-	LOG("****************************************************************\n");
-<<<<<<< HEAD
-		LOG("FAT: \n");
-		for (int i = 900; i != 950; i++) {
 
-			int next=0;
-			fat->getNext(i, &next);
-			//if((i+1)!=next)
-			LOGF("%i -> %i \n", i, next);
-		}
-=======
-	LOG("FAT: \n");
-	for (int i = 900; i != 950; i++) {
 
-		int next;
-		fat->getNext(i, &next);
-		//if((i+1)!=next)
-		LOGF("%i -> %i \n", i, next);
-	}
->>>>>>> 9aad0a4eaa5e3eee4ee491837331aaec70032ea3
-	//////////////////////////////////////////////////////////////////////
+
 
 		char * buffer1 = new char[BD_BLOCK_SIZE];
 		//buffer1="";
 		//printf("buffer1: %s \n", buffer1);
 	while (currentBlock != -1 && blocksNumber != 0) {
 		if (blocks->read(currentBlock, buffer1) == 0) {
-<<<<<<< HEAD
+
 		//	LOGF("buffer in currentBlock %i is : %s \n",currentBlock, buffer1);
 			string tmp(buffer1);
 		printf("size buffer: %i, buffer in currentBlock %i is : %s \n",(int)tmp.length(),currentBlock, buffer1);
-=======
+
 			LOGF("buffer in currentBlock %i is : %s \n", currentBlock, buffer1);
->>>>>>> 9aad0a4eaa5e3eee4ee491837331aaec70032ea3
+
 
 			temp = 0;
 			while (*(buffer1) != '\0') {
@@ -205,7 +214,7 @@ int MyFS::readFile(const char *path, char *buf, size_t size, off_t offset, struc
 				sizeWrite++;
 				temp++;
 				/*if(temp==BD_BLOCK_SIZE-1)
-				 break;*/
+				 break;
 			}
 			*buf = '\0';
 			buffer1 -= temp;
@@ -253,7 +262,8 @@ int MyFS::readFile(const char *path, char *buf, size_t size, off_t offset, struc
 	LOG("delete[] ft sucess \n");
 
 	LOG("readFile success \n");
-	RETURN(0);
+	*/
+
 }
 // int fuseCreate(const char *, mode_t, struct fuse_file_info *);
 int MyFS::addFile(const char * name, mode_t mode, time_t mtime, off_t size, char * text) {
@@ -588,55 +598,24 @@ int MyFS::fuseOpen(const char *path, struct fuse_file_info *fileInfo) { // How t
 }
 
 int MyFS::fuseRead(const char *path, char *buf, size_t size, off_t offset, struct fuse_file_info *fileInfo) {
-	LOGF("fuseRead start path: %s \n", path);
-	LOGF("size: %i", size);
+	LOGF("fuseRead start path: %s size: %i offset: %i \n",path,size,offset);
 
-	LOGF("root->existName(%s) == %i \n", path + 1, root->existName(path + 1));
-
-	if (!root->existName(path + 1)) {
+	//Überprüfen, dass file existiert
+	int returnValue = root->existName(path + 1);
+	LOGF("root->existName(%s) == %i \n", path + 1, returnValue);
+	if (!returnValue) {
 		RETURN(-ENOENT);LOG("root->existName(path+1)==0 \n");
 	}
-	LOG("1");
-
-	MyFile * fcopy = new MyFile();
-	if (root->getFile(path + 1, fcopy) == -1) {
-		LOG("can't get file from root root.getFile(path, &fcopy) \n");
-		RETURN(-ENOENT);
-	}
-
-	/*	if(offset>size)
-	 RETURN(-1);*/
-
-	//buf = new char[size];
-	LOG("2");
-
-	// TODO: Implement this!
 
 	readFile(path + 1, buf, size, offset, fileInfo);
-	//LOGF("%s \n",buf);
+
 	//printf("%s \n",buf);
-	//RETURN(size);
 	//LOGF("buf in fuseRead: %s", buf);
 
-	int count = 0;
-	while (*(buf) != '\0') {
-		buf++;
-		count++;
-	}
-	LOGF("count: %i \n", count);
-	//*(buf++)=char(10);
-	//count++;
-	//*(buf)=char(0);
-
-	buf -= count;
-
-	//size = fcopy->getSize();
-
-	delete fcopy;
-	return count;
-	//return fcopy->getSize();
-
+	return size;
 }
+
+
 /*int MyFS::fuseWrite
  - mit fuseWrite kann man den Inhalt einer Datei veraendern
  - mit size kann ich festlegen, wie viel ich veraendern moechte, mit offset, wo in der Datei ich
