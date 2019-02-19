@@ -5,7 +5,7 @@
 //  Created by Oliver Waldhorst on 15.12.17.
 //  Copyright © 2017 Oliver Waldhorst. All rights reserved.
 //
-/*
+
 #include "catch.hpp"
 
 #include "helper.hpp"
@@ -71,6 +71,7 @@ TEST_CASE( "my Funktionen in myfs testen", "[myfs]" ) {
 
 			delete [] pufferAdd;
 		}
+		fclose(fin);
 
 	}
 
@@ -102,13 +103,62 @@ TEST_CASE( "my Funktionen in myfs testen", "[myfs]" ) {
 			//off_t size=ceil((double)st.st_size/BD_BLOCK_SIZE)*BD_BLOCK_SIZE;
 			off_t size=st.st_size;
 
-			pufferRead = new char[size];
+			pufferRead = new char[size+1];
+
+			//richtigkeit ausgelesene ueberprueffen
 			int t= fs->readFile(argv[i], pufferRead,size,0,new fuse_file_info);
-			REQUIRE(t==0);
-			//	printf(" REQUIRE(t==0) \n");
-			//	printf("read File %s : %s \n",argv[i],pufferRead);
+			pufferRead[size]=char(0);
+			REQUIRE(t==size);
+				printf("read File %s : %s \n",argv[i],pufferRead);
+
+			char * pufferRead2 = new char[size+1];
+			int t2= fs->readFile(argv[i], pufferRead2,size,0,new fuse_file_info);
+			pufferRead2[size]=char(0);
+			printf("read File 2 %s : %s \n",argv[i],pufferRead2);
+			REQUIRE(t2==size);
+
+			REQUIRE(strcmp(pufferRead2,pufferRead)==0);
+
+			char * pufferRead3 = new char[size+1];
+			fin = fopen(argv[i], "rwb");
+			fread(pufferRead3, size, 1, fin);
+			pufferRead3[size]=char(0);
+			printf("read File 3 with fread %s : %s \n",argv[i],pufferRead3);
+			REQUIRE(strcmp(pufferRead2,pufferRead3)==0);
 
 			delete [] pufferRead;
+			delete [] pufferRead2;
+			delete [] pufferRead3;
+
+			for(int j=0;j<10;j++)
+			{
+			int offset = rand()%(size-1);
+			int readSize=size-offset;
+			printf("readSize: %i \n", readSize);
+
+			pufferRead3 = new char[readSize+1];
+			fseek(fin, offset, SEEK_SET);
+			fread(pufferRead3, readSize, 1, fin);
+			pufferRead3[readSize]=char(0);
+			printf("read with fssek with offset %i , puffer %s \n end fseek\n", offset, pufferRead3);
+
+			pufferRead2 = new char[readSize+1];
+			t2= fs->readFile(argv[i], pufferRead2,readSize,offset,new fuse_file_info);
+			printf("read with readFile from container with offset %i , puffer %s \n", offset, pufferRead2);
+			pufferRead2[readSize]=char(0);
+			REQUIRE(t2==readSize);
+			REQUIRE(strcmp(pufferRead2,pufferRead3)==0);
+
+
+			delete [] pufferRead2;
+			delete [] pufferRead3;
+
+			}
+
+
+
+			fclose(fin);
+
 		}
 		//
 		//fclose(fin);
@@ -202,6 +252,7 @@ TEST_CASE( "my Funktionen in myfs testen", "[myfs]" ) {
 		delete fs;
 	}
 
+
 }
 
-*/
+

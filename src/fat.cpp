@@ -16,7 +16,7 @@ void MyFAT::showFat(int start, int end) {
 	}
 }
 
-int MyFAT::unLink(int current) { //todo fehle behandeln + header bearbeiten
+int MyFAT::unLink(int current) {
 	if (current >= size || current < 0)
 		return -1;
 	else
@@ -27,7 +27,7 @@ int MyFAT::unLink(int current) { //todo fehle behandeln + header bearbeiten
 
 int MyFAT::link(int current, int* next) {
 
-	if (*next >= size || *next < 0 || current >= size || current < 0)
+	if (*next >= size || *next < -1 || current >= size || current < 0)
 		return -1;
 	else
 		table[current] = *next;

@@ -1,4 +1,4 @@
-// TODO LinkedList, bibliotheken anschauen
+
 
 #include <iostream>
 #include "root.h"
@@ -37,7 +37,7 @@ MyRoot::MyRoot(string name, off_t size, mode_t mode, int firstBlock) {
 MyRoot::MyRoot(char **array) {
 	sizeRoot = sizeof(array);
 	for (int i = 0; i <= sizeRoot; i++, array++) {
-		//TODO: Funktioniert der Konstruktor ?Oder array
+
 		MyFile *f = new MyFile(*array);
 		this->addFile(f->getName(), f->getSize(), f->getMode(), f->getLastMod(),
 				f->getFirstBlock());
@@ -87,10 +87,6 @@ const MyFile * f = new MyFile(name, getuid(), getgid(), size, mode, time(NULL),
 
 //Wenn erstes File
 if (sizeRoot == 1) {
-	//todo: ich(julia) habe hier folgendes entfernt:
-	//addressRoot = new MyFile(f); weil so ein konstruktor nicht existiert
-	//Macht es noch das richtige? Bitte Überprüfen
-
 	addressRoot = new MyFile(name, getuid(), getgid(), size, mode, time(NULL),
 			st_mtime, time(NULL), firstBlock);
 }
@@ -124,7 +120,7 @@ MyFile *f2 = new MyFile();
 if (this->sizeRoot != root->sizeRoot)
 	return false;
 
-//TODO: adressroot compere //braucht man das ?
+
 
 for (int k = 0; k <= this->sizeRoot; k++) {
 	if ((thisRoot[k] == similarRoot[k]) == false) {

@@ -15,7 +15,7 @@
 
 int main(int argc, char *argv[]) {
 
-	// TODO: Implement file system generation & copying of files here
+
 
 	printf("start \n");
 	printf("argc: %i \n", argc);
@@ -96,13 +96,18 @@ int main(int argc, char *argv[]) {
 			printf("size von der Datei: %i st.st_size : %i \n", size, st.st_size );
 			pufferAdd = new char[size];
 			fread(pufferAdd, size, 1, fin);
+			if(size<5000)
+			printf("pufferAdd : %s \n", pufferAdd);
 			pufferAdd[st.st_size]=char(10);
+			/*
+			for(int j=st.st_size+1;j<size;j++)
+						{
+							pufferAdd[j]=char(0);
+						}*/
+
 			//printf("die Inhalt von %s : %s \n", argv[i],pufferAdd);
 			//fs->resize(pufferAdd, st.st_size+1, size);
-			for(int j=st.st_size+1;j<size;j++)
-			{
-				pufferAdd[j]=char(0);
-			}
+
 			//LOGF("File: %s ,size: %i, puffer: %s  \n",argv[i],size, pufferAdd );
 
 			/*char * name = new char [255];

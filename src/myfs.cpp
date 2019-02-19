@@ -10,7 +10,7 @@
 
 #undef DEBUG
 
-// TODO: Comment this to reduce debug messages
+//  Comment this to reduce debug messages
 #define DEBUG
 #define DEBUG_METHODS
 #define DEBUG_RETURN_VALUES
@@ -124,7 +124,8 @@ void MyFS::resize(char * text, int oldSize, int newSize) {
 //int fuseRead(const char *path, char *buf, size_t size, off_t offset, struct fuse_file_info *fileInfo);
 int MyFS::readFile(const char *path, char *buf, size_t size, off_t offset, struct fuse_file_info *fileInfo) {
 
-	// TODO: Implement this!
+	//size++;
+
 	//printf("readFile start \n"); //funktioniert nicht
 	LOG("********************************************************************************************** ");
 	LOGF("readFile start , size: %i, offset: %i \n", (int)size, (int)offset);
@@ -149,49 +150,60 @@ int MyFS::readFile(const char *path, char *buf, size_t size, off_t offset, struc
 		printf("File's size is false  fcopy.getSize() mod D_BLOCK_SIZE!=0 \n");
 		RETURN(-ENOENT);
 	}*/
-	//TODO : blocksNumber falsch
-	int blocksNumber = fileSize / BD_BLOCK_SIZE;
-	LOGF("blocksnumber in readFile : %i \n", blocksNumber);
+
+	int usedBlocks = fileSize / BD_BLOCK_SIZE;
+	if(fileSize % BD_BLOCK_SIZE!=0)
+		usedBlocks++;
+	LOGF("usedBlocks in readFile : %i \n", usedBlocks);
 	//buf = new char [fcopy->getSize()];
 
 
 	//grenzüberschreitung überprüfen
-	if((int)offset+(int)size>fileSize){
+/*	if((int)offset+(int)size+1>usedBlocks*BD_BLOCK_SIZE){
 		LOG("Requested Postion not within filesize");
 		RETURN(-EINVAL);	//TODO ist das der korrekte fehlercode: (Invalid argument)?
-	}
+	}*/
 
 	//Auszulesende stelle berechen
+	LOGF("511/512 = %i \n", (int)(511/512));
 	int blockNumber = offset/BD_BLOCK_SIZE;
+	LOGF("blockNumber: %i \n", blockNumber);
 	int positionInBlock = offset%BD_BLOCK_SIZE;
+	LOGF("positionInBlock: %i \n", positionInBlock);
 
 
 	//blocknummer des blockNummer-ten Block suchen
 	int currentBlock = file->getFirstBlock();
+	LOGF("currentBlock: %i ->",currentBlock );
 	for(int i = 0; i<blockNumber; i++){ // blockNumber-mal häufig den nächsten Block suchen TODO: ist das so richtig? +-1 block?
 		int next = 0;
 		fat->getNext(currentBlock,&next);
 		currentBlock = next;
+		LOGF("currentBlock: %i \n",currentBlock );
 	}
 
 	char * readBuf = new char[BD_BLOCK_SIZE];
 	int bytesRead = 0;
 	int testcount=0;
+
+	if(size>fileSize)
+		size=fileSize;
+
 	//Auslesen bis size blöcke gelesen
-	while(bytesRead<=(int)size){
+	while(bytesRead<(int)size){
 		testcount++;
 		blocks->read(currentBlock,readBuf);
 		//if(testcount==1)
 		//{
 			string temp(readBuf);
-			printf("size from readBuf: %i readBuf: %s \n",temp.length() , readBuf);
+			//printf("size from readBuf: %i readBuf: %s \n",temp.length() , readBuf);
 
 		//}
 		//Ausgelesene Bytes in buffer schreiben, bis readbuffer-ende oder genug gelesen
-		while(positionInBlock<BD_BLOCK_SIZE && bytesRead<=(int)size){
+		while(positionInBlock<BD_BLOCK_SIZE && bytesRead<(int)size){
 			buf[bytesRead++]=readBuf[positionInBlock++];
 		//	if(testcount==1)
-				printf("bytesRead: %i, positionInBlock: %i , buf[bytesRead]: %c,readBuf[positionInBlock]: %c\n ",bytesRead-1,positionInBlock-1, buf[bytesRead-1], readBuf[positionInBlock-1]);
+			//	printf("bytesRead: %i, positionInBlock: %i , buf[bytesRead]: %i,readBuf[positionInBlock]: %i\n ",bytesRead-1,positionInBlock-1, buf[bytesRead-1], readBuf[positionInBlock-1]);
 
 		}
 		positionInBlock=0;
@@ -200,13 +212,15 @@ int MyFS::readFile(const char *path, char *buf, size_t size, off_t offset, struc
 		int next = 0;
 		fat->getNext(currentBlock,&next);
 		currentBlock = next;
+		LOGF("currentBlock: %i \n",currentBlock );
 	}
-
-	printf("buf: %s \n", buf);
+	//buf[bytesRead]=char(0);
+	string strBuf(buf);
+	printf("sizeBuf: %i , buf: %s \n",strBuf.length(), buf);
 	delete[] readBuf;
 	delete file;
 
-	RETURN(0);
+	RETURN(size);
 /*
 >>>>>>> bcd816e55f499fb5569a0bef1c98158ec4d91eec
 	int sizeWrite = 0;
@@ -350,6 +364,7 @@ int MyFS::addFile(const char * name, mode_t mode, time_t mtime, off_t size, char
 		dmap->setUsed(blocksUse[i]);
 
 		//2. Verlinken in Fat
+		printf("blocksUse[i]:%i , blocksUse[i + 1]:%i \n", blocksUse[i],blocksUse[i + 1]);
 		returnCode = fat->link(blocksUse[i], &blocksUse[i + 1]);
 		if(returnCode ==-1){
 			printf("Error: Problem with linking blocks in fat");
@@ -367,17 +382,25 @@ int MyFS::addFile(const char * name, mode_t mode, time_t mtime, off_t size, char
 				buffer[index]= char(0);
 			}
 			//printf("Puffer %s \n",buffer);
+			if(size<5000)
+			printf("write in BlockNr %i , buffer : %s \n",blocksUse[i],buffer );
 			returnCode = this->blocks->write(blocksUse[i], buffer);
 			delete[] buffer;
 		}else{
+			/*char * temp = new char[BD_BLOCK_SIZE];
+			temp=text;
+			if(size<5000)
+			printf("write in BlockNr %i , buffer : %s \n",blocksUse[i],temp );*/
 			returnCode = this->blocks->write(blocksUse[i], text);
 			text += BD_BLOCK_SIZE; // pointer weiter schieben
+
 		}
 		if(returnCode ==-1){
 					printf("Error: Problem with writing to blockdevice");
 					RETURN(-1);
 				}
 		numberNeededBlocks--;
+		i++;
 	}
 
 
@@ -417,14 +440,17 @@ int MyFS::addFile(const char * name, mode_t mode, time_t mtime, off_t size, char
 
 //int fuseUnlink(const char *path);
 int MyFS::deleteFile(const char *name) {
-	//TODO: veraendern fuer richtige size
+
 	MyFile fcopy;
 	if (root->getFile(name, &fcopy) == -1 || root->deleteFile(name) == -1) {
 		printf("error in deleteFeil in root.getFile(name, &fcopy)==-1||root.deleteFile(name)==-1");
 		RETURN(-ENOENT);
 	}
 
+
 	int blocksNumber = fcopy.getSize() / BD_BLOCK_SIZE;
+	if(fcopy.getSize() % BD_BLOCK_SIZE!=0)
+		blocksNumber++;
 	int currentBlock = fcopy.getFirstBlock();
 	//////////////////////////////////////
 	char * text = new char[fcopy.getSize()];
@@ -649,12 +675,12 @@ int MyFS::fuseRead(const char *path, char *buf, size_t size, off_t offset, struc
 		RETURN(-ENOENT);LOG("root->existName(path+1)==0 \n");
 	}
 
-	readFile(path + 1, buf, size, offset, fileInfo);
 
 	//printf("%s \n",buf);
 	//LOGF("buf in fuseRead: %s", buf);
 
-	return size;
+	return readFile(path + 1, buf, size, offset, fileInfo);
+
 }
 
 
@@ -666,8 +692,8 @@ int MyFS::fuseRead(const char *path, char *buf, size_t size, off_t offset, struc
 int MyFS::fuseWrite(const char *path, const char *buf, size_t size, off_t offset, struct fuse_file_info *fileInfo) {
 	LOGM()
 	;
-	//TODO MODE prueffen
-	// TODO: Implement this!
+
+
 //long endSizeBuf=size;
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	LOGF("fusewrite %s \n", path);
@@ -1021,7 +1047,7 @@ int MyFS::fuseRelease(const char *path, struct fuse_file_info *fileInfo) {
 	LOGM()
 	;
 
-	// TODO: Implement this!
+	//todo delete puffer
 	//temporeres Zeug loeschen
 	fileInfo->fh = NULL;
 	//sp->closeOpen();

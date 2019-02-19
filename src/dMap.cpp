@@ -114,9 +114,9 @@ int dMap::init(int startingBlock, BlockDevice *blocks) {
 			} else {
 				c &= ~(1 << charBit); //unset charbit
 			}
-		//Wieso wird den Puffer zwei mal initialisiert? aber nur ein  mal geloescht
+
 	int pufferLength = BD_BLOCK_SIZE; //512
-	char * puffer = new char[pufferLength];
+	//char * puffer = new char[pufferLength];
 
 		}
 		puffer[byteNr] = c;

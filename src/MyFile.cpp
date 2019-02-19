@@ -3,7 +3,7 @@
 #include <stdlib.h>
 using namespace std;
 //Define the constructor
-//TODO FEHLE FINDEN
+
 MyFile::MyFile(string cname, uid_t cuser, gid_t cgroup, off_t csize,
 		mode_t cmode, time_t clastAccess, time_t clastMod,
 		time_t clastStatusChange, int cfirstBlock) {
@@ -24,7 +24,7 @@ MyFile::~MyFile() { //
 }
 
 //Define the constructor
-//TODO FEHLE FINDEN
+
 MyFile::MyFile() {
 	name = ""; //Dateiname
 	user = NULL; //Benutzer
