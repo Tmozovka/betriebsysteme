@@ -62,7 +62,7 @@ MyFS::MyFS(char * nameCont) {
 	fat = new MyFAT();
 	root = new MyRoot();
 
-	printf("WORK WITH CONTAINER INIT : %s \n",nameCont );
+	printf("WORK WITH CONTAINER INIT : %s \n", nameCont);
 	blocks->open(nameCont);
 	dmap->read(DMAP_START, blocks);
 	fat->read(FAT_START, blocks);
@@ -128,196 +128,194 @@ int MyFS::readFile(const char *path, char *buf, size_t size, off_t offset, struc
 
 	//printf("readFile start \n"); //funktioniert nicht
 	LOG("********************************************************************************************** ");
-	LOGF("readFile start , size: %i, offset: %i \n", (int)size, (int)offset);
+	LOGF("readFile start , size: %i, offset: %i \n", (int )size, (int )offset);
 
 	//todo hier vielleicht noch irgendwas in fileInfo prüfen?
 
 	//Informationen zu file abrufen
 	MyFile * file = new MyFile();
 	int returnValue;
-	returnValue=root->getFile(path, file);
-	if ( returnValue == -1) {
+	returnValue = root->getFile(path, file);
+	if (returnValue == -1) {
 		//printf("can't get file from root root.getFile(path, &fcopy) \n");
 		LOG("can't get file from root root.getFile(path, &fcopy) \n");
 		RETURN(-ENOENT);
 	}
 
-
-	int fileSize=file->getSize(); ;//= ft->getSize();
+	int fileSize = file->getSize();
+	;	//= ft->getSize();
 	LOGF("readFile fileSize= ft->getSize() %i  \n", fileSize);
 	//int blocksNumber = ceil(fcopy.getSize() / BD_BLOCK_SIZE);
 	/*if (fileSize % BD_BLOCK_SIZE != 0) {
-		printf("File's size is false  fcopy.getSize() mod D_BLOCK_SIZE!=0 \n");
-		RETURN(-ENOENT);
-	}*/
+	 printf("File's size is false  fcopy.getSize() mod D_BLOCK_SIZE!=0 \n");
+	 RETURN(-ENOENT);
+	 }*/
 
 	int usedBlocks = fileSize / BD_BLOCK_SIZE;
-	if(fileSize % BD_BLOCK_SIZE!=0)
+	if (fileSize % BD_BLOCK_SIZE != 0)
 		usedBlocks++;
 	LOGF("usedBlocks in readFile : %i \n", usedBlocks);
 	//buf = new char [fcopy->getSize()];
 
-
 	//grenzüberschreitung überprüfen
-/*	if((int)offset+(int)size+1>usedBlocks*BD_BLOCK_SIZE){
-		LOG("Requested Postion not within filesize");
-		RETURN(-EINVAL);	//TODO ist das der korrekte fehlercode: (Invalid argument)?
-	}*/
+	/*	if((int)offset+(int)size+1>usedBlocks*BD_BLOCK_SIZE){
+	 LOG("Requested Postion not within filesize");
+	 RETURN(-EINVAL);	//TODO ist das der korrekte fehlercode: (Invalid argument)?
+	 }*/
 
 	//Auszulesende stelle berechen
-	LOGF("511/512 = %i \n", (int)(511/512));
-	int blockNumber = offset/BD_BLOCK_SIZE;
+	LOGF("511/512 = %i \n", (int )(511 / 512));
+	int blockNumber = offset / BD_BLOCK_SIZE;
 	LOGF("blockNumber: %i \n", blockNumber);
-	int positionInBlock = offset%BD_BLOCK_SIZE;
+	int positionInBlock = offset % BD_BLOCK_SIZE;
 	LOGF("positionInBlock: %i \n", positionInBlock);
-
 
 	//blocknummer des blockNummer-ten Block suchen
 	int currentBlock = file->getFirstBlock();
-	LOGF("currentBlock: %i ->",currentBlock );
-	for(int i = 0; i<blockNumber; i++){ // blockNumber-mal häufig den nächsten Block suchen TODO: ist das so richtig? +-1 block?
+	LOGF("currentBlock: %i ->", currentBlock);
+	for (int i = 0; i < blockNumber; i++) { // blockNumber-mal häufig den nächsten Block suchen TODO: ist das so richtig? +-1 block?
 		int next = 0;
-		fat->getNext(currentBlock,&next);
+		fat->getNext(currentBlock, &next);
 		currentBlock = next;
-		LOGF("currentBlock: %i \n",currentBlock );
+		LOGF("currentBlock: %i \n", currentBlock);
 	}
 
 	char * readBuf = new char[BD_BLOCK_SIZE];
 	int bytesRead = 0;
-	int testcount=0;
+	int testcount = 0;
 
-	if(size>fileSize)
-		size=fileSize;
+	if (size > fileSize)
+		size = fileSize;
 
 	//Auslesen bis size blöcke gelesen
-	while(bytesRead<(int)size){
+	while (bytesRead < (int) size) {
 		testcount++;
-		blocks->read(currentBlock,readBuf);
+		blocks->read(currentBlock, readBuf);
 		//if(testcount==1)
 		//{
-			string temp(readBuf);
-			//printf("size from readBuf: %i readBuf: %s \n",temp.length() , readBuf);
+		string temp(readBuf);
+		//printf("size from readBuf: %i readBuf: %s \n",temp.length() , readBuf);
 
 		//}
 		//Ausgelesene Bytes in buffer schreiben, bis readbuffer-ende oder genug gelesen
-		while(positionInBlock<BD_BLOCK_SIZE && bytesRead<(int)size){
-			buf[bytesRead++]=readBuf[positionInBlock++];
-		//	if(testcount==1)
+		while (positionInBlock < BD_BLOCK_SIZE && bytesRead < (int) size) {
+			buf[bytesRead++] = readBuf[positionInBlock++];
+			//	if(testcount==1)
 			//	printf("bytesRead: %i, positionInBlock: %i , buf[bytesRead]: %i,readBuf[positionInBlock]: %i\n ",bytesRead-1,positionInBlock-1, buf[bytesRead-1], readBuf[positionInBlock-1]);
 
 		}
-		positionInBlock=0;
+		positionInBlock = 0;
 
 		//Nächste Blocknummer holen
 		int next = 0;
-		fat->getNext(currentBlock,&next);
+		fat->getNext(currentBlock, &next);
 		currentBlock = next;
-		LOGF("currentBlock: %i \n",currentBlock );
+		LOGF("currentBlock: %i \n", currentBlock);
 	}
 	//buf[bytesRead]=char(0);
 	string strBuf(buf);
-	printf("sizeBuf: %i , buf: %s \n",strBuf.length(), buf);
+	printf("sizeBuf: %i , buf: %s \n", strBuf.length(), buf);
 	delete[] readBuf;
 	delete file;
 
 	RETURN(size);
-/*
->>>>>>> bcd816e55f499fb5569a0bef1c98158ec4d91eec
-	int sizeWrite = 0;
+	/*
+	 >>>>>>> bcd816e55f499fb5569a0bef1c98158ec4d91eec
+	 int sizeWrite = 0;
 
-	int currentBlock = ft->getFirstBlock();
-	int countBuf = 0;
-	int temp = 0;
-<<<<<<< HEAD
-////////////////////////////////////////////////////////////////////////
-	LOG("****************************************************************\n");
-
-
-	LOG("FAT: \n");
-	for (int i = 900; i != 950; i++) {
-
-		int next;
-		fat->getNext(i, &next);
-		//if((i+1)!=next)
-		LOGF("%i -> %i \n", i, next);
-	}
-
-	//////////////////////////////////////////////////////////////////////
-=======
+	 int currentBlock = ft->getFirstBlock();
+	 int countBuf = 0;
+	 int temp = 0;
+	 <<<<<<< HEAD
+	 ////////////////////////////////////////////////////////////////////////
+	 LOG("****************************************************************\n");
 
 
+	 LOG("FAT: \n");
+	 for (int i = 900; i != 950; i++) {
 
->>>>>>> bcd816e55f499fb5569a0bef1c98158ec4d91eec
+	 int next;
+	 fat->getNext(i, &next);
+	 //if((i+1)!=next)
+	 LOGF("%i -> %i \n", i, next);
+	 }
 
-		char * buffer1 = new char[BD_BLOCK_SIZE];
-		//buffer1="";
-		//printf("buffer1: %s \n", buffer1);
-	while (currentBlock != -1 && blocksNumber != 0) {
-		if (blocks->read(currentBlock, buffer1) == 0) {
-
-		//	LOGF("buffer in currentBlock %i is : %s \n",currentBlock, buffer1);
-			string tmp(buffer1);
-		printf("size buffer: %i, buffer in currentBlock %i is : %s \n",(int)tmp.length(),currentBlock, buffer1);
-
-			LOGF("buffer in currentBlock %i is : %s \n", currentBlock, buffer1);
+	 //////////////////////////////////////////////////////////////////////
+	 =======
 
 
-			temp = 0;
-			while (*(buffer1) != '\0') {
-				*(buf++) = *(buffer1++);
-				countBuf++;
-				sizeWrite++;
-				temp++;
-				/*if(temp==BD_BLOCK_SIZE-1)
-				 break;
-			}
-			*buf = '\0';
-			buffer1 -= temp;
 
-		} else {
-			LOG("error in fuseREAD blocks.read(currentBlock, buffer) \n");
-			RETURN(-EPERM);
-		}
+	 >>>>>>> bcd816e55f499fb5569a0bef1c98158ec4d91eec
 
-		int neu = 0;
-		if (fat->getNext(currentBlock, &neu) == -1) {
-			LOG("error in fuseREAD fat.getNext(currentBlock,&currentBlock) \n");
-			RETURN(-ENOENT);
-		}
-		//if(currentBlock+1!=neu)
-		LOGF(" verweis currentBlock : %i , neuBlock: %i", currentBlock, neu);
-		currentBlock = neu;
+	 char * buffer1 = new char[BD_BLOCK_SIZE];
+	 //buffer1="";
+	 //printf("buffer1: %s \n", buffer1);
+	 while (currentBlock != -1 && blocksNumber != 0) {
+	 if (blocks->read(currentBlock, buffer1) == 0) {
 
-		blocksNumber--;
-	}
+	 //	LOGF("buffer in currentBlock %i is : %s \n",currentBlock, buffer1);
+	 string tmp(buffer1);
+	 printf("size buffer: %i, buffer in currentBlock %i is : %s \n",(int)tmp.length(),currentBlock, buffer1);
 
-	LOGF("sizewrite: %i \n", sizeWrite);
-	LOGF("fcopy->getSize() %i \n", fileSize);
-	if (sizeWrite == fileSize) {
-		*(buf) = char(0);
-		buf++;
-		countBuf++;
-	} else {
-		LOG("sizeWrite==fileSize false \n");
-		for (int i = sizeWrite; i < fileSize; i++) {
-			*buf = char(0);
-			buf++;
-			countBuf++;
-		}
-		LOG("end schleife \n");
-	}
+	 LOGF("buffer in currentBlock %i is : %s \n", currentBlock, buffer1);
 
-	buf -= countBuf;
-	//buf+=offset;
-	//LOGF("all buf is  : %s \n",buf);
 
-	delete[] buffer1;
-	LOG("delete[] buffer1 sucess \n");
-	delete ft;
-	LOG("delete[] ft sucess \n");
+	 temp = 0;
+	 while (*(buffer1) != '\0') {
+	 *(buf++) = *(buffer1++);
+	 countBuf++;
+	 sizeWrite++;
+	 temp++;
+	 /*if(temp==BD_BLOCK_SIZE-1)
+	 break;
+	 }
+	 *buf = '\0';
+	 buffer1 -= temp;
 
-	LOG("readFile success \n");
-	*/
+	 } else {
+	 LOG("error in fuseREAD blocks.read(currentBlock, buffer) \n");
+	 RETURN(-EPERM);
+	 }
+
+	 int neu = 0;
+	 if (fat->getNext(currentBlock, &neu) == -1) {
+	 LOG("error in fuseREAD fat.getNext(currentBlock,&currentBlock) \n");
+	 RETURN(-ENOENT);
+	 }
+	 //if(currentBlock+1!=neu)
+	 LOGF(" verweis currentBlock : %i , neuBlock: %i", currentBlock, neu);
+	 currentBlock = neu;
+
+	 blocksNumber--;
+	 }
+
+	 LOGF("sizewrite: %i \n", sizeWrite);
+	 LOGF("fcopy->getSize() %i \n", fileSize);
+	 if (sizeWrite == fileSize) {
+	 *(buf) = char(0);
+	 buf++;
+	 countBuf++;
+	 } else {
+	 LOG("sizeWrite==fileSize false \n");
+	 for (int i = sizeWrite; i < fileSize; i++) {
+	 *buf = char(0);
+	 buf++;
+	 countBuf++;
+	 }
+	 LOG("end schleife \n");
+	 }
+
+	 buf -= countBuf;
+	 //buf+=offset;
+	 //LOGF("all buf is  : %s \n",buf);
+
+	 delete[] buffer1;
+	 LOG("delete[] buffer1 sucess \n");
+	 delete ft;
+	 LOG("delete[] ft sucess \n");
+
+	 LOG("readFile success \n");
+	 */
 
 }
 // int fuseCreate(const char *, mode_t, struct fuse_file_info *);
@@ -328,109 +326,107 @@ int MyFS::addFile(const char * name, mode_t mode, time_t mtime, off_t size, char
 	LOGF("add file with name : %s \n", name);
 
 	int numberNeededBlocks = size / BD_BLOCK_SIZE;
-	int bytesInLastBlock = size%BD_BLOCK_SIZE;
+	int bytesInLastBlock = size % BD_BLOCK_SIZE;
 	//file passt nicht vollständig in blöcke
-	if(bytesInLastBlock!=0){
+	if (bytesInLastBlock != 0) {
 		numberNeededBlocks++;
 	}
 
 	LOGF("numberNeededBlocks : %i \n", numberNeededBlocks);
-	LOGF("BytesInLastBlock: %i \n",bytesInLastBlock);
+	LOGF("BytesInLastBlock: %i \n", bytesInLastBlock);
 
 	//array zum merken der blocknummern
-	int * blocksUse = new int[numberNeededBlocks+1];
+	int * blocksUse = new int[numberNeededBlocks + 1];
 	blocksUse[numberNeededBlocks] = -1; //keine Verlinkung vom letzten Block aus
 
 	int returnCode;
 
 	//Freie blöcke finden
-	returnCode= dmap->getFreeBlocks(numberNeededBlocks, &blocksUse);
-	if(returnCode ==-1){
+	returnCode = dmap->getFreeBlocks(numberNeededBlocks, &blocksUse);
+	if (returnCode == -1) {
 		printf("error in addFile no free blocks in dmap \n");
 		RETURN(-EPERM);
 	}
 
 	//file ins root schreiben
 	returnCode = root->addFile(name, size, mode, mtime, blocksUse[0]);
-	if(returnCode == -1){
+	if (returnCode == -1) {
 		printf("error in addFile in root->addFile(name, size, mode,st_mtime,blocks[0] \n");
 		return -1;
 	}
 
-
 	int i = 0;
-	while(numberNeededBlocks!=0){
+	while (numberNeededBlocks != 0) {
 		//1. Als belegt markieren
 		dmap->setUsed(blocksUse[i]);
 
 		//2. Verlinken in Fat
-		printf("blocksUse[i]:%i , blocksUse[i + 1]:%i \n", blocksUse[i],blocksUse[i + 1]);
+		printf("blocksUse[i]:%i , blocksUse[i + 1]:%i \n", blocksUse[i], blocksUse[i + 1]);
 		returnCode = fat->link(blocksUse[i], &blocksUse[i + 1]);
-		if(returnCode ==-1){
+		if (returnCode == -1) {
 			printf("Error: Problem with linking blocks in fat");
 			RETURN(-1);
 		}
 		// 3. Inhalt schreiben
 		//Ausnahme: letzter Block ist nicht ganz voll
-		if(numberNeededBlocks==1 && bytesInLastBlock!=0){
+		if (numberNeededBlocks == 1 && bytesInLastBlock != 0) {
 			char * buffer = new char[BD_BLOCK_SIZE];
 
-			for(int index = 0; index<bytesInLastBlock;index++){ // Gültigen Inhalt schreiben
-				buffer[index]= *text++;
+			for (int index = 0; index < bytesInLastBlock; index++) { // Gültigen Inhalt schreiben
+				buffer[index] = *text++;
 			}
-			for(int index = bytesInLastBlock;index<BD_BLOCK_SIZE; index++){ // Rest mit 0 füllen
-				buffer[index]= char(0);
+			for (int index = bytesInLastBlock; index < BD_BLOCK_SIZE; index++) { // Rest mit 0 füllen
+				buffer[index] = char(0);
 			}
 			//printf("Puffer %s \n",buffer);
-			if(size<5000)
-			printf("write in BlockNr %i , buffer : %s \n",blocksUse[i],buffer );
+			if (size < 5000)
+				printf("write in BlockNr %i , buffer : %s \n", blocksUse[i], buffer);
 			returnCode = this->blocks->write(blocksUse[i], buffer);
 			delete[] buffer;
-		}else{
+		} else {
 			/*char * temp = new char[BD_BLOCK_SIZE];
-			temp=text;
-			if(size<5000)
-			printf("write in BlockNr %i , buffer : %s \n",blocksUse[i],temp );*/
+			 temp=text;
+			 if(size<5000)
+			 printf("write in BlockNr %i , buffer : %s \n",blocksUse[i],temp );*/
 			returnCode = this->blocks->write(blocksUse[i], text);
 			text += BD_BLOCK_SIZE; // pointer weiter schieben
 
 		}
-		if(returnCode ==-1){
-					printf("Error: Problem with writing to blockdevice");
-					RETURN(-1);
-				}
+		if (returnCode == -1) {
+			printf("Error: Problem with writing to blockdevice");
+			RETURN(-1);
+		}
 		numberNeededBlocks--;
 		i++;
 	}
 
+	/*
+	 for (int i = 0; i < numberNeededBlocks; i++) {
+	 dmap->setUsed(blocksUse[i]);
 
-/*
-		for (int i = 0; i < numberNeededBlocks; i++) {
-			dmap->setUsed(blocksUse[i]);
+	 if (i + 1 != numberNeededBlocks) {
+	 if (fat->link(blocksUse[i], &blocksUse[i + 1]) == -1) {
+	 RETURN(-1);
+	 printf("error in addFile in fat.link(blocks[i], &blocks[i+1] \n");
+	 }
+	 }
 
-			if (i + 1 != numberNeededBlocks) {
-				if (fat->link(blocksUse[i], &blocksUse[i + 1]) == -1) {
-					RETURN(-1);
-					printf("error in addFile in fat.link(blocks[i], &blocks[i+1] \n");
-				}
-			}
+	 string tmp(text);
+	 printf("text size:%i \n", tmp.length());
 
-			string tmp(text);
-			printf("text size:%i \n", tmp.length());
-
-			if(tmp.length()<BLOCK_SIZE)
-			{
-				for(int i=tmp.length();i<BLOCK_SIZE;i++)
-					text[i]=char(0);
-			}
+	 if(tmp.length()<BLOCK_SIZE)
+	 {
+	 for(int i=tmp.length();i<BLOCK_SIZE;i++)
+	 text[i]=char(0);
+	 }
 
 
-			if (this->blocks->write(blocksUse[i], text) == -1) {
-				printf("error in addFile in this->blocks.write(i, \"try\") \n");
-			}
-			text += BD_BLOCK_SIZE;
-		}
-*/
+	 if (this->blocks->write(blocksUse[i], text) == -1) {
+	 printf("error in addFile in this->blocks.write(i, \"try\") \n");
+	 }
+	 text += BD_BLOCK_SIZE;
+	 }
+	 */
 
 	delete[] blocksUse;
 	LOG("addFile succes");
@@ -447,9 +443,8 @@ int MyFS::deleteFile(const char *name) {
 		RETURN(-ENOENT);
 	}
 
-
 	int blocksNumber = fcopy.getSize() / BD_BLOCK_SIZE;
-	if(fcopy.getSize() % BD_BLOCK_SIZE!=0)
+	if (fcopy.getSize() % BD_BLOCK_SIZE != 0)
 		blocksNumber++;
 	int currentBlock = fcopy.getFirstBlock();
 	//////////////////////////////////////
@@ -561,7 +556,8 @@ int MyFS::fuseGetattr(const char *path, struct stat *st) {
 }
 
 int MyFS::fuseMknod(const char *path, mode_t mode, dev_t dev) {
-	LOGM();
+	LOGM()
+	;
 
 	LOGF("fuseMKnod start , path : %s \n ", path);
 
@@ -594,12 +590,12 @@ int MyFS::fuseMknod(const char *path, mode_t mode, dev_t dev) {
 	}
 
 	// 2. File ins root schreiben
-	returnCode =root->addFile(path + 1, 0, mode, time(NULL), blocks[0]);
+	returnCode = root->addFile(path + 1, 0, mode, time(NULL), blocks[0]);
 	if (returnCode == -1) {
 		LOG("can't add file in root. Error in root.addFile(path, 0, S_IFREG | 0444) \n");
 		RETURN(-EPERM);
 	}
-	LOGF("Added File : %s to root \n ", path+1);
+	LOGF("Added File : %s to root \n ", path + 1);
 
 	//3. Block als belegt markieren
 	returnCode = dmap->setUsed(blocks[0]);
@@ -666,7 +662,7 @@ int MyFS::fuseOpen(const char *path, struct fuse_file_info *fileInfo) { // How t
 }
 
 int MyFS::fuseRead(const char *path, char *buf, size_t size, off_t offset, struct fuse_file_info *fileInfo) {
-	LOGF("fuseRead start path: %s size: %i offset: %i \n",path,size,offset);
+	LOGF("fuseRead start path: %s size: %i offset: %i \n", path, size, offset);
 
 	//Überprüfen, dass file existiert
 	int returnValue = root->existName(path + 1);
@@ -675,14 +671,12 @@ int MyFS::fuseRead(const char *path, char *buf, size_t size, off_t offset, struc
 		RETURN(-ENOENT);LOG("root->existName(path+1)==0 \n");
 	}
 
-
 	//printf("%s \n",buf);
 	//LOGF("buf in fuseRead: %s", buf);
 
 	return readFile(path + 1, buf, size, offset, fileInfo);
 
 }
-
 
 /*int MyFS::fuseWrite
  - mit fuseWrite kann man den Inhalt einer Datei veraendern
@@ -693,224 +687,374 @@ int MyFS::fuseWrite(const char *path, const char *buf, size_t size, off_t offset
 	LOGM()
 	;
 
-
-//long endSizeBuf=size;
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	LOGF("fusewrite %s \n", path);
 	LOGF("fusewrite buf %s \n", buf);
 	LOGF("in fuseWrite size : %i offset: %i \n", size, offset);
 
-	string* s = root->getArray();
-
-	for (int i = 0; i < root->getSize(); i++)
-		LOGF("s:  %s \n", s[i].c_str());
-
-	MyFile *flink = new MyFile();
-	LOGF("try to get %s \n", path + 1);
-
-	string tempStr(path + 1);
-	if (root->getFile(tempStr, flink) == -1) {
-		LOG("error in fuseWrite in root.getFile( path, &fcopy) \n");
+	//fileinfos holen
+	MyFile *file = new MyFile();
+	int returnValue;
+	returnValue = root->getFile(path + 1, file);
+	if (returnValue == -1) {
+		LOGF("cant find file with name %s in root", path + 1);
 		RETURN(-EPERM);
 	}
-	LOG("2 \n");
 
-	int blocksNumber;
-	size_t newSizeFile;
-	char * newBuf;
-	int newBufCount = 0;
-	int ret = size;
+	//Aktuelle file eigenschaften
+	int fileSize = file->getSize();
+	int usedBlocks = fileSize / BD_BLOCK_SIZE;
+	int bytesLastBlock = fileSize % BD_BLOCK_SIZE;
+	if (bytesLastBlock != 0) {
+		usedBlocks++;
+	}
+	LOGF("fileSize: %i usedBlocks: %i bytesLAstBlock: %i\n", fileSize, usedBlocks, bytesLastBlock);
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	if (offset != 0) {
-		LOG("offset ist ungleich 0 \n");
-		int temp = ceil((double) flink->getSize() / BD_BLOCK_SIZE) * BD_BLOCK_SIZE;
-		LOGF("anzahl der Bytes in alte Datei: %i \n", temp);
-		if (offset == temp) {
-			LOGF("offset ist gleich anzahl an Bloecke %i == %i \n", offset, temp);
+	//Weitere Blöcke allokieren wenn benötigt
+	int bytesToAdd = ((int) offset + (int) size) - (usedBlocks * BD_BLOCK_SIZE);
+	LOGF("bytesToAdd: %i\n", bytesToAdd);
 
-			///anzahlBytes in Datei/////////////////////////////////
-			char * tempBuf = new char[flink->getSize()];
-			readFile(path + 1, tempBuf, flink->getSize(), 0, fileInfo);
-
-			int bytesFile = 0;
-			while (*tempBuf != char(0)) {
-				bytesFile++;
-				tempBuf++;
-			}
-
-			tempBuf -= bytesFile;
-			LOGF("Bytes in File: %i \n", bytesFile);
-			LOGF("Bytes in tempBuf: %s \n", tempBuf);
-			delete[] tempBuf;
-			LOG("delete tempBuf sucess \n");
-			////////////////////////////////////////////////////////
-			LOG("count bytes sucess");
-
-			double allSize = ((int) size + bytesFile);
-			LOGF("allSize=(size+ (bytesFile - offset)): %f \n", allSize);
-			LOGF("ceil(allSize/ BD_BLOCK_SIZE) : %f \n", ceil((double)allSize/ BD_BLOCK_SIZE));
-			newSizeFile = ceil((double) allSize / BD_BLOCK_SIZE) * BD_BLOCK_SIZE;
-			LOGF("newSizeFile is %i \n", newSizeFile);
-
-			newBuf = new char[newSizeFile];
-
-			LOG("try to readFile \n");
-			readFile(path + 1, newBuf, size, 0, fileInfo);
-			LOGF("end readFile, newBuf: %s \n", newBuf);
-
-			int newCount = 0;
-			for (int i = 0; *newBuf != char(0); i++) {
-				newBuf++;
-				newCount++;
-			}
-			//(newBuf++)='\0';
-			//size += newCount;
-			/**(newBuf++)='\0';
-			 newCount++;*/
-			//int t=(int) size+newCount;
-			while (*buf != char(0)) {
-				*(newBuf++) = *(buf++);
-				newCount++;
-			}
-
-			newBuf -= newCount;
-			ret = newCount;
-		} else {
-			LOGF("offset ist ungleich anzahl an Bloecke %i == %i \n", offset, temp);
-			int newAddSize = ((int) size + (int) offset);
-			LOGF("so viel Bytes muessen hinzuegefuegt werden: size(%i) + offset(%i) = %i \n", size, offset, newAddSize);
-			if (newAddSize > temp) {
-
-				LOGF("es muss mehr Bytes(%) hinzuegefugt werden, als die Groesse der Datei (%i) \n", newAddSize, temp);
-				//die Datei wird groesse nach der ueberschreibung
-
-				//groeese die hinzuegefugt wird finden
-				int countBufForSize = 0;
-				//countBufForSize - groesse von buf
-				while (*buf != char(0)) {
-					buf++;
-					countBufForSize++;
-				}
-				buf -= countBufForSize;
-				/*int countFileSize = 0;
-				 //countFileSize - groesse von den text in der datei
-				 char * readBufTemp = new char[temp];
-				 readFile(path + 1, readBufTemp, size, 0, fileInfo);
-				 while (readBufTemp != char(0)) {
-				 readBufTemp++;
-				 countFileSize++;
-				 }*/
-
-				newSizeFile = ceil((double) newAddSize / BD_BLOCK_SIZE) * BD_BLOCK_SIZE;
-
-				int newCount = 0;
-				newBuf = new char[newSizeFile];
-				readFile(path + 1, newBuf, size, 0, fileInfo);
-				//buf bis offset auslesen
-				while (newCount < offset) {
-					newBuf++;
-					newCount++;
-				}
-
-				while (*buf != char(0)) {
-					*(newBuf++) = *(buf++);
-					newCount++;
-				}
-
-				newBuf -= newCount;
-				ret = newCount;
-
-			} else {
-				LOGF("es muss weniger Bytes(%i) hinzuegefugt werden, als die Groesse der Datei (%i) \n", newAddSize,
-						temp);
-				int newCount = 0;
-				//die Groesse bleibt gleich
-				newSizeFile = temp;
-				newBuf = new char[newSizeFile];
-				readFile(path + 1, newBuf, size, 0, fileInfo);
-				//buf bis offset auslesen
-				while (newCount < offset) {
-					newBuf++;
-					newCount++;
-				}
-
-				while (*buf != char(0)) {
-					*(newBuf++) = *(buf++);
-					newCount++;
-				}
-
-				while (*newBuf != char(0)) {
-					newBuf++;
-					newCount++;
-				}
-
-				newBuf -= newCount;
-				ret = newCount;
-			}
-		}
-	} else {
-		LOG("offset ist gleich 0 \n");
-
-		///////////////////////////////version : den ganzen Text in alte Datei muss geloescht werden
-		newSizeFile = ceil((double) size / BD_BLOCK_SIZE) * BD_BLOCK_SIZE;
-
-		newBuf = new char[newSizeFile];
-		int newCount = 0;
-		for (int i = 0; i < (int) size; i++) {
-			*(newBuf++) = *(buf++);
-			newCount++;
+	if (bytesToAdd > 0) {
+		LOG("byteyToAdd > 0 -> new blocks are going to be added");
+		// Wenn im letzen Block noch platz, dann diesem Platz abziehen
+		if (bytesLastBlock != 0) {
+			bytesToAdd -= BD_BLOCK_SIZE - bytesLastBlock;
 		}
 
-		newBuf -= newCount;
-		ret = newCount;
+		// Benötigte Blöcke berechen
+		int blocksToAdd = bytesToAdd / BD_BLOCK_SIZE;
+		if (bytesToAdd % BD_BLOCK_SIZE != 0) { //weitern block hinzu, wenn es nicht aufgeht
+			blocksToAdd++;
+		}
+		LOGF("blocksToAdd: %i\n", blocksToAdd);
+
+		//Aus dmap freie blöcke suchen
+		int * blocksToAddArray = new int[blocksToAdd + 1];
+		blocksToAddArray[blocksToAdd] = -1;
+		dmap->getFreeBlocks(blocksToAdd, &blocksToAddArray);
+
+		//Letzten allokierten block bekommen
+		int currentBlock = file->getFirstBlock();
+		int next = 0;
+
+		while (1) {
+			fat->getNext(currentBlock, &next);
+			if (next != -1)
+				currentBlock = next;
+			else
+				break;
+		}
+
+		//Blöcke linken
+		returnValue = fat->link(currentBlock, &blocksToAddArray[0]);
+		if (returnValue == -1) {
+			LOGF("Error occured: Cant link  fat entry at Fatindex %i to block %i\n", currentBlock, blocksToAddArray[0]);
+			RETURN(-ENOMSG);  // No message of desired type
+		}
+		LOGF("position: %i  -> %i\n ", currentBlock, blocksToAddArray[0]);
+
+		for (int i = 0; i < blocksToAdd; i++) {
+			dmap->setUsed(blocksToAddArray[i]);
+			returnValue = fat->link(blocksToAddArray[i], &blocksToAddArray[i + 1]);
+
+			if (returnValue == -1) {
+				LOGF("Error occured: Cant link fat entry at Fatindex %i to block %i\n", i, blocksToAddArray[i]);
+				RETURN(-ENOMSG);  // No message of desired type
+			}
+			LOGF("position: %i  -> %i\n ", blocksToAddArray[i], blocksToAddArray[i + 1]);
+		}
 
 	}
 
-	LOGF("newBuf: %s \n", newBuf);
-	LOGF("ret: %i \n", ret);
 
-///////////////////////////////////////alte parameter loeschen////////////////////////////////////////////////////////
-	//if (offset == 0) {
-	char * text = new char[ BD_BLOCK_SIZE];
-	for (int i = 0; i < BD_BLOCK_SIZE; i++)
-		*(text++) = char(0);
-	text -= BD_BLOCK_SIZE;
-///////////////////////////////////////////////////
-	blocksNumber = (flink->getSize() / BD_BLOCK_SIZE);
-	int currentBlock = flink->getFirstBlock();
-	LOGF("erste Block am Anfang : %i \n", currentBlock);
-	LOGF("blocksNumber alt: %i \n", blocksNumber);
 
-	while (blocksNumber != 0 && currentBlock != -1) {
-		if (this->blocks->write(currentBlock, text) == -1) {
-			printf("error in addFile in this->blocks.write(i,    ) \n");
+	//Startposition zum schreiben berechen
+	int blockToWrite = offset / BD_BLOCK_SIZE;
+	int positionInBlock = offset % BD_BLOCK_SIZE;
+	LOGF("blockToWrite: %i positionInBlock: %i\n", blockToWrite, positionInBlock);
+
+	//Block zum schreiben suchen
+	int currentBlock = file->getFirstBlock();
+	int next = 0;
+	for (int i = 0; i < blockToWrite; i++) {
+		fat->getNext(currentBlock, &next);
+		currentBlock = next;
+	}
+	LOGF("First Block to write currentBlock:%i\n", currentBlock);
+
+	int bytesToWrite = size;
+	char * bufWrite = new char[BD_BLOCK_SIZE];
+	while (bytesToWrite != 0) {
+		LOG("start while");
+		//schreiben eines nicht kompletten Blocks
+		if (positionInBlock != 0 || bytesToWrite < BD_BLOCK_SIZE) {
+
+			if (blockToWrite > usedBlocks||size==0) {  // neu allokierter block //muss mit char(0) gefüllt werden
+				for (int i = 0; i < BD_BLOCK_SIZE; i++) {
+					bufWrite[i] = 0;
+				}
+			} else {  //bereits beschriebener block
+				blocks->read(currentBlock, bufWrite);
+			}
+
+			// zu schreibende Zeichen mit alten Zeichen kombinieren
+			LOGF("In currentBlock: %i wird an positionToWrite: %i geschrieben. bytesToWrite: %i\n", currentBlock,
+					positionInBlock, bytesToWrite);
+			while (bytesToWrite != 0) {
+				bufWrite[positionInBlock++] = *buf;
+				buf++;
+				bytesToWrite--;
+			}
+
+			blocks->write(currentBlock, bufWrite);
+			LOGF("bufWrite:%s End of Buffer\n", bufWrite);
+			positionInBlock = 0;
+			LOG("1\n");
+
+		} else {  //ganzen block schreiben
+			*bufWrite = *buf;
+			blocks->write(currentBlock, bufWrite);
+			LOGF("Ganzer Block currentBLock: %i beschrieben. bytesToWrite: %i", currentBlock, bytesToWrite);
+			buf += BD_BLOCK_SIZE;
+			*bufWrite += *buf;
+			bytesToWrite -= BD_BLOCK_SIZE;
 		}
 
-		if (dmap->setUnused(currentBlock) == -1) {
-			printf("error in deleteFile in dmap.setUnused(currentBlock)");
-			RETURN(-EPERM);
-		}
-
-		int blockBefore = currentBlock;
-		if (fat->getNext(currentBlock, &currentBlock) == -1) {
-			printf("error in deleteFeil in fat.getNext(currentBlock, &currentBlock");
-			RETURN(-EPERM);
-		}
-
-		if (fat->unLink(blockBefore) == -1) {
-			printf("error in deleteFeil in fat.unLink(blockBefore)");
-			RETURN(-EPERM);
-		}
-
-		blocksNumber--;
+		//Nächsten block aus fat holen
+		fat->getNext(currentBlock, &next);
+		currentBlock = next;
+		blockToWrite++;
 	}
 
-	//delete[] text;
-	//newSizeFile = ceil((double) size / BD_BLOCK_SIZE) * BD_BLOCK_SIZE;
-//	}
-//////////////////////////////neu parameter angeben////////////////////////////////////////////
-	/*	else {
+	//bufWrit erst überschreiben, damit buf nicht gelöscht wird
+	for (int i = 0; i < BD_BLOCK_SIZE; i++) {
+		bufWrite[i] = char(0);
+	}
+	delete[] bufWrite;
+
+	//Size aktualisieren
+	fileSize = size + offset;
+	root->setSize(path + 1, fileSize);
+	LOGF("fileSize:%i\n", fileSize);
+
+	//todo änderungen auf blockdevice persistieren
+	return size;
+	/*
+
+	 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+	 string* s = root->getArray();
+
+	 for (int i = 0; i < root->getSize(); i++)
+	 LOGF("s:  %s \n", s[i].c_str());
+
+	 MyFile *flink = new MyFile();
+	 LOGF("try to get %s \n", path + 1);
+
+	 string tempStr(path + 1);
+	 if (root->getFile(tempStr, flink) == -1) {
+	 LOG("error in fuseWrite in root.getFile( path, &fcopy) \n");
+	 RETURN(-EPERM);
+	 }
+	 LOG("2 \n");
+
+	 int blocksNumber;
+	 size_t newSizeFile;
+	 char * newBuf;
+	 int newBufCount = 0;
+	 int ret = size;
+
+	 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	 if (offset != 0) {
+	 LOG("offset ist ungleich 0 \n");
+	 int temp = ceil((double) flink->getSize() / BD_BLOCK_SIZE) * BD_BLOCK_SIZE;
+	 LOGF("anzahl der Bytes in alte Datei: %i \n", temp);
+	 if (offset == temp) {
+	 LOGF("offset ist gleich anzahl an Bloecke %i == %i \n", offset, temp);
+
+	 ///anzahlBytes in Datei/////////////////////////////////
+	 char * tempBuf = new char[flink->getSize()];
+	 readFile(path + 1, tempBuf, flink->getSize(), 0, fileInfo);
+
+	 int bytesFile = 0;
+	 while (*tempBuf != char(0)) {
+	 bytesFile++;
+	 tempBuf++;
+	 }
+
+	 tempBuf -= bytesFile;
+	 LOGF("Bytes in File: %i \n", bytesFile);
+	 LOGF("Bytes in tempBuf: %s \n", tempBuf);
+	 delete[] tempBuf;
+	 LOG("delete tempBuf sucess \n");
+	 ////////////////////////////////////////////////////////
+	 LOG("count bytes sucess");
+
+	 double allSize = ((int) size + bytesFile);
+	 LOGF("allSize=(size+ (bytesFile - offset)): %f \n", allSize);
+	 LOGF("ceil(allSize/ BD_BLOCK_SIZE) : %f \n", ceil((double)allSize/ BD_BLOCK_SIZE));
+	 newSizeFile = ceil((double) allSize / BD_BLOCK_SIZE) * BD_BLOCK_SIZE;
+	 LOGF("newSizeFile is %i \n", newSizeFile);
+
+	 newBuf = new char[newSizeFile];
+
+	 LOG("try to readFile \n");
+	 readFile(path + 1, newBuf, size, 0, fileInfo);
+	 LOGF("end readFile, newBuf: %s \n", newBuf);
+
+	 int newCount = 0;
+	 for (int i = 0; *newBuf != char(0); i++) {
+	 newBuf++;
+	 newCount++;
+	 }
+	 //(newBuf++)='\0';
+	 //size += newCount;
+	 /**(newBuf++)='\0';
+	 newCount++;
+	 //int t=(int) size+newCount;
+	 while (*buf != char(0)) {
+	 *(newBuf++) = *(buf++);
+	 newCount++;
+	 }
+
+	 newBuf -= newCount;
+	 ret = newCount;
+	 } else {
+	 LOGF("offset ist ungleich anzahl an Bloecke %i == %i \n", offset, temp);
+	 int newAddSize = ((int) size + (int) offset);
+	 LOGF("so viel Bytes muessen hinzuegefuegt werden: size(%i) + offset(%i) = %i \n", size, offset, newAddSize);
+	 if (newAddSize > temp) {
+
+	 LOGF("es muss mehr Bytes(%) hinzuegefugt werden, als die Groesse der Datei (%i) \n", newAddSize, temp);
+	 //die Datei wird groesse nach der ueberschreibung
+
+	 //groeese die hinzuegefugt wird finden
+	 int countBufForSize = 0;
+	 //countBufForSize - groesse von buf
+	 while (*buf != char(0)) {
+	 buf++;
+	 countBufForSize++;
+	 }
+	 buf -= countBufForSize;
+	 /*int countFileSize = 0;
+	 //countFileSize - groesse von den text in der datei
+	 char * readBufTemp = new char[temp];
+	 readFile(path + 1, readBufTemp, size, 0, fileInfo);
+	 while (readBufTemp != char(0)) {
+	 readBufTemp++;
+	 countFileSize++;
+	 }
+
+	 newSizeFile = ceil((double) newAddSize / BD_BLOCK_SIZE) * BD_BLOCK_SIZE;
+
+	 int newCount = 0;
+	 newBuf = new char[newSizeFile];
+	 readFile(path + 1, newBuf, size, 0, fileInfo);
+	 //buf bis offset auslesen
+	 while (newCount < offset) {
+	 newBuf++;
+	 newCount++;
+	 }
+
+	 while (*buf != char(0)) {
+	 *(newBuf++) = *(buf++);
+	 newCount++;
+	 }
+
+	 newBuf -= newCount;
+	 ret = newCount;
+
+	 } else {
+	 LOGF("es muss weniger Bytes(%i) hinzuegefugt werden, als die Groesse der Datei (%i) \n", newAddSize,
+	 temp);
+	 int newCount = 0;
+	 //die Groesse bleibt gleich
+	 newSizeFile = temp;
+	 newBuf = new char[newSizeFile];
+	 readFile(path + 1, newBuf, size, 0, fileInfo);
+	 //buf bis offset auslesen
+	 while (newCount < offset) {
+	 newBuf++;
+	 newCount++;
+	 }
+
+	 while (*buf != char(0)) {
+	 *(newBuf++) = *(buf++);
+	 newCount++;
+	 }
+
+	 while (*newBuf != char(0)) {
+	 newBuf++;
+	 newCount++;
+	 }
+
+	 newBuf -= newCount;
+	 ret = newCount;
+	 }
+	 }
+	 } else {
+	 LOG("offset ist gleich 0 \n");
+
+	 ///////////////////////////////version : den ganzen Text in alte Datei muss geloescht werden
+	 newSizeFile = ceil((double) size / BD_BLOCK_SIZE) * BD_BLOCK_SIZE;
+
+	 newBuf = new char[newSizeFile];
+	 int newCount = 0;
+	 for (int i = 0; i < (int) size; i++) {
+	 *(newBuf++) = *(buf++);
+	 newCount++;
+	 }
+
+	 newBuf -= newCount;
+	 ret = newCount;
+
+	 }
+
+	 LOGF("newBuf: %s \n", newBuf);
+	 LOGF("ret: %i \n", ret);
+
+	 ///////////////////////////////////////alte parameter loeschen////////////////////////////////////////////////////////
+	 //if (offset == 0) {
+	 char * text = new char[ BD_BLOCK_SIZE];
+	 for (int i = 0; i < BD_BLOCK_SIZE; i++)
+	 *(text++) = char(0);
+	 text -= BD_BLOCK_SIZE;
+	 ///////////////////////////////////////////////////
+	 blocksNumber = (flink->getSize() / BD_BLOCK_SIZE);
+	 int currentBlock = flink->getFirstBlock();
+	 LOGF("erste Block am Anfang : %i \n", currentBlock);
+	 LOGF("blocksNumber alt: %i \n", blocksNumber);
+
+	 while (blocksNumber != 0 && currentBlock != -1) {
+	 if (this->blocks->write(currentBlock, text) == -1) {
+	 printf("error in addFile in this->blocks.write(i,    ) \n");
+	 }
+
+	 if (dmap->setUnused(currentBlock) == -1) {
+	 printf("error in deleteFile in dmap.setUnused(currentBlock)");
+	 RETURN(-EPERM);
+	 }
+
+	 int blockBefore = currentBlock;
+	 if (fat->getNext(currentBlock, &currentBlock) == -1) {
+	 printf("error in deleteFeil in fat.getNext(currentBlock, &currentBlock");
+	 RETURN(-EPERM);
+	 }
+
+	 if (fat->unLink(blockBefore) == -1) {
+	 printf("error in deleteFeil in fat.unLink(blockBefore)");
+	 RETURN(-EPERM);
+	 }
+
+	 blocksNumber--;
+	 }
+
+	 //delete[] text;
+	 //newSizeFile = ceil((double) size / BD_BLOCK_SIZE) * BD_BLOCK_SIZE;
+	 //	}
+	 //////////////////////////////neu parameter angeben////////////////////////////////////////////
+	 /*	else {
 	 newSizeFile =ceil((double) size + flink->getSize() / BD_BLOCK_SIZE) * BD_BLOCK_SIZE;
 
 	 char * newBuf = new char[newSizeFile];
@@ -932,115 +1076,120 @@ int MyFS::fuseWrite(const char *path, const char *buf, size_t size, off_t offset
 	 newBuf-=newCount;
 
 
-	 }*/
+	 }
 
-	LOGF("newSizeFile: %i \n", newSizeFile);
-	flink->setSize(newSizeFile);
-	LOG("flink->setSize(newSizeFile) sucess \n");
-	//root->copyFile(flink->getName(), flink);
-	LOGF("flink->getSize() : %i \n", flink->getSize());
-	flink->setLastMod(time(NULL));
-	flink->setLastAccess(time(NULL));
-	LOG("5");
 
-	blocksNumber = (newSizeFile / BD_BLOCK_SIZE);
-	LOGF("blocksNumber new: %i \n", blocksNumber);
-	int * blocksUse = new int[blocksNumber];
+	 LOGF("newSizeFile: %i \n", newSizeFile);
+	 flink->setSize(newSizeFile);
+	 LOG("flink->setSize(newSizeFile) sucess \n");
+	 //root->copyFile(flink->getName(), flink);
+	 LOGF("flink->getSize() : %i \n", flink->getSize());
+	 flink->setLastMod(time(NULL));
+	 flink->setLastAccess(time(NULL));
+	 LOG("5");
 
-	//blocksUse[blocksNumber] = 0;
-	if (dmap->getFreeBlocks(blocksNumber, &blocksUse) == 0) {
-		/*if (root->addFile(name, size, mode, mtime, blocksUse[0]) == -1) {
-		 printf(
-		 "error in addFile in root->addFile(name, size, mode,st_mtime,blocks[0] \n");
-		 return -1;
-		 }*/
-		flink->setFirstBlock(blocksUse[0]);
-		LOGF("flink->getFirstBlock() : %i \n", flink->getFirstBlock());
+	 blocksNumber = (newSizeFile / BD_BLOCK_SIZE);
+	 LOGF("blocksNumber new: %i \n", blocksNumber);
+	 int * blocksUse = new int[blocksNumber];
 
-		//currentBlock = flink->getFirstBlock();
-		int tempCount = 0;
-		for (int i = 0; i < blocksNumber; i++) {
-			LOGF("bearbeite Block nr %i \n", blocksUse[i]);
-			dmap->setUsed(blocksUse[i]);
+	 //blocksUse[blocksNumber] = 0;
+	 if (dmap->getFreeBlocks(blocksNumber, &blocksUse) == 0) {
+	 /*if (root->addFile(name, size, mode, mtime, blocksUse[0]) == -1) {
+	 printf(
+	 "error in addFile in root->addFile(name, size, mode,st_mtime,blocks[0] \n");
+	 return -1;
+	 }
+	 flink->setFirstBlock(blocksUse[0]);
+	 LOGF("flink->getFirstBlock() : %i \n", flink->getFirstBlock());
 
-			if (i + 1 != blocksNumber) {
-				LOGF("%i != blocksNumber \n", i + 1);
-				if (fat->link(blocksUse[i], &blocksUse[i + 1]) == -1) {
-					LOG("error in addFile in fat.link(blocks[i], &blocks[i+1] \n");
-					RETURN(-1);
-				}
-				LOGF("Bloecke %i und %i sind gelinkt \n", blocksUse[i], blocksUse[i + 1]);
-			}
-			char * buffer = new char[BD_BLOCK_SIZE];
-			int count = 0;
-			while (*newBuf != '\0') {
-				//LOG("start while\n");
-				*buffer = *newBuf;
-				newBuf++;
-				buffer++;
-				count++;
-				tempCount++;
-				newBufCount++;
-				if (count == BD_BLOCK_SIZE - 2)
-					break;
-				if (tempCount == (int) ret)
-					break;
-			}
-			LOG("end while\n");
-			*(buffer++) = char(0);
-			count++;
-			buffer -= count;
+	 //currentBlock = flink->getFirstBlock();
+	 int tempCount = 0;
+	 for (int i = 0; i < blocksNumber; i++) {
+	 LOGF("bearbeite Block nr %i \n", blocksUse[i]);
+	 dmap->setUsed(blocksUse[i]);
 
-			LOGF("write buffer %s in  block %i \n", buffer, blocksUse[i]);
-			if (this->blocks->write(blocksUse[i], buffer) == -1) {
-				printf("error in addFile in this->blocks.write(i, \"try\") \n");
-			}
+	 if (i + 1 != blocksNumber) {
+	 LOGF("%i != blocksNumber \n", i + 1);
+	 if (fat->link(blocksUse[i], &blocksUse[i + 1]) == -1) {
+	 LOG("error in addFile in fat.link(blocks[i], &blocks[i+1] \n");
+	 RETURN(-1);
+	 }
+	 LOGF("Bloecke %i und %i sind gelinkt \n", blocksUse[i], blocksUse[i + 1]);
+	 }
+	 char * buffer = new char[BD_BLOCK_SIZE];
+	 int count = 0;
+	 while (*newBuf != '\0') {
+	 //LOG("start while\n");
+	 *buffer = *newBuf;
+	 newBuf++;
+	 buffer++;
+	 count++;
+	 tempCount++;
+	 newBufCount++;
+	 if (count == BD_BLOCK_SIZE - 2)
+	 break;
+	 if (tempCount == (int) ret)
+	 break;
+	 }
+	 LOG("end while\n");
+	 *(buffer++) = char(0);
+	 count++;
+	 buffer -= count;
 
-			//buf += BD_BLOCK_SIZE;
-			delete[] buffer;
-		}
+	 LOGF("write buffer %s in  block %i \n", buffer, blocksUse[i]);
+	 if (this->blocks->write(blocksUse[i], buffer) == -1) {
+	 printf("error in addFile in this->blocks.write(i, \"try\") \n");
+	 }
 
-	} else {
-		printf("error in addFile no free blocks in dmap \n");
-		RETURN(-EPERM);
-		//no more place
-	}
+	 //buf += BD_BLOCK_SIZE;
+	 delete[] buffer;
+	 }
 
-	/////////////////////
-	MyFile *ftr = new MyFile();
-	//LOGF("try to get %s \n", path+1);
+	 } else {
+	 printf("error in addFile no free blocks in dmap \n");
+	 RETURN(-EPERM);
+	 //no more place
+	 }
 
-	string temp2(path + 1);
-	LOGF("temp2 : %s \n", temp2.c_str());
-	int err = root->copyFile(temp2, flink);
-	LOGF("err = root->copyFile(temp2, flink) : %i \n", err);
-	if (root->getFile(temp2, ftr) == -1)
-		;
-	LOGF("flink->getSize() : %i \n", flink->getSize());
-	LOGF("ftr->getSize() : %i \n", ftr->getSize());
+	 /////////////////////
+	 MyFile *ftr = new MyFile();
+	 //LOGF("try to get %s \n", path+1);
 
-	/////////////////////
+	 string temp2(path + 1);
+	 LOGF("temp2 : %s \n", temp2.c_str());
+	 int err = root->copyFile(temp2, flink);
+	 LOGF("err = root->copyFile(temp2, flink) : %i \n", err);
+	 if (root->getFile(temp2, ftr) == -1)
+	 ;
+	 LOGF("flink->getSize() : %i \n", flink->getSize());
+	 LOGF("ftr->getSize() : %i \n", ftr->getSize());
 
-	LOG("root->copyFile(path, flink); ready \n");
-	writeBlockDevice();
-	LOG("writeBlockDevice sucess \n");
-	delete[] blocksUse;
-	LOG("delete[] blocksUse sucess \n");
-	newBuf -= newBufCount;
-	delete[] newBuf;
-	LOG("delete[] newBuf sucess \n");
-	delete[] text;
-	LOG("delete text sucess \n");
+	 /////////////////////
 
-	delete ftr;
-	LOG("delete ftr sucess \n");
-	delete flink;
-	LOG("delete flink sucess \n");
+	 LOG("root->copyFile(path, flink); ready \n");
+	 writeBlockDevice();
+	 LOG("writeBlockDevice sucess \n");
+	 delete[] blocksUse;
+	 LOG("delete[] blocksUse sucess \n");
+	 newBuf -= newBufCount;
+	 delete[] newBuf;
+	 LOG("delete[] newBuf sucess \n");
+	 delete[] text;
+	 LOG("delete text sucess \n");
 
-	//LOGF("currentBlock: %i \n", currentBlock);
-	LOG("6");
+	 delete ftr;
+	 LOG("delete ftr sucess \n");
+	 delete flink;
+	 LOG("delete flink sucess \n");
 
-	RETURN(ret); //!!???
+	 //LOGF("currentBlock: %i \n", currentBlock);
+	 LOG("6");
+
+	 RETURN(ret); //!!???
+
+
+	 */
+
 }
 
 int MyFS::fuseRelease(const char *path, struct fuse_file_info *fileInfo) {

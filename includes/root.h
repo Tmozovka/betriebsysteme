@@ -31,6 +31,7 @@ public  :
 	int getFile(string name, MyFile* file);
 	MyFile* getAdr(){return addressRoot;};
 	int copyFile(string name, MyFile* file);
+	int setSize(string name, off_t size);
 
 	/*int getFileTry(int number);
 	 MyFile getFile(int number);*/
