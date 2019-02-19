@@ -50,11 +50,11 @@ public:
 	friend bool operator ==(MyFile const &f, MyFile const& f2);
 	MyFile& operator =(const MyFile &f);
 
-	char * writeFileChar();
+	void writeFileChar(char * b);
 	char * writeBlock();
-	char * readBlock(int blockNo, BlockDevice  blocks);
+	void readBlock(char ** c, int blockNo, BlockDevice  blocks);
 
-	char * writeVar( char * buf, int size, int & count );
+	void writeVar(char *,  char * buf, int size, int & count );
 	//void writeVar(int * var, char * buf, int size, int & count );
 	void convertS(string & var, char * varT);
 	template<class T>

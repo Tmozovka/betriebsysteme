@@ -83,9 +83,9 @@ MyFile& MyFile::operator =(const MyFile &f) {
 
 //to Blocks
 char * MyFile::writeBlock() {
-	char * buf = new char[512];
-	char * readBuf = new char[512];
-	buf = this->writeFileChar();
+	char * buf = new char[BLOCK_SIZE];
+	char * readBuf = new char[BLOCK_SIZE];
+	writeFileChar(buf);
 
 	//printf("buf mit tryFile: %s \n", buf);
 	//printf("write to block \n");
@@ -100,10 +100,11 @@ char * MyFile::writeBlock() {
 				"Differences between written and read Blocks");
 	}
 	remove("containerFileTest.bin");
+	delete [] buf;
 	return readBuf;
 }
 
-char * MyFile::writeFileChar() {
+void MyFile::writeFileChar(char * block) {
 
 	char * name = new char[FILE_NAME_SIZE];
 	strcpy(name, this->name.c_str());
@@ -144,7 +145,7 @@ char * MyFile::writeFileChar() {
 	strcpy(firstBlock, to_string(this->firstBlock).c_str());
 	resize(firstBlock, to_string(this->firstBlock).length(), FILE_BLOCK_SIZE);
 
-	char * block = new char[BLOCK_SIZE];
+	//char * block = new char[BLOCK_SIZE];
 	//printf("pointer %hd \n", ()block);
 	strcpy(block, name);
 	strcat(block, user);
@@ -164,18 +165,27 @@ char * MyFile::writeFileChar() {
 
 	printf("MAX SIZE: %i, block size: %i",MAX_FILE_SIZE,tstr.length());
 
-	return block;
+	delete [] name;
+	delete [] user;
+	delete [] group;
+	delete [] size;
+	delete [] mode;
+	delete [] lastAccess;
+	delete [] lastMod;
+	delete [] lastStatusChange;
+	delete [] firstBlock;
+	//return block;
 
 }
-char * MyFile::readBlock(int blockNo, BlockDevice blocks) {
-	char * buf = new char[BLOCK_SIZE];
+void MyFile::readBlock(char ** readBuf,int blockNo, BlockDevice blocks) {
+	char * buf = *readBuf;
 	blocks.read(blockNo, buf);
-	return buf;
+	//return buf;
 }
 
-char * MyFile::writeVar(char * buf, int size, int &count) {
+void MyFile::writeVar(char * varT, char * buf, int size, int &count) {
 
-	char * varT = new char[size];
+	//char * varT = new char[size];
 	int sizeVar = 0;
 	while (sizeVar != size - 1) {
 
@@ -202,7 +212,7 @@ char * MyFile::writeVar(char * buf, int size, int &count) {
 	*varT = char(0);
 	varT -= sizeVar;
 
-	return varT;
+	//return varT;
 
 }
 
@@ -220,49 +230,76 @@ MyFile::MyFile(char * buf) {
 	int count = 0;
 printf("start name \n");
 	//name
-	convertS(this->name, writeVar(buf, FILE_NAME_SIZE, count));
+	char * varT = new char[FILE_NAME_SIZE];
+	writeVar(varT,buf, FILE_NAME_SIZE, count);
+	convertS(this->name, varT);
 	buf += count;
 	count = 0;
+	delete [] varT;
 
 	//user
-	convertI(this->user, writeVar(buf, FILE_USER_SIZE, count));
+	varT = new char[FILE_USER_SIZE];
+	writeVar(varT,buf, FILE_USER_SIZE, count);
+	convertI(this->user,varT);
 	buf += count;
 	count = 0;
+	delete [] varT;
 
 	//group
-	convertI(this->group, writeVar(buf, FILE_GROUP_SIZE, count));
+	varT = new char[FILE_GROUP_SIZE];
+	writeVar(varT,buf, FILE_GROUP_SIZE, count);
+	convertI(this->group, varT);
 	buf += count;
 	count = 0;
+	delete [] varT;
 
 	//size
-	convertI(this->size, writeVar(buf, FILE_SIZE_SIZE, count));
+	varT = new char[FILE_SIZE_SIZE];
+	writeVar(varT, buf, FILE_SIZE_SIZE, count);
+	convertI(this->size, varT);
 	buf += count;
 	count = 0;
+	delete [] varT;
 
 	//mode
-	convertI(this->mode, writeVar(buf, FILE_MODE_SIZE, count));
+	varT = new char[FILE_MODE_SIZE];
+	writeVar(varT,buf, FILE_MODE_SIZE, count);
+	convertI(this->mode, varT);
 	buf += count;
 	count = 0;
+	delete [] varT;
 
 	//lastAccess
-	convertI(this->lastAccess, writeVar(buf, FILE_ACCESS_SIZE, count));
+	varT = new char[FILE_ACCESS_SIZE];
+	writeVar(varT,buf, FILE_ACCESS_SIZE, count);
+	convertI(this->lastAccess, varT);
 	buf += count;
 	count = 0;
+	delete [] varT;
 
 	//lastMod
-	convertI(this->lastMod, writeVar(buf, FILE_MOD_SIZE, count));
+	varT = new char[FILE_MOD_SIZE];
+	writeVar(varT,buf, FILE_MOD_SIZE, count);
+	convertI(this->lastMod, varT);
 	buf += count;
 	count = 0;
+	delete [] varT;
 
 	//lastStatusChange
-	convertI(this->lastStatusChange, writeVar(buf, FILE_STATUS_SIZE, count));
+	varT = new char[FILE_STATUS_SIZE];
+	writeVar(varT,buf, FILE_STATUS_SIZE, count);
+	convertI(this->lastStatusChange, varT);
 	buf += count;
 	count = 0;
+	delete [] varT;
 
 	//firstBlock
-	convertI(this->firstBlock, writeVar(buf, FILE_BLOCK_SIZE, count));
+	varT = new char[FILE_BLOCK_SIZE];
+	writeVar(varT,buf, FILE_BLOCK_SIZE, count);
+	convertI(this->firstBlock, varT);
 	buf += count;
 	count = 0;
+	delete [] varT;
 
 	//printf("Konstruktor von MyFile ist beendet \n");
 

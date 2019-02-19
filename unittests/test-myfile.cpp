@@ -27,11 +27,13 @@ TEST_CASE( "Compare File// Getter- and Settermethods", "[MyFile]" ) {
 
 		//printf("START TO WRITE IN BLOCK \n");
 
-		char* readBuf = tryFile->writeBlock();
+		char* readBuf = new char [BLOCK_SIZE];
+		readBuf = tryFile->writeBlock();
 		MyFile * newFile = new MyFile(readBuf);
 		REQUIRE(*newFile == *tryFile);
 
 		//remove("containerFileTest.bin");
+		delete [] readBuf; //?? valdrid leaks
 		delete tryFile;
 		delete newFile;
 	//	delete blocks;
@@ -45,7 +47,7 @@ TEST_CASE( "Compare File// Getter- and Settermethods", "[MyFile]" ) {
 
 		char * buf = new char [512];
 		char * readBuf = new char [512];
-		buf = tryFile->writeFileChar();
+		tryFile->writeFileChar(buf);
 
 		printf("buf mit tryFile: %s \n", buf);
 		printf("write to block \n");
@@ -55,7 +57,7 @@ TEST_CASE( "Compare File// Getter- and Settermethods", "[MyFile]" ) {
 		printf("START TO READ IN BLOCK \n");
 		blocks.create("containerFileTest2.bin");
 		blocks.write(0,buf);
-		readBuf=tryFile->readBlock(0,blocks);
+		tryFile->readBlock(&readBuf,0,blocks);
 
 		printf("buf aus BlockDevice %s \n", readBuf);
 

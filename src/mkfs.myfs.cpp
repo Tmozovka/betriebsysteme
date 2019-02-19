@@ -45,7 +45,8 @@ int main(int argc, char *argv[]) {
 
 		fin = fopen(argv[i], "rwb");
 		if (fin) {
-			LOGF("successful open File: %s \n", argv[i]);LOGF("successful open File: %s \n", argv[i]);
+			LOGF("successful open File: %s \n", argv[i]);
+			LOGF("successful open File: %s \n", argv[i]);
 
 			struct stat st;
 			st.st_mode = S_IFREG | 0444;
@@ -89,8 +90,9 @@ int main(int argc, char *argv[]) {
 			/////////////////////////////////////////////////////////////////////////////////
 			printf("name zum bearbeiten %s \n", argv[i]);
 
-			off_t size = ceil((double) st.st_size / BD_BLOCK_SIZE) //ceil(2/512)=1  ceil(513/512)=2
-			* BD_BLOCK_SIZE;
+			/*off_t size = ceil((double) st.st_size / BD_BLOCK_SIZE) //ceil(2/512)=1  ceil(513/512)=2
+			* BD_BLOCK_SIZE;*/
+			off_t size =st.st_size+1;
 			printf("size von der Datei: %i st.st_size : %i \n", size, st.st_size );
 			pufferAdd = new char[size];
 			fread(pufferAdd, size, 1, fin);
@@ -136,6 +138,8 @@ int main(int argc, char *argv[]) {
 
 	//fs->fat->showFat();
 	fs->writeBlockDevice();
+
+	delete [] ar;
 
 	//////////////////////// Hinzufügen der Datenstrukturen//////////////////
 

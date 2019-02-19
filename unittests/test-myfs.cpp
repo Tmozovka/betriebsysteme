@@ -5,7 +5,7 @@
 //  Created by Oliver Waldhorst on 15.12.17.
 //  Copyright © 2017 Oliver Waldhorst. All rights reserved.
 //
-
+/*
 #include "catch.hpp"
 
 #include "helper.hpp"
@@ -13,7 +13,7 @@
 #include <string.h>
 
 using namespace std;
-/*
+
 // TODO: Implement your helper functions here!
 TEST_CASE( "my Funktionen in myfs testen", "[myfs]" ) {
 	FILE *fin;
@@ -202,5 +202,6 @@ TEST_CASE( "my Funktionen in myfs testen", "[myfs]" ) {
 		delete fs;
 	}
 
-}*/
+}
 
+*/

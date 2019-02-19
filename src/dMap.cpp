@@ -114,7 +114,7 @@ int dMap::init(int startingBlock, BlockDevice *blocks) {
 			} else {
 				c &= ~(1 << charBit); //unset charbit
 			}
-
+		//Wieso wird den Puffer zwei mal initialisiert? aber nur ein  mal geloescht
 	int pufferLength = BD_BLOCK_SIZE; //512
 	char * puffer = new char[pufferLength];
 
@@ -235,7 +235,7 @@ int dMap::read(int startingBlock, BlockDevice* blocks) {
 
 			for (int charBit = 0; charBit < 8; charBit++) {
 				if (currentDmapIndex == BLOCK_NUMBER) {
-					delete[] puffer;
+					delete[] puffer; //wird puffer immer geloescht oder nur unter bestimmte bediengung
 					printf("Letzter für dmap ausgelesener Block: %d \n",
 							currentBlock - 1);
 					return currentBlock;

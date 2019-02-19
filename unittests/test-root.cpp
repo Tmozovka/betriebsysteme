@@ -17,6 +17,8 @@ TEST_CASE( "Add/get/delete File", "[root]" ) {
 	myroot->getFile(firstfile->getName(), mf);
 	REQUIRE( result == 0);
 	REQUIRE( *mf == *firstfile);
+	delete firstfile;
+	delete mf;
 
 }
 	SECTION("No addition possible: too many files in Root"){
@@ -56,6 +58,7 @@ TEST_CASE( "Add/get/delete File", "[root]" ) {
 	int result =myroot->addFile(nameBig,f->getSize(),f->getMode(),f->getLastMod(),f->getFirstBlock());
 	REQUIRE(result==-1);
 	delete f;
+	delete [] nameBig;
 }
 
 	SECTION("No addition possible: Name already exists - Test 1"){
@@ -123,6 +126,7 @@ TEST_CASE( "Add/get/delete File", "[root]" ) {
 	bool boolResult=myroot->existName(f->getName());
 	REQUIRE(boolResult==false);
 
+	delete fileSimilarName;
 	delete f;
 }
 //-----getArray----------------------------------------------------------------------------------------
@@ -158,6 +162,7 @@ TEST_CASE( "Add/get/delete File", "[root]" ) {
 	delete f1;
 	delete f2;
 	delete f3;
+	delete [] filenames;
 }
 
 	delete myroot;
@@ -250,6 +255,7 @@ SECTION("Klein Test fuer das Block Beschreiben")
 
 		delete tryRoot;
 		delete newRoot;
+		delete firstFile;
 
 
 	}
@@ -277,7 +283,7 @@ SECTION("Klein Test fuer das Block Beschreiben")
 			REQUIRE(*newRoot==*tryRoot);
 
 
-
+			delete firstFile;
 			delete tryRoot;
 			delete newRoot;
 

@@ -23,7 +23,7 @@ public:
 	void showFat(int s, int e);
 
 	void resize(char * text, int oldSize, int newSize);
-	char * writeBlock();
+	void writeBlock(char ** c);
 	friend bool operator ==(MyFAT const &f, MyFAT const& f2);
 	friend bool operator !=(MyFAT const &f, MyFAT const& f2);
 	friend int compare(MyFAT f1, MyFAT f2);

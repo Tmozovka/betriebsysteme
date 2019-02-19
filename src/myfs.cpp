@@ -127,7 +127,7 @@ int MyFS::readFile(const char *path, char *buf, size_t size, off_t offset, struc
 	// TODO: Implement this!
 	//printf("readFile start \n"); //funktioniert nicht
 	LOG("********************************************************************************************** ");
-	LOG("readFile start ");
+	LOGF("readFile start , size: %i, offset: %i \n", (int)size, (int)offset);
 
 	//todo hier vielleicht noch irgendwas in fileInfo prüfen?
 
@@ -176,13 +176,23 @@ int MyFS::readFile(const char *path, char *buf, size_t size, off_t offset, struc
 
 	char * readBuf = new char[BD_BLOCK_SIZE];
 	int bytesRead = 0;
+	int testcount=0;
 	//Auslesen bis size blöcke gelesen
-	while(bytesRead<=size){
+	while(bytesRead<=(int)size){
+		testcount++;
 		blocks->read(currentBlock,readBuf);
+		//if(testcount==1)
+		//{
+			string temp(readBuf);
+			printf("size from readBuf: %i readBuf: %s \n",temp.length() , readBuf);
 
+		//}
 		//Ausgelesene Bytes in buffer schreiben, bis readbuffer-ende oder genug gelesen
-		while(positionInBlock<BD_BLOCK_SIZE && bytesRead<=size){
+		while(positionInBlock<BD_BLOCK_SIZE && bytesRead<=(int)size){
 			buf[bytesRead++]=readBuf[positionInBlock++];
+		//	if(testcount==1)
+				printf("bytesRead: %i, positionInBlock: %i , buf[bytesRead]: %c,readBuf[positionInBlock]: %c\n ",bytesRead-1,positionInBlock-1, buf[bytesRead-1], readBuf[positionInBlock-1]);
+
 		}
 		positionInBlock=0;
 
@@ -192,6 +202,7 @@ int MyFS::readFile(const char *path, char *buf, size_t size, off_t offset, struc
 		currentBlock = next;
 	}
 
+	printf("buf: %s \n", buf);
 	delete[] readBuf;
 	delete file;
 
@@ -406,6 +417,7 @@ int MyFS::addFile(const char * name, mode_t mode, time_t mtime, off_t size, char
 
 //int fuseUnlink(const char *path);
 int MyFS::deleteFile(const char *name) {
+	//TODO: veraendern fuer richtige size
 	MyFile fcopy;
 	if (root->getFile(name, &fcopy) == -1 || root->deleteFile(name) == -1) {
 		printf("error in deleteFeil in root.getFile(name, &fcopy)==-1||root.deleteFile(name)==-1");

@@ -64,8 +64,9 @@ MyFAT::~MyFAT() {
 	//printf("Destruktor von MyFat ist beendet \n");
 }
 
-char * MyFAT::writeBlock() {
-	char * result = new char[size * 6];
+void MyFAT::writeBlock(char ** buf) {
+	//char * result = new char[size * 6];
+	char * result = *buf;
 
 	char * temp = new char[1];
 	temp[0] = '_';
@@ -88,7 +89,7 @@ char * MyFAT::writeBlock() {
 
 	delete[] temp;
 
-	return result;
+	//return result;
 }
 
 void MyFAT::read(int start, BlockDevice * blocks) {
@@ -279,7 +280,7 @@ void MyFAT::writeBlockDevice(BlockDevice * blocks, int start) {
 	printf("start for fat writeBlockDevice  start : %i \n", start);
 	int nrBlocks = 0;
 	char * buf = new char[size * 6];
-	buf = this->writeBlock();
+	this->writeBlock(&buf);
 	//printf("fat: %s \n", buf);
 
 	int firstBlock = start;
