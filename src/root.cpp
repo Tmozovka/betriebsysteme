@@ -180,6 +180,20 @@ int MyRoot::getFile(string name, MyFile * f) {
 
 }
 
+int MyRoot::setSize(string name, off_t size){
+	std::list<MyFile>::iterator it = files.begin();
+
+	while (it->getName() != name) {
+		it++;
+		if (it == files.end()) {
+			return -1;
+		}
+	}
+	it->setSize(size);
+
+	return 0;
+}
+
 int MyRoot::copyFile(string name, MyFile* file) {
 
 	std::list<MyFile>::iterator it = files.begin();
