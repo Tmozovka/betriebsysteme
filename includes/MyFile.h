@@ -30,6 +30,9 @@ public:
 
 	MyFile();
 
+	MyFile(const MyFile &f);
+	MyFile(MyFile * f);
+
 	~MyFile();
 	MyFile(char *);
 	//get

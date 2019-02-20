@@ -80,6 +80,8 @@ int MyRoot::addFile(string name, off_t size, mode_t mode, time_t st_mtime,
 	}
 
 //Speichern von Name, Dateigroesse und Zugriffsrechte pro Datei
+	/*MyFile * firstfile = new MyFile(name, getuid(), getgid(), size, mode,
+			time(NULL), time(NULL), time(NULL), firstBlock);*/
 	const MyFile * f = new MyFile(name, getuid(), getgid(), size, mode,
 			time(NULL), st_mtime, time(NULL), firstBlock);
 
