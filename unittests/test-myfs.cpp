@@ -106,13 +106,14 @@ TEST_CASE( "my Funktionen in myfs testen", "[myfs]" ) {
 			pufferRead = new char[size+1];
 
 			//richtigkeit ausgelesene ueberprueffen
-			int t= fs->readFile(argv[i], pufferRead,size,0,new fuse_file_info);
+			struct fuse_file_info tmp;
+			int t= fs->readFile(argv[i], pufferRead,size,0,&tmp);
 			pufferRead[size]=char(0);
 			REQUIRE(t==size);
-				printf("read File %s : %s \n",argv[i],pufferRead);
+			printf("read File %s : %s \n",argv[i],pufferRead);
 
 			char * pufferRead2 = new char[size+1];
-			int t2= fs->readFile(argv[i], pufferRead2,size,0,new fuse_file_info);
+			int t2= fs->readFile(argv[i], pufferRead2,size,0,&tmp);
 			pufferRead2[size]=char(0);
 			printf("read File 2 %s : %s \n",argv[i],pufferRead2);
 			REQUIRE(t2==size);
@@ -126,36 +127,35 @@ TEST_CASE( "my Funktionen in myfs testen", "[myfs]" ) {
 			printf("read File 3 with fread %s : %s \n",argv[i],pufferRead3);
 			REQUIRE(strcmp(pufferRead2,pufferRead3)==0);
 
+			//delete tmp;
 			delete [] pufferRead;
 			delete [] pufferRead2;
 			delete [] pufferRead3;
 
 			for(int j=0;j<10;j++)
 			{
-			int offset = rand()%(size-1);
-			int readSize=size-offset;
-			printf("readSize: %i \n", readSize);
+				int offset = rand()%(size-1);
+				int readSize=size-offset;
+				printf("readSize: %i \n", readSize);
 
-			pufferRead3 = new char[readSize+1];
-			fseek(fin, offset, SEEK_SET);
-			fread(pufferRead3, readSize, 1, fin);
-			pufferRead3[readSize]=char(0);
-			printf("read with fssek with offset %i , puffer %s \n end fseek\n", offset, pufferRead3);
+				pufferRead3 = new char[readSize+1];
+				fseek(fin, offset, SEEK_SET);
+				fread(pufferRead3, readSize, 1, fin);
+				pufferRead3[readSize]=char(0);
+				printf("read with fssek with offset %i , puffer %s \n end fseek\n", offset, pufferRead3);
 
-			pufferRead2 = new char[readSize+1];
-			t2= fs->readFile(argv[i], pufferRead2,readSize,offset,new fuse_file_info);
-			printf("read with readFile from container with offset %i , puffer %s \n", offset, pufferRead2);
-			pufferRead2[readSize]=char(0);
-			REQUIRE(t2==readSize);
-			REQUIRE(strcmp(pufferRead2,pufferRead3)==0);
+				pufferRead2 = new char[readSize+1];
+				t2= fs->readFile(argv[i], pufferRead2,readSize,offset,new fuse_file_info);
+				pufferRead2[readSize]=char(0);
+				printf("read with readFile from container with offset %i , puffer %s \n", offset, pufferRead2);
 
+				REQUIRE(t2==readSize);
+				REQUIRE(strcmp(pufferRead2,pufferRead3)==0);
 
-			delete [] pufferRead2;
-			delete [] pufferRead3;
+				delete [] pufferRead2;
+				delete [] pufferRead3;
 
 			}
-
-
 
 			fclose(fin);
 
@@ -170,6 +170,7 @@ TEST_CASE( "my Funktionen in myfs testen", "[myfs]" ) {
 	int t=fs->deleteFile(temp);
 	REQUIRE(t==0);
 	REQUIRE(fs->root->getSize()==1);
+	delete [] ar;
 	ar = new string[fs->root->getSize()];
 	ar = fs->root->getArray();
 
@@ -177,13 +178,14 @@ TEST_CASE( "my Funktionen in myfs testen", "[myfs]" ) {
 	string comp2 = ar[0];
 	REQUIRE( comp2.compare(comp)==0);
 
+	delete [] ar;
 	//printf("deleteFile: %s \n", argv[2]);
 	//REQUIRE(fs->deleteFile(argv[2])==0); //error
 	temp= argv[2];
 	REQUIRE(fs->deleteFile(temp)==0);//error
 	REQUIRE(fs->root->getSize()==0);
 
-	delete [] ar;
+
 	remove("containerTest.bin");
 	delete fs;
 }
@@ -227,32 +229,65 @@ TEST_CASE( "my Funktionen in myfs testen", "[myfs]" ) {
 		}
 	}
 
-
 	MyFS * newFs = new MyFS("containerTest2.bin");
 
-	remove("containerTest2.bin");
 	bool a=*fs==*newFs;
 	REQUIRE(*fs==*newFs);
 
+	//SECTION("test fuseWrite") {
+
+	/*	printf("FUSE WRITE TEST START\n");
+		int size=1000;
+		int offset =0;
+		int ch='!';
+		char * buf =new char[size];
+		for (int j=0;j<size;j++)
+			buf[j]=ch;
+		//buf[j]=(ch++)%50+34;
+
+		for(int i=2;i<argc;i++)
+		{
+			char * name = new char[sizeof(argv[i])+3];
+			name[0]='/';
+			for(int j=0;j<sizeof(argv[i])+2;j++)
+			{
+				name[j+1]=argv[i][j];
+			}
+			name[sizeof(argv[i])+2]=char(0);
+			printf("NAME FUER FUSE WRITE: %s \n", name);
+			newFs->fuseWrite(name, buf, size, offset, NULL);
+
+			int readSize=size+100;
+			pufferRead = new char[readSize+1];
+			int ret= newFs->readFile(argv[i], pufferRead,readSize,offset,new fuse_file_info);
+			pufferRead[readSize]=char(0);
+			printf("Datei: %s, changed inhalt: %s \n", argv[i], pufferRead);
+			delete [] name;
+			delete [] pufferRead;
+
+		}
+
+		printf("FUSE WRITE TEST END\n");
+		//struct fuse_file_info *fileInfo
+		delete [] buf;
+	//}*/
+
+	remove("containerTest2.bin");
 	delete newFs;
 	delete fs;
 
-
 }
 
-	SECTION("test MKnod")
-	{
-		MyFS * fs = new MyFS();
+	SECTION("test MKnod"){
+	MyFS * fs = new MyFS();
 
-		int * blocks[1];
-		//LOG("0\n");
-		REQUIRE(fs->dmap->getFreeBlocks(1, blocks)==0);
-		REQUIRE(fs->root->addFile("text3.txt", 512, 1000, time(NULL), *blocks[0])==0);
+	int * blocks[1];
+	//LOG("0\n");
+	REQUIRE(fs->dmap->getFreeBlocks(1, blocks)==0);
+	REQUIRE(fs->root->addFile("text3.txt", 512, 1000, time(NULL), *blocks[0])==0);
 
-		delete fs;
-	}
-
-
+	delete fs;
 }
 
+}
 

@@ -64,9 +64,9 @@ int TestFilesytem::compareLists(MyList list1, MyList list2) {
 	return 1;
 }
 
-void TestFilesytem::readFile(char* filename, MyList* list, int offset=0) {
+void TestFilesytem::readFile(char* filename, MyList* list, int offset) {
 	int fileDescr = myOpen(filename);
-	lseek(fileDescr, offset, SEEK_SET);
+	//lseek(fileDescr, offset, SEEK_SET);
 
 	ssize_t bytesRead;
 	do {
@@ -340,7 +340,7 @@ int main(int argc, char *argv[]) {
 	listMount2.list.clear();
 
 	//***************************************************************************************************
-/*	std::cerr << "\033[0;45m" << "Test: identisch nach mehrmals lesen big.txt"
+	std::cerr << "\033[0;45m" << "Test: identisch nach mehrmals lesen big.txt"
 			<< "\033[1;0m" << std::endl;
 
 	test1.readFile("../mount-dir/big.txt", &listMount);
@@ -350,7 +350,7 @@ int main(int argc, char *argv[]) {
 
 	test1.compareLists(listMount, listMount2);
 	listMount.list.clear();
-	listMount2.list.clear();*/
+	listMount2.list.clear();
 
 	//***************************************************************************************************
 		std::cerr << "\033[0;45m" << "Test: Read mit offset 5 testen text3"
@@ -367,7 +367,7 @@ int main(int argc, char *argv[]) {
 
 
 //***************************************************************************************************
-	/*std::cerr << "\033[0;45m" << "Test: Schreiben ohne offset" << "\033[1;0m"
+	std::cerr << "\033[0;45m" << "Test: Schreiben ohne offset" << "\033[1;0m"
 			<< std::endl;
 	//schreiben
 	char* fcomp = (char*) "../text1.txt";
@@ -475,7 +475,7 @@ int main(int argc, char *argv[]) {
 
 	test1.compareLists(listMount, listCompare);
 	listMount.list.clear();
-	listCompare.list.clear();*/
+	listCompare.list.clear();
 
 	return 0;
 

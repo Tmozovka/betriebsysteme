@@ -96,7 +96,7 @@ int main(int argc, char *argv[]) {
 			printf("size von der Datei: %i st.st_size : %i \n", size, st.st_size );
 			pufferAdd = new char[size];
 			fread(pufferAdd, size, 1, fin);
-			if(size<5000)
+		//	if(size<5000)
 		//	printf("pufferAdd : %s \n", pufferAdd);
 		//	pufferAdd[st.st_size]=char(10);
 			/*
