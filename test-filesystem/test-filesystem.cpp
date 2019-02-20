@@ -66,7 +66,8 @@ int TestFilesytem::compareLists(MyList list1, MyList list2) {
 
 void TestFilesytem::readFile(char* filename, MyList* list, int offset) {
 	int fileDescr = myOpen(filename);
-	//lseek(fileDescr, offset, SEEK_SET);
+	printf("offset : %i\n", offset);
+	lseek(fileDescr, offset, SEEK_SET);
 
 	ssize_t bytesRead;
 	do {
@@ -252,13 +253,13 @@ void TestFilesytem::printFile(MyList list) {
 
 }
 
-void TestFilesytem::printTwoFiles(char* fn1, char* fn2) {
+void TestFilesytem::printTwoFiles(char* fn1, char* fn2, int offset) {
 	if (printingFiles) {
 		MyList list1;
 		MyList list2;
 
-		readFile(fn1, &list1);
-		readFile(fn2, &list2);
+		readFile(fn1, &list1, offset);
+		readFile(fn2, &list2, offset);
 
 		std::cerr << "Print " << fn1 << std::endl;
 		printFile(list1);
@@ -368,7 +369,7 @@ int main(int argc, char *argv[]) {
 	listMount2.list.clear();
 
 	//***************************************************************************************************
-	std::cerr << "\033[0;45m" << "Test: identisch nach mehrmals lesen big.txt"
+	/*std::cerr << "\033[0;45m" << "Test: identisch nach mehrmals lesen big.txt"
 			<< "\033[1;0m" << std::endl;
 
 	test1.readFile("../mount-dir/big.txt", &listMount);
@@ -378,7 +379,7 @@ int main(int argc, char *argv[]) {
 
 	test1.compareLists(listMount, listMount2);
 	listMount.list.clear();
-	listMount2.list.clear();
+	listMount2.list.clear();*/
 
 	//***************************************************************************************************
 		std::cerr << "\033[0;45m" << "Test: Read mit offset 5 testen text3"
@@ -395,6 +396,20 @@ int main(int argc, char *argv[]) {
 
 
 //***************************************************************************************************
+		std::cerr << "\033[0;45m" << "Test: Read mit offset 15 testen text3"
+						<< "\033[1;0m" << std::endl;
+
+				test1.readFile("../mount-dir/text3.txt", &listMount, 15);
+				//test1.readFile(FileInMount, &listMount2);
+				test1.readFile("../input/text3.txt", &listMount2, 15);
+				test1.printTwoFiles("../mount-dir/text3.txt", "../input/text3.txt", 15);
+
+				test1.compareLists(listMount, listMount2);
+				listMount.list.clear();
+				listMount2.list.clear();
+
+
+		//***************************************************************************************************
 	std::cerr << "\033[0;45m" << "Test: Schreiben ohne offset" << "\033[1;0m"
 			<< std::endl;
 	//schreiben
