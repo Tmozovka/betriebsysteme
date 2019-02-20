@@ -27,7 +27,7 @@ public:
 
 	int compareLists(MyList list1, MyList list2);
 
-	void readFile(char* filename, MyList* list, int offset =0);
+	void readFile(char* filename, MyList* list, int offset = 0);
 
 	void myWrite(char* filename, int bytesToWrite, int offset);
 

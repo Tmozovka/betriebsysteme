@@ -126,7 +126,7 @@ int MyFS::readFile(const char *path, char *buf, size_t size, off_t offset, struc
 
 	//size++;
 
-	printf("fileInfo->fh= %i, fileInfo->keep_cashe= %i \n", fileInfo->fh, fileInfo->keep_cache);
+	//printf("fileInfo->fh= %i, fileInfo->keep_cashe= %i \n", fileInfo->fh, fileInfo->keep_cache);
 
 	//printf("readFile start \n"); //funktioniert nicht
 	LOG("********************************************************************************************** ");
@@ -203,7 +203,7 @@ int MyFS::readFile(const char *path, char *buf, size_t size, off_t offset, struc
 		blocks->read(currentBlock, readBuf);
 		//if(testcount==1)
 		//{
-		string temp(readBuf);
+	//	string temp(readBuf);
 		//printf("size from readBuf: %i readBuf: %s \n",temp.length() , readBuf);
 
 		//}
@@ -223,14 +223,14 @@ int MyFS::readFile(const char *path, char *buf, size_t size, off_t offset, struc
 		LOGF("currentBlock: %i \n", currentBlock);
 	}
 	//buf[bytesRead]=char(0);
-	string strBuf(buf);
-	printf("sizeBuf: %i , buf: %s \n", strBuf.length(), buf);
+	//string strBuf(buf);
+	//printf("sizeBuf: %i , buf: %s \n", strBuf.length(), buf);
 	delete[] readBuf;
 	delete file;
 
 	/*fileInfo->keep_cache=size;
 	root->writeToPuffer(path, buf);*/
-
+	//LOGF("readBuf : %s \n", buf);
 	RETURN(size);
 	/*
 	 >>>>>>> bcd816e55f499fb5569a0bef1c98158ec4d91eec
@@ -345,8 +345,8 @@ int MyFS::addFile(const char * name, mode_t mode, time_t mtime, off_t size, char
 		numberNeededBlocks++;
 	}
 
-	LOGF("numberNeededBlocks : %i \n", numberNeededBlocks);
-	LOGF("BytesInLastBlock: %i \n", bytesInLastBlock);
+	//LOGF("numberNeededBlocks : %i \n", numberNeededBlocks);
+	//LOGF("BytesInLastBlock: %i \n", bytesInLastBlock);
 
 	//array zum merken der blocknummern
 	int * blocksUse = new int[numberNeededBlocks + 1];
@@ -374,7 +374,7 @@ int MyFS::addFile(const char * name, mode_t mode, time_t mtime, off_t size, char
 		dmap->setUsed(blocksUse[i]);
 
 		//2. Verlinken in Fat
-		printf("blocksUse[i]:%i , blocksUse[i + 1]:%i \n", blocksUse[i], blocksUse[i + 1]);
+		//printf("blocksUse[i]:%i , blocksUse[i + 1]:%i \n", blocksUse[i], blocksUse[i + 1]);
 		returnCode = fat->link(blocksUse[i], &blocksUse[i + 1]);
 		if (returnCode == -1) {
 			printf("Error: Problem with linking blocks in fat");
@@ -464,11 +464,13 @@ int MyFS::deleteFile(const char *name) {
 	if (fcopy.getSize() % BD_BLOCK_SIZE != 0)
 		blocksNumber++;
 	int currentBlock = fcopy.getFirstBlock();
+
+
 	//////////////////////////////////////
-	char * text = new char[fcopy.getSize()];
-	for (int i = 0; i < fcopy.getSize(); i++)
-		*(text++) = char(0);
-	text -= fcopy.getSize();
+	char * text = new char[BD_BLOCK_SIZE];
+	for (int i = 0; i < BD_BLOCK_SIZE; i++)
+		text[i] = char(0);
+	//text -= fcopy.getSize();
 	//////////////////////////////////////
 	while (blocksNumber != 0 && currentBlock != -1) {
 		if (this->blocks->write(currentBlock, text) == -1) {
@@ -731,12 +733,14 @@ int MyFS::fuseWrite(const char *path, const char *buf, size_t size, off_t offset
 	int bytesToAdd = ((int) offset + (int) size) - (usedBlocks * BD_BLOCK_SIZE);
 	LOGF("bytesToAdd: %i\n", bytesToAdd);
 
+	if (bytesToAdd > 0 && bytesLastBlock != 0) {
+			bytesToAdd -= BD_BLOCK_SIZE - bytesLastBlock;
+		}
+
 	if (bytesToAdd > 0) {
 		LOG("byteyToAdd > 0 -> new blocks are going to be added");
 		// Wenn im letzen Block noch platz, dann diesem Platz abziehen
-		if (bytesLastBlock != 0) {
-			bytesToAdd -= BD_BLOCK_SIZE - bytesLastBlock;
-		}
+
 
 		// Benötigte Blöcke berechen
 		int blocksToAdd = bytesToAdd / BD_BLOCK_SIZE;
@@ -808,9 +812,10 @@ int MyFS::fuseWrite(const char *path, const char *buf, size_t size, off_t offset
 
 			if (blockToWrite > usedBlocks||size==0) {  // neu allokierter block //muss mit char(0) gefüllt werden
 				for (int i = 0; i < BD_BLOCK_SIZE; i++) {
-					bufWrite[i] = 0;
+					bufWrite[i] = char(0);
 				}
 			} else {  //bereits beschriebener block
+				LOGF("in Block %i schreiben bufWrite %s \n",currentBlock,bufWrite );
 				blocks->read(currentBlock, bufWrite);
 			}
 
@@ -823,6 +828,7 @@ int MyFS::fuseWrite(const char *path, const char *buf, size_t size, off_t offset
 				bytesToWrite--;
 			}
 
+			LOGF("in Block %i schreiben bufWrite %s \n",currentBlock,bufWrite );
 			blocks->write(currentBlock, bufWrite);
 			LOGF("bufWrite:%s End of Buffer\n", bufWrite);
 			positionInBlock = 0;
@@ -830,6 +836,7 @@ int MyFS::fuseWrite(const char *path, const char *buf, size_t size, off_t offset
 
 		} else {  //ganzen block schreiben
 			*bufWrite = *buf;
+			LOGF("in Block %i schreiben bufWrite %s \n",currentBlock,bufWrite );
 			blocks->write(currentBlock, bufWrite);
 			LOGF("Ganzer Block currentBLock: %i beschrieben. bytesToWrite: %i", currentBlock, bytesToWrite);
 			buf += BD_BLOCK_SIZE;
@@ -855,8 +862,11 @@ int MyFS::fuseWrite(const char *path, const char *buf, size_t size, off_t offset
 	LOGF("newBuf: %s \n", newBuf);
 	LOGF("ret: %i \n", ret);*/
 	//Size aktualisieren
+	if((size + offset)>fileSize)
+	{
 	fileSize = size + offset;
 	root->setSize(path + 1, fileSize);
+	}
 	LOGF("fileSize:%i\n", fileSize);
 
 	//todo änderungen auf blockdevice persistieren
