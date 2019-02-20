@@ -269,6 +269,33 @@ void TestFilesytem::printTwoFiles(char* fn1, char* fn2) {
 int main(int argc, char *argv[]) {
 	TestFilesytem test1;
 
+
+
+
+	//char * filename ="../mount-dir/text1.txt";
+	char * filename ="./file2.txt";
+
+	int offset = 0;
+	int fileDescr = open(filename, O_CREAT |O_TRUNC| O_RDWR, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+	printf("fileDescr:%i\n",fileDescr);
+	lseek(fileDescr, offset, SEEK_SET);
+	int length= 100;
+	char* stringToWrite = new char[length+1];
+	stringToWrite[length]= char(0);
+	for(int i = 0; i<length; i++)
+		stringToWrite[i]= 'a';
+
+	int bytesWritten = write(fileDescr, stringToWrite, length);
+	printf("bytesWritten:%i\n",bytesWritten);
+	int ret = close(fileDescr);
+	printf("ret:%i\n",ret);
+
+	delete[] stringToWrite;
+
+
+
+	return(0);
+
 //Zusamenfügen von path von Datei
 
 //for mount-dir
@@ -474,6 +501,8 @@ int main(int argc, char *argv[]) {
 	test1.compareLists(listMount, listCompare);
 	listMount.list.clear();
 	listCompare.list.clear();
+
+
 
 	return 0;
 

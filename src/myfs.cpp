@@ -1440,8 +1440,11 @@ int MyFS::fuseReadlink(const char *path, char *link, size_t size) {
 	return 0;
 }
 int MyFS::fuseTruncate(const char *path, off_t newSize) {
+
 	LOGM()
 	;
+
+	LOGF("newSize: %i\n",newSize);
 	return 0;
 }
 
