@@ -16,11 +16,15 @@ MyFile::MyFile(string cname, uid_t cuser, gid_t cgroup, off_t csize,
 	lastMod = clastMod; //letzte Ver�nderung (mtime)
 	lastStatusChange = clastStatusChange; //letzter Status�nderung (ctime)
 	firstBlock = cfirstBlock; //Zeiger auf ersten Block (u_int32_t BlockNo)
+	puffer=new char[size+1];
+	for(int i =0;i<size+1;i++)
+		puffer[i]=char(0);
 
 	//printf("Konstruktor von MyFile ist beendet \n");
 }
 MyFile::~MyFile() { //
 	//printf("Destruktor von MyFile ist beendet \n");
+	delete [] puffer;
 }
 
 //Define the constructor
@@ -35,6 +39,9 @@ MyFile::MyFile() {
 	lastMod = time(NULL); //letzte Ver�nderung (mtime)
 	lastStatusChange = time(NULL); //letzter Status�nderung (ctime)
 	firstBlock = -1; //Zeiger auf ersten Block (u_int32_t BlockNo)
+	puffer=new char[size+1];
+	for(int i =0;i<size+1;i++)
+			puffer[i]=char(0);
 
 	//printf("Konstruktor von MyFile ist beendet \n");
 }
@@ -50,6 +57,9 @@ int MyFile::init(MyFile * f) {
 	lastMod = f->lastMod; //letzte Ver�nderung (mtime)
 	lastStatusChange = f->lastStatusChange; //letzter Status�nderung (ctime)
 	firstBlock = f->firstBlock; //Zeiger auf ersten Block (u_int32_t BlockNo)
+	puffer=new char[size+1];
+	for(int i =0;i<size+1;i++)
+			puffer[i]=char(0);
 
 	return 1;
 
@@ -355,4 +365,12 @@ void MyFile::resize(char * text, int oldSize, int newSize) {
 	*(text - 1) = '\0';
 	text -= newSize;
 
+}
+
+void  MyFile::writeFromPuffer(char * buf)
+{
+	for(int i=0;i<size+1; i++)
+	{
+		buf[i]=puffer[i];
+	}
 }
