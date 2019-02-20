@@ -129,6 +129,42 @@ MyFile::MyFile() {
 	//printf("Konstruktor von MyFile ist beendet \n");
 }
 
+MyFile::MyFile(const MyFile &f) {
+	this->name = f.name; //Dateiname
+	this->user = f.user; //Benutzer
+	this->group = f.group; //Gruppen-ID
+	this->size = f.size; //Dateigroesse
+	this->mode = f.mode; //Zugriffsberechtigung
+	this->lastAccess = f.lastAccess; //Zeitpunkt letzter Zugriff (atime)
+	this->lastMod = f.lastMod; //letzte Ver�nderung (mtime)
+	this->lastStatusChange = f.lastStatusChange; //letzter Status�nderung (ctime)
+	this->firstBlock = f.firstBlock; //Zeiger auf ersten Block (u_int32_t BlockNo)
+	//puffer=new char[size+1];
+	/*for(int i =0;i<BLOCK_SIZE;i++)
+			puffer[i]=char(0);*/
+
+	//printf("Konstruktor von MyFile ist beendet \n");
+}
+
+MyFile::MyFile(MyFile * f) {
+
+	name=f->name;
+	user = f->user;
+	group = f->group;
+	size = f->size;
+	mode = f->mode;
+	lastAccess = f->lastAccess;
+	lastMod = f->lastMod; //letzte Ver�nderung (mtime)
+	lastStatusChange = f->lastStatusChange; //letzter Status�nderung (ctime)
+	firstBlock = f->firstBlock; //Zeiger auf ersten Block (u_int32_t BlockNo)
+	//puffer=new char[size+1];
+	/*for(int i =0;i<BLOCK_SIZE;i++)
+			puffer[i]=char(0);*/
+
+
+}
+
+
 int MyFile::init(MyFile * f) {
 
 	name=f->name;
