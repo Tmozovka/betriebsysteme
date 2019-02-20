@@ -1,0 +1,8 @@
+	Starting logging...
+
+src/myfs.cpp:1377:fuseInit()
+	Container file name: /home/julia/Documents/betriebsysteme/container.bin
+	try to open container 
+
+	 open container sucess 
+

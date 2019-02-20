@@ -92,13 +92,13 @@ int main(int argc, char *argv[]) {
 
 			/*off_t size = ceil((double) st.st_size / BD_BLOCK_SIZE) //ceil(2/512)=1  ceil(513/512)=2
 			* BD_BLOCK_SIZE;*/
-			off_t size =st.st_size+1;
+			off_t size =st.st_size;
 			printf("size von der Datei: %i st.st_size : %i \n", size, st.st_size );
 			pufferAdd = new char[size];
 			fread(pufferAdd, size, 1, fin);
 			if(size<5000)
-			printf("pufferAdd : %s \n", pufferAdd);
-			pufferAdd[st.st_size]=char(10);
+		//	printf("pufferAdd : %s \n", pufferAdd);
+		//	pufferAdd[st.st_size]=char(10);
 			/*
 			for(int j=st.st_size+1;j<size;j++)
 						{

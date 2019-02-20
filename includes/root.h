@@ -60,6 +60,9 @@ public  :
 	friend bool operator ==(MyRoot const &f, MyRoot const& f2);
 	friend bool operator !=(MyRoot const &f, MyRoot const& f2);
 
+	/*void writeFromPuffer(const char * name, char * buf);
+	void writeToPuffer(const char * name, char * buf);*/
+
 
 };
 

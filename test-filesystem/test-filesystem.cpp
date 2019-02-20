@@ -64,8 +64,10 @@ int TestFilesytem::compareLists(MyList list1, MyList list2) {
 	return 1;
 }
 
-void TestFilesytem::readFile(char* filename, MyList* list) {
+void TestFilesytem::readFile(char* filename, MyList* list, int offset=0) {
 	int fileDescr = myOpen(filename);
+	lseek(fileDescr, offset, SEEK_SET);
+
 	ssize_t bytesRead;
 	do {
 		char* buffer = new char[BUFFERSIZE + 1];
@@ -271,7 +273,7 @@ int main(int argc, char *argv[]) {
 
 
 
-
+/*
 	//char * filename ="../mount-dir/text1.txt";
 	char * filename ="./file2.txt";
 
@@ -292,9 +294,10 @@ int main(int argc, char *argv[]) {
 
 	delete[] stringToWrite;
 
-
-
 	return(0);
+
+
+	*/
 
 //Zusamenfügen von path von Datei
 
@@ -352,7 +355,7 @@ int main(int argc, char *argv[]) {
 	listMount2.list.clear();
 
 	//***************************************************************************************************
-	std::cerr << "\033[0;45m" << "Test: identisch nach mehrmals lesen text2"
+	std::cerr << "\033[0;45m" << "Test: identisch nach mehrmals lesen text3"
 			<< "\033[1;0m" << std::endl;
 
 	test1.readFile("../mount-dir/text3.txt", &listMount);
@@ -365,34 +368,34 @@ int main(int argc, char *argv[]) {
 	listMount2.list.clear();
 
 	//***************************************************************************************************
-	std::cerr << "\033[0;45m" << "Test: identisch nach mehrmals lesen text2"
+/*	std::cerr << "\033[0;45m" << "Test: identisch nach mehrmals lesen big.txt"
 			<< "\033[1;0m" << std::endl;
 
-	test1.readFile("../mount-dir/text4.txt", &listMount);
+	test1.readFile("../mount-dir/big.txt", &listMount);
 	//test1.readFile(FileInMount, &listMount2);
-	test1.readFile("../input/in/text4.txt", &listMount2);
-	test1.printTwoFiles("../mount-dir/text4.txt", "../input/in/text4.txt");
+	test1.readFile("../input/in/big.txt", &listMount2);
+	//test1.printTwoFiles("../mount-dir/big.txt", "../input/in/big.txt");
 
 	test1.compareLists(listMount, listMount2);
 	listMount.list.clear();
-	listMount2.list.clear();
+	listMount2.list.clear();*/
 
 	//***************************************************************************************************
-	//Copy von Mountfile in filetocomapre erstellen
-	/*	std::cerr << "Now writing list1 to filetoComapre" << std::endl;
-	 test1.readFile(FileInMount, &listMount);
-	 test1.writeListToFile(listMount, fileToCompare);
+		std::cerr << "\033[0;45m" << "Test: Read mit offset 5 testen text3"
+				<< "\033[1;0m" << std::endl;
 
-	 //Vergleichsfile auslesen
-	 MyList listCompare;
-	 test1.readFile(fileToCompare, &listCompare);
-	 test1.printTwoFiles(FileInMount, fileToCompare);
-	 test1.compareLists(listMount, listCompare);
-	 listMount.list.clear();
-	 listCompare.list.clear();*/
+		test1.readFile("../mount-dir/text3.txt", &listMount, 5);
+		//test1.readFile(FileInMount, &listMount2);
+		test1.readFile("../input/text3.txt", &listMount2, 5);
+		test1.printTwoFiles("../mount-dir/text3.txt", "../input/text3.txt");
+
+		test1.compareLists(listMount, listMount2);
+		listMount.list.clear();
+		listMount2.list.clear();
+
 
 //***************************************************************************************************
-	std::cerr << "\033[0;45m" << "Test: Schreiben ohne offset" << "\033[1;0m"
+	/*std::cerr << "\033[0;45m" << "Test: Schreiben ohne offset" << "\033[1;0m"
 			<< std::endl;
 	//schreiben
 	char* fcomp = (char*) "../text1.txt";
@@ -500,7 +503,7 @@ int main(int argc, char *argv[]) {
 
 	test1.compareLists(listMount, listCompare);
 	listMount.list.clear();
-	listCompare.list.clear();
+	listCompare.list.clear();*/
 
 
 

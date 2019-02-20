@@ -126,6 +126,8 @@ int MyFS::readFile(const char *path, char *buf, size_t size, off_t offset, struc
 
 	//size++;
 
+	printf("fileInfo->fh= %i, fileInfo->keep_cashe= %i \n", fileInfo->fh, fileInfo->keep_cache);
+
 	//printf("readFile start \n"); //funktioniert nicht
 	LOG("********************************************************************************************** ");
 	LOGF("readFile start , size: %i, offset: %i \n", (int )size, (int )offset);
@@ -142,8 +144,16 @@ int MyFS::readFile(const char *path, char *buf, size_t size, off_t offset, struc
 		RETURN(-ENOENT);
 	}
 
-	int fileSize = file->getSize();
-	;	//= ft->getSize();
+
+	/*if(fileInfo->keep_cache!=0)
+	{
+	root->writeFromPuffer(path, buf);
+	RETURN(fileInfo->keep_cache);
+	}*/
+
+
+	int fileSize=file->getSize(); ;//= ft->getSize();
+
 	LOGF("readFile fileSize= ft->getSize() %i  \n", fileSize);
 	//int blocksNumber = ceil(fcopy.getSize() / BD_BLOCK_SIZE);
 	/*if (fileSize % BD_BLOCK_SIZE != 0) {
@@ -217,6 +227,9 @@ int MyFS::readFile(const char *path, char *buf, size_t size, off_t offset, struc
 	printf("sizeBuf: %i , buf: %s \n", strBuf.length(), buf);
 	delete[] readBuf;
 	delete file;
+
+	/*fileInfo->keep_cache=size;
+	root->writeToPuffer(path, buf);*/
 
 	RETURN(size);
 	/*
@@ -379,8 +392,12 @@ int MyFS::addFile(const char * name, mode_t mode, time_t mtime, off_t size, char
 				buffer[index] = char(0);
 			}
 			//printf("Puffer %s \n",buffer);
-			if (size < 5000)
-				printf("write in BlockNr %i , buffer : %s \n", blocksUse[i], buffer);
+
+			//if(size<5000)
+			//printf("write in BlockNr %i , buffer : %s \n",blocksUse[i],buffer );
+
+			//if (size < 5000)
+				//printf("write in BlockNr %i , buffer : %s \n", blocksUse[i], buffer);
 			returnCode = this->blocks->write(blocksUse[i], buffer);
 			delete[] buffer;
 		} else {
@@ -546,6 +563,7 @@ int MyFS::fuseGetattr(const char *path, struct stat *st) {
 		st->st_nlink = 1;
 		LOGF("size from %s is %i", path, f->getSize());
 		st->st_size = f->getSize();
+		st->st_blocks=(f->getSize()%BLOCK_SIZE==0)?f->getSize()/BLOCK_NUMBER:(f->getSize()/BLOCK_NUMBER+1);
 
 	}
 
@@ -640,7 +658,7 @@ int MyFS::fuseOpen(const char *path, struct fuse_file_info *fileInfo) { // How t
 		 fileInfo->attribute angeben...
 		 }*/
 		LOGF("name %s exist \n", path);
-		fileInfo->fh = 1;
+		//fileInfo->fh = 1;
 		RETURN(0);
 	}
 	LOG("2");
@@ -831,6 +849,11 @@ int MyFS::fuseWrite(const char *path, const char *buf, size_t size, off_t offset
 	}
 	delete[] bufWrite;
 
+
+	/*newBuf[ret]=char(0);
+			ret++;
+	LOGF("newBuf: %s \n", newBuf);
+	LOGF("ret: %i \n", ret);*/
 	//Size aktualisieren
 	fileSize = size + offset;
 	root->setSize(path + 1, fileSize);
@@ -1440,11 +1463,45 @@ int MyFS::fuseReadlink(const char *path, char *link, size_t size) {
 	return 0;
 }
 int MyFS::fuseTruncate(const char *path, off_t newSize) {
-
-	LOGM()
-	;
-
+	LOGM();
 	LOGF("newSize: %i\n",newSize);
+
+	if(newSize==0){
+		MyFile *file = new MyFile();
+		int returnCode;
+		returnCode = root->getFile(path+1,file);
+		if(returnCode == -1){
+			LOGF("cant find file with name %s in root", path + 1);
+			RETURN(-ENOENT);
+		}
+
+		int currentBlock =file->getFirstBlock();
+		int next =0;
+		while(1){
+			fat->getNext(currentBlock, &next);
+			if(next == -1){
+				break;
+			}else{
+				currentBlock = next;
+				returnCode =fat->unLink(currentBlock);
+				if(returnCode == -1){
+					LOGF("cant unlink in fat currentBlock: %i ",currentBlock);
+					RETURN(-ENOMSG);
+				}
+				dmap->setUnused(currentBlock);
+				if(returnCode == -1){
+					LOGF("cant free in dma p currentBlock: %i ",currentBlock);
+					RETURN(-ENOMSG);
+				}
+			}
+		}
+		root->setSize(path+1,0);
+		delete file;
+
+	}else{
+		RETURN(-ENOSYS); /* Function not implemented */
+	}
+
 	return 0;
 }
 
@@ -1491,8 +1548,7 @@ int MyFS::fuseFsyncdir(const char *path, int datasync, struct fuse_file_info *fi
 }
 
 int MyFS::fuseTruncate(const char *path, off_t offset, struct fuse_file_info *fileInfo) {
-	LOGM()
-	;
+	LOGM();
 	RETURN(0);
 }
 

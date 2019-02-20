@@ -327,7 +327,7 @@ void MyFAT::writeBlockDevice(BlockDevice * blocks, int start) {
 	for (int i = to_string(nrBlocks).length(); i < BLOCK_SIZE; i++)
 		temp[i] = char(0);
 
-	printf("nrBlocks write in %i : %s \n", firstBlock, temp);
+	//printf("nrBlocks write in %i : %s \n", firstBlock, temp);
 	//resize(temp,to_string(nrBlocks).length(),BLOCK_SIZE);
 	blocks->write(firstBlock, temp);
 

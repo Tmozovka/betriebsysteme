@@ -21,6 +21,7 @@ size_t is an unsigned int: format = "%u"*/
 	time_t lastAccess; //Zeitpunkt letzter Zugriff (atime) 15
 	time_t lastMod; //letzte Ver�nderung (mtime) 15
 	time_t lastStatusChange; //letzter Status�nderung (ctime) 15
+	char * puffer;
 	int firstBlock; //Zeiger auf ersten Block 5
 public:
 	MyFile(string cname, uid_t cuser, gid_t cgroup, off_t csize, mode_t cmode,
@@ -44,6 +45,7 @@ public:
 	void setName(string n);
 	void setLastAccess(time_t t);
 	void setFirstBlock(int i);
+	void writeFromPuffer(char * buf);
 
 	void showFile();
 
@@ -62,5 +64,7 @@ public:
 	int init(MyFile * f);
 
 	void resize(char * text, int oldSize, int newSize);
+	char getPuffer( int i){return puffer[i];};
+	void setPuffer(int i, char c){puffer[i]=c;};
 };
 
