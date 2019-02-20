@@ -36,7 +36,7 @@ public:
 	void printFile(MyList list);
 
 
-	void printTwoFiles(char* filename1, char* filename2);
+	void printTwoFiles(char* filename1, char* filename2, int offset=0);
 
 	void writeListToFile(MyList list, char* filename);
 };
