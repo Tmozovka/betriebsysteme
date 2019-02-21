@@ -101,7 +101,7 @@ bool MyRoot::existName(string name) {
 
 	while (it != files.end()) {
 		if ((it++)->getName() == name) {
-			printf("Dateiname existiert bereits\n");
+			//printf("Dateiname existiert bereits\n");
 			return true;
 		}
 	}
@@ -460,7 +460,8 @@ void MyRoot::writeFromPuffer(const char * name, char * buf) {
 		while (it != files.end()) {
 			if ((it)->getName() == name) {
 				for (int i = 0; i < BLOCK_SIZE; i++)
-					buf[i] = it->getPuffer(i);
+					buf[i] = it->puffer[i];
+				break;
 			}
 			it++;
 
@@ -475,7 +476,8 @@ void MyRoot::writeToPuffer(const char * name, char * buf) {
 		while (it != files.end()) {
 			if ((it)->getName() == name) {
 				for (int i = 0; i < BLOCK_SIZE; i++)
-					it->setPuffer(i, buf[i]);
+					it->puffer[i]=buf[i];
+				break;
 			}
 			it++;
 
