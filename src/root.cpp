@@ -67,21 +67,21 @@ int MyRoot::addFile(string name, off_t size, mode_t mode, time_t st_mtime,
 //Und muesste es nicht >= heissen?
 	if (sizeRoot + 1 > NUM_DIR_ENTRIES) {
 		printf("too many files in Root \n");
-		return -1;
+		return -ENOMSG;
 	}
 
 	if (existName(name)) {
 		printf("File's %s name is already exist \n", name.c_str());
-		return -1;
+		return -EEXIST;
 	}
 	if (name.length() > NAME_LENGTH) {
 		printf("File's %s name is too big \n", name.c_str());
-		return -1;
+		return -EFBIG;
 	}
 
 //Speichern von Name, Dateigroesse und Zugriffsrechte pro Datei
 	/*MyFile * firstfile = new MyFile(name, getuid(), getgid(), size, mode,
-			time(NULL), time(NULL), time(NULL), firstBlock);*/
+	 time(NULL), time(NULL), time(NULL), firstBlock);*/
 	const MyFile * f = new MyFile(name, getuid(), getgid(), size, mode,
 			time(NULL), st_mtime, time(NULL), firstBlock);
 
@@ -155,14 +155,29 @@ void MyRoot::showRoot() {
 	printf(
 			"************************************************************ \nRoot: \n");
 	std::list<MyFile>::iterator it = files.begin();
-
+	int count = 1;
 	while (it != files.end()) {
+		printf("%i: \n", count++);
 		(it)->showFile();
 		it++;
 	}
 	printf("************************************************************ \n");
 }
 
+void MyRoot::showFile(string path) {
+	printf(
+			"************************************************************ \nRoot: \n");
+	std::list<MyFile>::iterator it = files.begin();
+	while (it != files.end()) {
+		if(it->getName()==path)
+		{
+			(it)->showFile();
+			break;
+		}
+		it++;
+	}
+	printf("************************************************************ \n");
+}
 int MyRoot::getFile(string name, MyFile * f) {
 
 //LOG("Starting to look for file in root");
@@ -182,7 +197,7 @@ int MyRoot::getFile(string name, MyFile * f) {
 
 }
 
-int MyRoot::setSize(string name, off_t size){
+int MyRoot::setSize(string name, off_t size) {
 	std::list<MyFile>::iterator it = files.begin();
 
 	while (it->getName() != name) {
@@ -330,7 +345,7 @@ void MyRoot::writeBlockDevice(BlockDevice * blocks, int start) {
 	strcpy(buf, to_string(this->sizeRoot).c_str());
 //resize(buf, to_string(this->sizeRoot).length(), BLOCK_SIZE);
 
-	//printf("buf %i : %s \n", start, buf);
+//printf("buf %i : %s \n", start, buf);
 
 	for (int i = to_string(this->sizeRoot).length(); i < BLOCK_SIZE; i++)
 		buf[i] = char(0);
@@ -444,7 +459,7 @@ void MyRoot::writeFromPuffer(const char * name, char * buf) {
 
 		while (it != files.end()) {
 			if ((it)->getName() == name) {
-				for (int i = 0; i <BLOCK_SIZE; i++)
+				for (int i = 0; i < BLOCK_SIZE; i++)
 					buf[i] = it->getPuffer(i);
 			}
 			it++;

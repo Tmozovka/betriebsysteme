@@ -10,8 +10,8 @@ using namespace std;
 class MyFile {
 private:
 	/*
-off_t is a long int: format = "%ld"
-size_t is an unsigned int: format = "%u"*/
+	 off_t is a long int: format = "%ld"
+	 size_t is an unsigned int: format = "%u"*/
 
 	string name; //Dateiname 255
 	uid_t user; //Benutzer  unsigned int 10
@@ -21,7 +21,7 @@ size_t is an unsigned int: format = "%u"*/
 	time_t lastAccess; //Zeitpunkt letzter Zugriff (atime) 15
 	time_t lastMod; //letzte Ver�nderung (mtime) 15
 	time_t lastStatusChange; //letzter Status�nderung (ctime) 15
-	char * puffer=new char [BLOCK_SIZE];
+	char * puffer = new char[BLOCK_SIZE];
 	int firstBlock; //Zeiger auf ersten Block 5
 public:
 	MyFile(string cname, uid_t cuser, gid_t cgroup, off_t csize, mode_t cmode,
@@ -41,6 +41,25 @@ public:
 	off_t getSize();
 	int getFirstBlock();
 	string getName();
+	time_t getAccessTime() {
+		return lastAccess;
+	}
+	time_t getChangeTime() {
+		return lastStatusChange;
+	}
+	time_t getModifyTime() {
+		return lastMod;
+	}
+
+	void setAccessTime(time_t t) {
+		 lastAccess=t;
+	}
+	void setChangeTime(time_t t) {
+		lastStatusChange=t;
+	}
+	void setModifyTime(time_t t) {
+		lastMod=t;
+	}
 
 	//set
 	void setLastMod(time_t t);
@@ -57,9 +76,9 @@ public:
 
 	void writeFileChar(char * b);
 	char * writeBlock();
-	void readBlock(char ** c, int blockNo, BlockDevice  blocks);
+	void readBlock(char ** c, int blockNo, BlockDevice blocks);
 
-	void writeVar(char *,  char * buf, int size, int & count );
+	void writeVar(char *, char * buf, int size, int & count);
 	//void writeVar(int * var, char * buf, int size, int & count );
 	void convertS(string & var, char * varT);
 	template<class T>
@@ -67,7 +86,13 @@ public:
 	int init(MyFile * f);
 
 	void resize(char * text, int oldSize, int newSize);
-	char getPuffer( int i){return puffer[i];};
-	void setPuffer(int i, char c){puffer[i]=c;};
+	char getPuffer(int i) {
+		return puffer[i];
+	}
+	;
+	void setPuffer(int i, char c) {
+		puffer[i] = c;
+	}
+	;
 };
 

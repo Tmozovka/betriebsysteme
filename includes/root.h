@@ -41,6 +41,7 @@ public  :
 	bool existName(string name);
 	bool compareRoots(MyRoot* root);
 	void showRoot();
+	void showFile(string path);
 
 	int getSize() {
 		return sizeRoot;

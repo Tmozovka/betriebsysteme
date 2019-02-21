@@ -36,7 +36,7 @@ TEST_CASE( "Add/get/delete File", "[root]" ) {
 		name[0] ++;
 	}
 	int result = myroot->addFile(f->getName(),f->getSize(),f->getMode(),f->getLastMod(),f->getFirstBlock());
-	REQUIRE(result==-1);
+	REQUIRE(result<0);
 	delete f;
 	delete [] name;
 }
@@ -56,7 +56,7 @@ TEST_CASE( "Add/get/delete File", "[root]" ) {
 
 
 	int result =myroot->addFile(nameBig,f->getSize(),f->getMode(),f->getLastMod(),f->getFirstBlock());
-	REQUIRE(result==-1);
+	REQUIRE(result<0);
 	delete f;
 	delete [] nameBig;
 }
@@ -71,7 +71,7 @@ TEST_CASE( "Add/get/delete File", "[root]" ) {
 	MyRoot* twinsRoot = new MyRoot();
 	twinsRoot->addFile(f->getName(),12345,12,1000000,50009);
 	int result = twinsRoot->addFile(fileSimilarName->getName(),2345,13,1000001,50000);
-	REQUIRE(result==-1);
+	REQUIRE(result<0);
 	delete f;
 	delete fileSimilarName;
 	delete twinsRoot;
@@ -84,7 +84,7 @@ TEST_CASE( "Add/get/delete File", "[root]" ) {
 	MyRoot* rootTwins = new MyRoot();
 	rootTwins->addFile(f->getName(),12245,11,1000011,50005);
 	int result = rootTwins->addFile("testzwei.txt",2445,14,1000101,40000);
-	REQUIRE(result==-1);
+	REQUIRE(result<0);
 	delete f;
 	delete rootTwins;
 
@@ -92,7 +92,7 @@ TEST_CASE( "Add/get/delete File", "[root]" ) {
 	SECTION("No addition possible: Name already exists - Test 3"){
 	MyRoot* rootTwins = new MyRoot("testdrei.txt",12244,16,50003);
 	int result = rootTwins->addFile("testdrei.txt",2441,18,1010001,40001);
-	REQUIRE(result==-1);
+	REQUIRE(result<0);
 	delete rootTwins;
 }
 
@@ -310,6 +310,7 @@ SECTION("Klein Test fuer das Block Beschreiben")
 	SECTION("test root copyFile"){
 			MyRoot* r1 = new MyRoot("testdrei.txt",12244,16,50003);
 			MyRoot* r2 = new MyRoot("testdrei.txt",12244,16,50003);
+			r1->showRoot();
 			//std::list<MyFile>::iterator it = r1->files.begin();
 
 			//r1->addFile("secondFile.txt",10300,12005,1000001,59999);

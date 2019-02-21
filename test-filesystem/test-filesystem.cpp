@@ -133,14 +133,15 @@ void TestFilesytem::myWrite(char* filename, int bytesToWrite, int offset,
 	char stringToWrite[MAX_LENGTH];
 	int i = 0;
 
-	/*	char c;
+		char c;
 	 if (offset % 2 == 0)
 	 c = char(49);
 	 else
-	 c = char(50);*/
+	 c = char(50);
 
 	while (i < MAX_LENGTH) {
-		stringToWrite[i] = char(r % 9 + 48);
+		//stringToWrite[i] = char(r % 9 + 48);
+		stringToWrite[i] = c;
 		i++;
 		//	c++;
 		//	c = c % 100;
@@ -379,7 +380,7 @@ int main(int argc, char *argv[]) {
 	listMount2.list.clear();
 
 	//***************************************************************************************************
-	std::cerr << "\033[0;45m" << "Test: identisch nach mehrmals lesen big.txt"
+	/*std::cerr << "\033[0;45m" << "Test: identisch nach mehrmals lesen big.txt"
 			<< "\033[1;0m" << std::endl;
 
 	test1.readFile("../mount-dir/big.txt", &listMount);
@@ -387,13 +388,13 @@ int main(int argc, char *argv[]) {
 
 	test1.compareLists(listMount, listMount2);
 	listMount.list.clear();
-	listMount2.list.clear();
+	listMount2.list.clear();*/
 	//***************************************************************************************************
 	std::cerr << "\033[0;45m" << "Test: identisch nach mehrmals lesen 2 big.txt"
 			<< "\033[1;0m" << std::endl;
 
-	test1.readFile("../mount-dir/big.txt", &listMount);
-	test1.readFile("../input/in/big.txt", &listMount2);
+	test1.readFile("../mount-dir/big (copy).txt", &listMount);
+	test1.readFile("../input/in/big (copy).txt", &listMount2);
 
 	test1.compareLists(listMount, listMount2);
 	listMount.list.clear();
@@ -530,8 +531,8 @@ int main(int argc, char *argv[]) {
 	std::cerr << "\033[0;45m" << "Test: Schreiben  mit offset" << "\033[1;0m"
 			<< std::endl;
 	r = rand();
-	test1.myWrite(FileInMount, 3000, 515, r);
-	test1.myWrite(fcomp, 3000, 515, r);
+	test1.myWrite(FileInMount, 5000, 515, r);
+	test1.myWrite(fcomp, 5000, 515, r);
 
 	//files auslesen
 	test1.readFile(FileInMount, &listMount);

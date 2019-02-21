@@ -190,6 +190,7 @@ void MyFile::showFile() {
 			name.c_str(), user, group, (int) size, firstBlock);
 }
 
+
 //operators
 bool operator ==(MyFile const &f, MyFile const &f2) {
 	return ((f2.name == f.name) && f2.firstBlock == f.firstBlock && f2.size==f.size);
