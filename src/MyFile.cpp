@@ -100,31 +100,31 @@ MyFile::MyFile(string cname, uid_t cuser, gid_t cgroup, off_t csize,
 	lastStatusChange = clastStatusChange; //letzter Status�nderung (ctime)
 	firstBlock = cfirstBlock; //Zeiger auf ersten Block (u_int32_t BlockNo)
 	//puffer=new char[size+1];
-	/*for(int i =0;i<BLOCK_SIZE;i++)
-		puffer[i]=char(0);*/
+	for(int i =0;i<BLOCK_SIZE;i++)
+		puffer[i]=char(0);
 
 	//printf("Konstruktor von MyFile ist beendet \n");
 }
 MyFile::~MyFile() { //
 	//printf("Destruktor von MyFile ist beendet \n");
-	//delete [] puffer;
+	delete [] puffer;
 }
 
 //Define the constructor
 
 MyFile::MyFile() {
 	name = ""; //Dateiname
-	user = NULL; //Benutzer
-	group = NULL; //Gruppen-ID
-	size = NULL; //Dateigroesse
-	mode = NULL; //Zugriffsberechtigung
+	user = getuid(); //Benutzer
+	group = getgid(); //Gruppen-ID
+	size = 0; //Dateigroesse
+	mode =  100000 | 0444; //Zugriffsberechtigung
 	lastAccess = time(NULL); //Zeitpunkt letzter Zugriff (atime)
 	lastMod = time(NULL); //letzte Ver�nderung (mtime)
 	lastStatusChange = time(NULL); //letzter Status�nderung (ctime)
 	firstBlock = -1; //Zeiger auf ersten Block (u_int32_t BlockNo)
 	//puffer=new char[size+1];
-	/*for(int i =0;i<BLOCK_SIZE;i++)
-			puffer[i]=char(0);*/
+	for(int i =0;i<BLOCK_SIZE;i++)
+			puffer[i]=char(0);
 
 	//printf("Konstruktor von MyFile ist beendet \n");
 }
@@ -140,8 +140,8 @@ MyFile::MyFile(const MyFile &f) {
 	this->lastStatusChange = f.lastStatusChange; //letzter Status�nderung (ctime)
 	this->firstBlock = f.firstBlock; //Zeiger auf ersten Block (u_int32_t BlockNo)
 	//puffer=new char[size+1];
-	/*for(int i =0;i<BLOCK_SIZE;i++)
-			puffer[i]=char(0);*/
+	for(int i =0;i<BLOCK_SIZE;i++)
+			puffer[i]=char(0);
 
 	//printf("Konstruktor von MyFile ist beendet \n");
 }
@@ -158,8 +158,8 @@ MyFile::MyFile(MyFile * f) {
 	lastStatusChange = f->lastStatusChange; //letzter Status�nderung (ctime)
 	firstBlock = f->firstBlock; //Zeiger auf ersten Block (u_int32_t BlockNo)
 	//puffer=new char[size+1];
-	/*for(int i =0;i<BLOCK_SIZE;i++)
-			puffer[i]=char(0);*/
+	for(int i =0;i<BLOCK_SIZE;i++)
+			puffer[i]=char(0);
 
 
 }
@@ -177,8 +177,8 @@ int MyFile::init(MyFile * f) {
 	lastStatusChange = f->lastStatusChange; //letzter Status�nderung (ctime)
 	firstBlock = f->firstBlock; //Zeiger auf ersten Block (u_int32_t BlockNo)
 	//puffer=new char[size+1];
-	/*for(int i =0;i<BLOCK_SIZE;i++)
-			puffer[i]=char(0);*/
+	for(int i =0;i<BLOCK_SIZE;i++)
+			puffer[i]=char(0);
 
 	return 1;
 
@@ -408,10 +408,10 @@ void MyFile::resize(char * text, int oldSize, int newSize) {
 
 }
 
-/*void  MyFile::writeFromPuffer(char * buf)
+void  MyFile::writeFromPuffer(char * buf)
 {
 	for(int i=0;i<size+1; i++)
 	{
 		buf[i]=puffer[i];
 	}
-}*/
+}

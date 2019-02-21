@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
-
+#include <unistd.h>
 #include <stdexcept>
 #include <stdio.h>
 #include "myfs-structs.h"
@@ -21,7 +21,7 @@ size_t is an unsigned int: format = "%u"*/
 	time_t lastAccess; //Zeitpunkt letzter Zugriff (atime) 15
 	time_t lastMod; //letzte Ver�nderung (mtime) 15
 	time_t lastStatusChange; //letzter Status�nderung (ctime) 15
-	//char * puffer=new char [BLOCK_SIZE];
+	char * puffer=new char [BLOCK_SIZE];
 	int firstBlock; //Zeiger auf ersten Block 5
 public:
 	MyFile(string cname, uid_t cuser, gid_t cgroup, off_t csize, mode_t cmode,
@@ -67,7 +67,7 @@ public:
 	int init(MyFile * f);
 
 	void resize(char * text, int oldSize, int newSize);
-	/*char getPuffer( int i){return puffer[i];};
-	void setPuffer(int i, char c){puffer[i]=c;};*/
+	char getPuffer( int i){return puffer[i];};
+	void setPuffer(int i, char c){puffer[i]=c;};
 };
 

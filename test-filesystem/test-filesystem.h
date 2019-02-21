@@ -29,7 +29,7 @@ public:
 
 	void readFile(char* filename, MyList* list, int offset = 0);
 
-	void myWrite(char* filename, int bytesToWrite, int offset);
+	void myWrite(char* filename, int bytesToWrite, int offset, int r=100);
 
 	int myOpen(char* filename);
 

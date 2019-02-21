@@ -144,11 +144,13 @@ int MyFS::readFile(const char *path, char *buf, size_t size, off_t offset, struc
 		RETURN(-ENOENT);
 	}
 
-	/*if(fileInfo->keep_cache!=0)
+	char * puffer = new char[BLOCK_SIZE];
+	if(fileInfo->keep_cache==1)
 	 {
-	 root->writeFromPuffer(path, buf);
-	 RETURN(fileInfo->keep_cache);
-	 }*/
+	 root->writeFromPuffer(path, puffer);
+	 if(puffer[0]==char(0))
+		 fileInfo->keep_cache=0;
+	 }
 
 	int fileSize = file->getSize();
 	;	//= ft->getSize();
@@ -173,7 +175,6 @@ int MyFS::readFile(const char *path, char *buf, size_t size, off_t offset, struc
 	 }*/
 
 	//Auszulesende stelle berechen
-	LOGF("511/512 = %i \n", (int )(511 / 512));
 	int blockNumber = offset / BD_BLOCK_SIZE;
 	LOGF("blockNumber: %i \n", blockNumber);
 	int positionInBlock = offset % BD_BLOCK_SIZE;
@@ -181,12 +182,12 @@ int MyFS::readFile(const char *path, char *buf, size_t size, off_t offset, struc
 
 	//blocknummer des blockNummer-ten Block suchen
 	int currentBlock = file->getFirstBlock();
-	LOGF("currentBlock: %i ->", currentBlock);
+	//LOGF("currentBlock: %i ->", currentBlock);
 	for (int i = 0; i < blockNumber; i++) { // blockNumber-mal häufig den nächsten Block suchen TODO: ist das so richtig? +-1 block?
 		int next = 0;
 		fat->getNext(currentBlock, &next);
 		currentBlock = next;
-		LOGF("currentBlock: %i \n", currentBlock);
+		//LOGF("currentBlock: %i \n", currentBlock);
 	}
 
 	char * readBuf = new char[BD_BLOCK_SIZE];
@@ -199,7 +200,21 @@ int MyFS::readFile(const char *path, char *buf, size_t size, off_t offset, struc
 	//Auslesen bis size blöcke gelesen
 	while (bytesRead < (int) size) {
 		testcount++;
-		blocks->read(currentBlock, readBuf);
+		if(fileInfo->keep_cache==1&&currentBlock==file->getFirstBlock())
+		{
+			for(int i=0;i<BLOCK_SIZE;i++)
+				readBuf[i]=puffer[i];
+		}
+		else
+		{
+			blocks->read(currentBlock, readBuf);
+			if(currentBlock==file->getFirstBlock())
+			{
+				printf("write in puffer from block %i \n", currentBlock);
+				for(int i=0;i<BLOCK_SIZE;i++)
+					puffer[i]=readBuf[i];
+			}
+		}
 		//if(testcount==1)
 		//{
 		//	string temp(readBuf);
@@ -219,17 +234,24 @@ int MyFS::readFile(const char *path, char *buf, size_t size, off_t offset, struc
 		int next = 0;
 		fat->getNext(currentBlock, &next);
 		currentBlock = next;
-		LOGF("currentBlock: %i \n", currentBlock);
+		//LOGF("currentBlock: %i \n", currentBlock);
 	}
 	//buf[bytesRead]=char(0);
 	//string strBuf(buf);
 	//printf("sizeBuf: %i , buf: %s \n", strBuf.length(), buf);
+	if(fileInfo->keep_cache==0)
+	{
+	root->writeToPuffer(path, puffer);
+	fileInfo->keep_cache=1;
+	}
 	delete[] readBuf;
 	delete file;
+	delete [] puffer;
 
-	/*fileInfo->keep_cache=size;
-	 root->writeToPuffer(path, buf);*/
+
+
 	//LOGF("readBuf : %s \n", buf);
+	LOG("END readFile \n");
 	RETURN(size);
 	/*
 	 >>>>>>> bcd816e55f499fb5569a0bef1c98158ec4d91eec
@@ -472,22 +494,22 @@ int MyFS::deleteFile(const char *name) {
 	//////////////////////////////////////
 	while (blocksNumber != 0 && currentBlock != -1) {
 		if (this->blocks->write(currentBlock, text) == -1) {
-			printf("error in addFile in this->blocks.write(i,    ) \n");
+			LOG("error in addFile in this->blocks.write(i,    ) \n");
 		}
 
 		if (dmap->setUnused(currentBlock) == -1) {
-			printf("error in deleteFile in dmap.setUnused(currentBlock)");
+			LOG("error in deleteFile in dmap.setUnused(currentBlock)");
 			RETURN(-ENOMSG);
 		}
 
 		int blockBefore = currentBlock;
 		if (fat->getNext(currentBlock, &currentBlock) == -1) {
-			printf("error in deleteFeil in fat.getNext(currentBlock, &currentBlock");
+			LOG("error in deleteFeil in fat.getNext(currentBlock, &currentBlock");
 			RETURN(-ENOMSG);
 		}
 
 		if (fat->unLink(blockBefore) == -1) {
-			printf("error in deleteFeil in fat.unLink(blockBefore)");
+			LOG("error in deleteFeil in fat.unLink(blockBefore)");
 			RETURN(-ENOMSG);
 		}
 
@@ -706,8 +728,8 @@ int MyFS::fuseWrite(const char *path, const char *buf, size_t size, off_t offset
 	LOGM()
 	;
 
-	LOGF("fusewrite %s \n", path);
-	LOGF("fusewrite buf %s \n", buf);
+	LOGF("fusewrite start %s \n", path);
+	//LOGF("fusewrite buf %s \n", buf);
 	LOGF("in fuseWrite size : %i offset: %i \n", size, offset);
 
 	//fileinfos holen

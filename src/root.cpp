@@ -437,16 +437,17 @@ void MyRoot::resize(char * text, int oldSize, int newSize) {
 	text -= newSize;
 
 }
-/*
+
 void MyRoot::writeFromPuffer(const char * name, char * buf) {
 	if (existName(name)) {
 		std::list<MyFile>::iterator it = files.begin();
 
 		while (it != files.end()) {
-			if ((it++)->getName() == name) {
-				for (int i = 0; i < it->getSize()+1; i++)
+			if ((it)->getName() == name) {
+				for (int i = 0; i <BLOCK_SIZE; i++)
 					buf[i] = it->getPuffer(i);
 			}
+			it++;
 
 		}
 	}
@@ -457,12 +458,13 @@ void MyRoot::writeToPuffer(const char * name, char * buf) {
 		std::list<MyFile>::iterator it = files.begin();
 
 		while (it != files.end()) {
-			if ((it++)->getName() == name) {
-				for (int i = 0; i < it->getSize()+1; i++)
+			if ((it)->getName() == name) {
+				for (int i = 0; i < BLOCK_SIZE; i++)
 					it->setPuffer(i, buf[i]);
 			}
+			it++;
 
 		}
 	}
-}*/
+}
 

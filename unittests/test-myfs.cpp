@@ -116,6 +116,13 @@ TEST_CASE( "my Funktionen in myfs testen", "[myfs]" ) {
 			int t2= fs->readFile(argv[i], pufferRead2,size,0,&tmp);
 			pufferRead2[size]=char(0);
 			printf("read File 2 %s : %s \n",argv[i],pufferRead2);
+			for(int j=0;j<size+1;j++)
+			{
+				if(pufferRead[j]!=pufferRead2[j])
+				{
+					printf("auf der Stelle %i ist in pufferRead Zeichen %c und in in pufferRead2 Zeichen %c \n", j, pufferRead[j], pufferRead2[j]);
+				}
+			}
 			REQUIRE(t2==size);
 
 			REQUIRE(strcmp(pufferRead2,pufferRead)==0);
@@ -145,7 +152,7 @@ TEST_CASE( "my Funktionen in myfs testen", "[myfs]" ) {
 				printf("read with fssek with offset %i , puffer %s \n end fseek\n", offset, pufferRead3);
 
 				pufferRead2 = new char[readSize+1];
-				t2= fs->readFile(argv[i], pufferRead2,readSize,offset,new fuse_file_info);
+				t2= fs->readFile(argv[i], pufferRead2,readSize,offset,&tmp);
 				pufferRead2[readSize]=char(0);
 				printf("read with readFile from container with offset %i , puffer %s \n", offset, pufferRead2);
 
