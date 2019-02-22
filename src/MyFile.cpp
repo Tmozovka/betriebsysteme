@@ -177,8 +177,8 @@ int MyFile::init(MyFile * f) {
 	lastStatusChange = f->lastStatusChange; //letzter Status�nderung (ctime)
 	firstBlock = f->firstBlock; //Zeiger auf ersten Block (u_int32_t BlockNo)
 	//puffer=new char[size+1];
-	for(int i =0;i<BLOCK_SIZE;i++)
-			puffer[i]=char(0);
+	/*for(int i =0;i<BLOCK_SIZE;i++)
+			puffer[i]=char(0);*/
 
 	return 1;
 

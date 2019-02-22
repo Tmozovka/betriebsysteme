@@ -1,4 +1,4 @@
-#include "catch.hpp"
+/*#include "catch.hpp"
 #include "helper.hpp"
 #include "fat.h"
 #include "blockdevice.h"
@@ -118,5 +118,5 @@ TEST_CASE( "Set/get/delete Allocated Blocks", "[fat]" ) {
 	}
 
 	delete fat;
-}
+}*/
 

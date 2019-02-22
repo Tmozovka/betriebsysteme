@@ -107,15 +107,18 @@ TEST_CASE( "my Funktionen in myfs testen", "[myfs]" ) {
 
 			//richtigkeit ausgelesene ueberprueffen
 			struct fuse_file_info tmp;
+			tmp.writepage=0;
 			int t= fs->readFile(argv[i], pufferRead,size,0,&tmp);
 			pufferRead[size]=char(0);
 			REQUIRE(t==size);
-			printf("read File %s : %s \n",argv[i],pufferRead);
+			printf("writepage: %i read File %s : %s \n",tmp.writepage,argv[i],pufferRead);
 
 			char * pufferRead2 = new char[size+1];
 			int t2= fs->readFile(argv[i], pufferRead2,size,0,&tmp);
 			pufferRead2[size]=char(0);
-			printf("read File 2 %s : %s \n",argv[i],pufferRead2);
+			printf("writepage: %i read File 2 %s : %s \n",tmp.writepage,argv[i],pufferRead2);
+			printf("root in test myfs \n");
+			fs->root->showRoot();
 			for(int j=0;j<size+1;j++)
 			{
 				if(pufferRead[j]!=pufferRead2[j])
@@ -159,7 +162,16 @@ TEST_CASE( "my Funktionen in myfs testen", "[myfs]" ) {
 				REQUIRE(t2==readSize);
 				REQUIRE(strcmp(pufferRead2,pufferRead3)==0);
 
+				char * pufferRead = new char[size+1];
+				t2= fs->readFile(argv[i], pufferRead,readSize,offset,&tmp);
+				REQUIRE(t2==readSize);
+				pufferRead[size]=char(0);
+				printf("writepage: %i read File 2 %s : %s \n",tmp.writepage,argv[i],pufferRead2);
+				REQUIRE(strcmp(pufferRead,pufferRead3)==0);
+				REQUIRE(strcmp(pufferRead2,pufferRead3)==0);
+
 				delete [] pufferRead2;
+				delete [] pufferRead;
 				delete [] pufferRead3;
 
 			}

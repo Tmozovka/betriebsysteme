@@ -193,16 +193,16 @@ int MyFS::readFile(const char *path, char *buf, size_t size, off_t offset,
 	while (bytesRead < (int) size) {
 
 		//Prüfen, ob aktueller block in filebuffer steht
-		/*if (fileInfo->keep_cache == currentBlockNumber+1) {
+		if (fileInfo->writepage == currentBlockNumber+1) {
 
-			LOGF("fileInfo->keep_cache: %i\n",fileInfo->keep_cache);
+			LOGF("fileInfo->writepage: %i\n",fileInfo->writepage);
 			LOGF("currentBlockNumber: %i steht in filebuffer-> lesen aus buffer\n",currentBlockNumber);
 			root->writeFromPuffer(path,readBuf);
 			LOGF("buffer aus file buffer: %s\n",readBuf);
 		} else {
-*/
+
 			blocks->read(currentBlock, readBuf);
-	//	}
+		}
 
 		//Ausgelesene Bytes in buffer schreiben, bis readbuffer-ende oder genug gelesen
 		while (positionInBlock < BD_BLOCK_SIZE && bytesRead < (int) size) {
@@ -229,11 +229,12 @@ int MyFS::readFile(const char *path, char *buf, size_t size, off_t offset,
 
 	//buffer neu setzen
 
-	if (fileInfo->keep_cache != currentBlockNumber+1) {
+	if (fileInfo->writepage != currentBlockNumber) {
 		LOGF("neue filebuffer von currentBlockNumber: %i wird gesetzt",currentBlockNumber);
 		root->writeToPuffer(path,readBuf);
-		fileInfo->keep_cache = currentBlockNumber+1;
-		LOGF("fileInfo->keep_cache: %i\n",fileInfo->keep_cache);
+		int tmp=currentBlockNumber;
+		fileInfo->writepage = tmp;
+		LOGF("fileInfo->writepage: %i\n",fileInfo->writepage);
 	}
 
 
@@ -248,7 +249,9 @@ int MyFS::readFile(const char *path, char *buf, size_t size, off_t offset,
 int MyFS::addFile(const char * name, mode_t mode, time_t mtime, off_t size,
 		char * text) {
 
-	LOG("********************************************************************************************** ");LOG("addFile start");LOGF("add file with name : %s \n", name);
+	LOG("********************************************************************************************** ");
+	LOG("addFile start");
+	LOGF("add file with name : %s \n", name);
 
 	int numberNeededBlocks = size / BD_BLOCK_SIZE;
 	int bytesInLastBlock = size % BD_BLOCK_SIZE;
