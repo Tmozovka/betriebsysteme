@@ -1,4 +1,7 @@
 # betriebsysteme
+Creating a filesystem during the Operating Systems Exercise
+
+# download project 
 how to git? information about all steps https://git-scm.com/book/de/v1/Los-geht%E2%80%99s
 1) install git
 2) register on GitHub
