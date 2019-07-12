@@ -16,7 +16,7 @@ Fehle beim Speicher Allockeren anschauen :
 2)valgrind ./mkfs.myfs container.bin text1.txt text2.txt oder valgrind ./mkfs.myfs container.bin text1.txt ./text2.txt ./input/text3.txt ./input/in/* ./input/in2/*
 3)valgrind ./mount.myfs container.bin logfile ./mount-dir -s -f
 
-**System mounten:**
+# System mounten:
 1) rm container.bin
 
 2)  ./mkfs.myfs container.bin text1.txt text2.txt
@@ -33,7 +33,7 @@ system testen
 
 
 
-**Test-filesystem ausführen**
+# Test-filesystem ausführen
 
 1)Filesystem mounten; der Ordner muss mount-dir heißen
 
