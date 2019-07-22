@@ -5,7 +5,7 @@
 #include <unistd.h>
 #include <string>
 #include <sys/types.h>
-
+using namespace std;
 
 class MyList{
 	public:
@@ -20,8 +20,6 @@ class MyList{
 class TestFilesytem {
 
 public:
-	int printingFiles;
-
 	TestFilesytem();
 	void myClose(int fileDescr);
 
@@ -35,10 +33,19 @@ public:
 
 	void printFile(MyList list);
 
+	void testReadTwoFiles(string file1, string file2, int offset = 0);
+
+	void testReadTwoFiles(char* file1, char* file2, int offset = 0);
+
+	void testWriteIntoTwoFiles(string file1, string file2, int offset = 0);
+
+	void testWriteIntoTwoFiles(char* file1, char* file2, int offset = 0);
 
 	void printTwoFiles(char* filename1, char* filename2, int offset=0);
 
 	void writeListToFile(MyList list, char* filename);
+
+	char* convertStringToCharArray(string s);
 };
 
 

@@ -1,16 +1,18 @@
 #include "test-filesystem.h"
 #define BUFFERSIZE 100
-
+#include <bits/stdc++.h> 
+using namespace std;
+bool PRINT_FILES = true;
 TestFilesytem::TestFilesytem() {
 }
 
 int TestFilesytem::compareLists(MyList list1, MyList list2) {
 
 	//Tets auf verschiedene Längen
-	//std::cerr << "list1.list.size()" << list1.list.size() << "list2.list.size()" << list2.list.size();
+	//cerr << "list1.list.size()" << list1.list.size() << "list2.list.size()" << list2.list.size();
 
 	if (list1.list.size() != list2.list.size()) {
-		std::cout << "\033[1;31m" << "ERROR: files have different sizes"
+		cout << "\033[1;31m" << "ERROR: files have different sizes"
 				<< "\033[0m" << std::endl;
 		return -1;
 	}
@@ -22,34 +24,34 @@ int TestFilesytem::compareLists(MyList list1, MyList list2) {
 	int stelle = 0;
 	while (it1 != list1.list.end()) {
 		for (int i = 0; i < BUFFERSIZE; i++) {
-			//std::cerr<<(*it1)[i]<<(*it2)[i];
+			//cerr<<(*it1)[i]<<(*it2)[i];
 			stelle++;
 			if ((*it1)[i] != (*it2)[i]) {
-				std::cout << "\033[1;31m" << "auf der Stelle: " << stelle - 2
+				cout << "\033[1;31m" << "auf der Stelle: " << stelle - 2
 						<< "kein Unterschied, it1[i] ist "
 						<< (int) (*it1)[i - 2] << " it2[i] ist "
 						<< (int) (*it2)[i - 2] << std::endl;
-				std::cout << "\033[1;31m" << "auf der Stelle: " << stelle - 1
+				cout << "\033[1;31m" << "auf der Stelle: " << stelle - 1
 						<< "kein Unterschied, it1[i] ist "
 						<< (int) (*it1)[i - 1] << " it2[i] ist "
 						<< (int) (*it2)[i - 1] << std::endl;
-				std::cout << "\033[1;31m" << "auf der Stelle: " << stelle
+				cout << "\033[1;31m" << "auf der Stelle: " << stelle
 						<< "ist Unterschied, it1[i] ist " << (int) (*it1)[i]
 						<< " it2[i] ist " << (int) (*it2)[i] << std::endl;
-				std::cout << "\033[1;31m" << "auf der Stelle: " << stelle + 1
+				cout << "\033[1;31m" << "auf der Stelle: " << stelle + 1
 						<< "nach der Unterschied, it1[i] ist "
 						<< (int) (*it1)[i + 1] << " it2[i] ist "
 						<< (int) (*it2)[i + 1] << std::endl;
-				std::cout << "\033[1;31m" << "auf der Stelle: " << stelle + 2
+				cout << "\033[1;31m" << "auf der Stelle: " << stelle + 2
 						<< "nach der Unterschied, it1[i] ist "
 						<< (int) (*it1)[i + 2] << " it2[i] ist "
 						<< (int) (*it2)[i + 2] << std::endl;
-				std::cout << "\033[1;31m" << "auf der Stelle: " << stelle + 3
+				cout << "\033[1;31m" << "auf der Stelle: " << stelle + 3
 						<< "nach der Unterschied, it1[i] ist "
 						<< (int) (*it1)[i + 3] << " it2[i] ist "
 						<< (int) (*it2)[i + 3] << std::endl;
 
-				std::cout << "\033[1;31m" << "ERROR: content is different"
+				cout << "\033[1;31m" << "ERROR: content is different"
 						<< "\033[0m" << std::endl;
 				return -1;
 			}
@@ -59,7 +61,7 @@ int TestFilesytem::compareLists(MyList list1, MyList list2) {
 		it2++;
 	}
 
-	std::cout << "\033[1;32m" << "SUCCESS: Compared files are identical"
+	cout << "\033[1;32m" << "SUCCESS: Compared files are identical"
 			<< "\033[0m" << std::endl;
 	return 1;
 }
@@ -75,7 +77,7 @@ void TestFilesytem::readFile(char* filename, MyList* list, int offset) {
 		bytesRead = read(fileDescr, buffer, BUFFERSIZE);
 		buffer[BUFFERSIZE] = '\0';
 		if (bytesRead == -1) {
-			std::cerr << "\033[1;31m"
+			cerr << "\033[1;31m"
 					<< "Error: Could not read from file, code " << "\033[0m"
 					<< errno << std::endl;
 			exit(-1);
@@ -90,10 +92,10 @@ void TestFilesytem::readFile(char* filename, MyList* list, int offset) {
 			list->validBytesLastEntry = bytesRead;
 		}
 		//use this to print file
-		//std::cout << buffer;
+		//cout << buffer;
 
 	} while (bytesRead > 0);
-	std::cout << std::endl;
+	cout << std::endl;
 
 	myClose(fileDescr);
 }
@@ -103,7 +105,7 @@ int TestFilesytem::myOpen(char* filename) {
 	fileDescr = open(filename, O_RDONLY);
 
 	if (fileDescr == -1) {
-		std::cerr << "\033[1;31m" << "Error: Could not open file, code "
+		cerr << "\033[1;31m" << "Error: Could not open file, code "
 				<< errno << "\033[0m" << std::endl;
 		exit(-1);
 	}
@@ -120,12 +122,12 @@ void TestFilesytem::myWrite(char* filename, int bytesToWrite, int offset,
 	int fileDescr = open(filename, O_CREAT | O_RDWR,
 	S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
 	if (fileDescr == -1) {
-		std::cerr << "\033[1;31m" << "Error: Could not open file, code "
+		cerr << "\033[1;31m" << "Error: Could not open file, code "
 				<< errno << "\033[0m" << std::endl;
 		exit(-1);
 	}
 
-	std::cerr << "Offset is now set to " << offset << ". There are "
+	cerr << "Offset is now set to " << offset << ". There are "
 			<< bytesToWrite << " Bytes to write" << std::endl;
 
 //Initializing String to write
@@ -153,16 +155,16 @@ void TestFilesytem::myWrite(char* filename, int bytesToWrite, int offset,
 	bytesWritten = write(fileDescr, stringToWrite, bytesToWrite);
 
 	if (bytesWritten == -1) {
-		std::cerr << "\033[1;31m" << "Error: Could not write to file, code "
+		cerr << "\033[1;31m" << "Error: Could not write to file, code "
 				<< errno << "\033[0m" << std::endl;
 		exit(-1);
 	}
 
-	std::cerr << "Wrote " << bytesWritten << " bytes to " << filename;
+	cerr << "Wrote " << bytesWritten << " bytes to " << filename;
 	if (bytesToWrite != bytesWritten) {
-		std::cerr << " Expected were " << bytesToWrite << " Bytes";
+		cerr << " Expected were " << bytesToWrite << " Bytes";
 	}
-	std::cerr << std::endl;
+	cerr << std::endl;
 	myClose(fileDescr);
 
 }
@@ -171,7 +173,7 @@ void TestFilesytem::myClose(int fileDescr) {
 	int ret;
 	ret = close(fileDescr);
 	if (ret == -1) {
-		std::cerr << "\033[1;31m" << "Error: Could not close file, code "
+		cerr << "\033[1;31m" << "Error: Could not close file, code "
 				<< errno << "\033[0m" << std::endl;
 		exit(-1);
 	}
@@ -182,7 +184,7 @@ void TestFilesytem::writeListToFile(MyList list, char* filename) {
 	int fileDescr = open(filename, O_CREAT | O_TRUNC | O_RDWR,
 	S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
 	if (fileDescr == -1) {
-		std::cerr << "\033[1;31m" << "Error: Could not open file, code "
+		cerr << "\033[1;31m" << "Error: Could not open file, code "
 				<< errno << "\033[0m" << std::endl;
 		exit(-1);
 	}
@@ -193,17 +195,17 @@ void TestFilesytem::writeListToFile(MyList list, char* filename) {
 
 	while (it != list.list.end()) {
 		char* buffer = new char[BUFFERSIZE];
-		//std::cerr << "currentNoListEntry :" << currentNoListEntry << " list.size(): " << list.list.size() << std::endl;
+		//cerr << "currentNoListEntry :" << currentNoListEntry << " list.size(): " << list.list.size() << std::endl;
 
 		/*
 		 //Print list entry
-		 std::cerr<<"Print list entry "<< currentNoListEntry<<" in PrintListToFile: "<<std::endl;
+		 cerr<<"Print list entry "<< currentNoListEntry<<" in PrintListToFile: "<<std::endl;
 		 for(int i = 0 ; i<BUFFERSIZE; i++){
 		 if(((*it)[i])==0){
-		 std::cerr<<"'\\0'";
+		 cerr<<"'\\0'";
 		 }
 
-		 std::cerr<<(*it)[i];
+		 cerr<<(*it)[i];
 		 }
 
 		 */
@@ -223,16 +225,16 @@ void TestFilesytem::writeListToFile(MyList list, char* filename) {
 			}
 
 		}
-		//std::cerr << "Anzahl Bytes in Puffer: " << noBytesInPuffer << std::endl;
+		//cerr << "Anzahl Bytes in Puffer: " << noBytesInPuffer << std::endl;
 		bytesWritten = write(fileDescr, buffer, noBytesInPuffer);
 		if (bytesWritten == -1) {
-			std::cerr << "\033[1;31m"
+			cerr << "\033[1;31m"
 					<< "Error: Could not write list to file, code " << errno
 					<< "\033[0m" << std::endl;
 			exit(-1);
 		}
 
-		//std::cerr << "In Buffer von WriteListToFile steht: " << buffer << std::endl;
+		//cerr << "In Buffer von WriteListToFile steht: " << buffer << std::endl;
 		it++;
 		currentNoListEntry++;
 		delete buffer;
@@ -243,305 +245,134 @@ void TestFilesytem::writeListToFile(MyList list, char* filename) {
 
 void TestFilesytem::printFile(MyList list) {
 
-	//std::cerr << "Printfile Methode aufgerufen:" << std::endl;
+	//cerr << "Printfile Methode aufgerufen:" << std::endl;
 	int currentListEntry = 0;
 	for (char* c : list.list) {
-		//std::cerr << "Im " << currentListEntry++ << "ten Eintrag steht:";
+		//cerr << "Im " << currentListEntry++ << "ten Eintrag steht:";
 		for (int i = 0; i < BUFFERSIZE; i++) {
-			std::cerr << "\033[0;7m" << c[i] << "\033[1;0m";
+			cerr << "\033[0;7m" << c[i] << "\033[1;0m";
 		}
 	}
-	std::cerr << std::endl;
+	cerr << std::endl;
 
 }
 
 void TestFilesytem::printTwoFiles(char* fn1, char* fn2, int offset) {
-	if (printingFiles) {
+	if (PRINT_FILES) {
 		MyList list1;
 		MyList list2;
 
 		readFile(fn1, &list1, offset);
 		readFile(fn2, &list2, offset);
 
-		std::cerr << "Print " << fn1 << std::endl;
+		cerr << "Print " << fn1 << std::endl;
 		printFile(list1);
-		std::cerr << "Print " << fn2 << std::endl;
+		cerr << "Print " << fn2 << std::endl;
 		printFile(list2);
 
 	}
 }
 
-int main(int argc, char *argv[]) {
-	TestFilesytem test1;
 
-	/*
-	 //char * filename ="../mount-dir/text1.txt";
-	 char * filename ="./file2.txt";
-
-	 int offset = 0;
-	 int fileDescr = open(filename, O_CREAT |O_TRUNC| O_RDWR, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
-	 printf("fileDescr:%i\n",fileDescr);
-	 lseek(fileDescr, offset, SEEK_SET);
-	 int length= 100;
-	 char* stringToWrite = new char[length+1];
-	 stringToWrite[length]= char(0);
-	 for(int i = 0; i<length; i++)
-	 stringToWrite[i]= 'a';
-
-	 int bytesWritten = write(fileDescr, stringToWrite, length);
-	 printf("bytesWritten:%i\n",bytesWritten);
-	 int ret = close(fileDescr);
-	 printf("ret:%i\n",ret);
-
-	 delete[] stringToWrite;
-
-	 return(0);
-
-
-	 */
-
-//Zusamenfügen von path von Datei
-//for mount-dir
-	std::string pathToMountFile("../mount-dir/");
-
-//for testing in test-filessytem folder
-//std::string path("");
-
-	pathToMountFile += argv[1];
-	char FileInMount[pathToMountFile.length() + 1];
-	for (int i = 0; i <= pathToMountFile.length(); i++) {
-		FileInMount[i] = pathToMountFile[i];
-	}
-
-	//char * FileInMount = (char*) "file2.txt";
-
-	char* fileToCompare = (char*) "fileToCompare.txt";
-
-	std::cerr << "Mit Datei: " << FileInMount << " werden nun Tests ausgeführt"
-			<< std::endl;
-
-	if (argv[2]) {
-		test1.printingFiles = 1;
-	} else {
-		test1.printingFiles = 0;
-	}
-
-//***************************************************************************************************
-	std::cerr << "\033[0;45m" << "Test: identisch nach mehrmals lesen text1"
-			<< "\033[1;0m" << std::endl;
-
+void TestFilesytem::testReadTwoFiles(char* file1, char* file2, int offset){
 	MyList listMount;
 	MyList listMount2;
-	test1.readFile(FileInMount, &listMount);
-	//test1.readFile(FileInMount, &listMount2);
-	test1.readFile("../text1.txt", &listMount2);
-	test1.printTwoFiles(FileInMount, "../text1.txt");
+	TestFilesytem testFilesytem;
 
-	test1.compareLists(listMount, listMount2);
-	listMount.list.clear();
-	listMount2.list.clear();
-//***************************************************************************************************
-	std::cerr << "\033[0;45m" << "Test: identisch nach mehrmals lesen text1"
-			<< "\033[1;0m" << std::endl;
+	cerr << "\033[0;45m" << "Test reading in file "<< file1 << " and file " <<file2 << " "<< " with offset: "<< offset << "\033[1;0m" << std::endl;
 
-	test1.readFile(FileInMount, &listMount);
-	//test1.readFile(FileInMount, &listMount2);
-	test1.readFile("../text1.txt", &listMount2);
-	test1.printTwoFiles(FileInMount, "../text1.txt");
+	testFilesytem.readFile(file1, &listMount, offset);
+	testFilesytem.readFile(file2, &listMount2, offset);
+	testFilesytem.printTwoFiles(file1, file2, offset);
 
-	test1.compareLists(listMount, listMount2);
+	testFilesytem.compareLists(listMount, listMount2);
 	listMount.list.clear();
 	listMount2.list.clear();
 
-//***************************************************************************************************
-	std::cerr << "\033[0;45m" << "Test: identisch nach mehrmals lesen text2"
-			<< "\033[1;0m" << std::endl;
+}
 
-	test1.readFile("../mount-dir/text2.txt", &listMount);
-	//test1.readFile(FileInMount, &listMount2);
-	test1.readFile("../text2.txt", &listMount2);
-	test1.printTwoFiles("../mount-dir/text2.txt", "../text2.txt");
+void TestFilesytem::testWriteIntoTwoFiles(char* file1, char* file2, int offset){
+	MyList listMount;
+	MyList listMount2;
+	TestFilesytem testFilesytem;
 
-	test1.compareLists(listMount, listMount2);
-	listMount.list.clear();
-	listMount2.list.clear();
-
-	//***************************************************************************************************
-	std::cerr << "\033[0;45m" << "Test: identisch nach mehrmals lesen text3"
-			<< "\033[1;0m" << std::endl;
-
-	test1.readFile("../mount-dir/text3.txt", &listMount);
-	//test1.readFile(FileInMount, &listMount2);
-	test1.readFile("../input/text3.txt", &listMount2);
-	test1.printTwoFiles("../mount-dir/text3.txt", "../input/text3.txt");
-
-	test1.compareLists(listMount, listMount2);
-	listMount.list.clear();
-	listMount2.list.clear();
-
-	//***************************************************************************************************
-	/*std::cerr << "\033[0;45m" << "Test: identisch nach mehrmals lesen big.txt"
-			<< "\033[1;0m" << std::endl;
-
-	test1.readFile("../mount-dir/big.txt", &listMount);
-	test1.readFile("../input/in/big.txt", &listMount2);
-
-	test1.compareLists(listMount, listMount2);
-	listMount.list.clear();
-	listMount2.list.clear();*/
-	//***************************************************************************************************
-	std::cerr << "\033[0;45m" << "Test: identisch nach mehrmals lesen 2 big.txt"
-			<< "\033[1;0m" << std::endl;
-
-	test1.readFile("../mount-dir/big (copy).txt", &listMount);
-	test1.readFile("../input/in/big (copy).txt", &listMount2);
-
-	test1.compareLists(listMount, listMount2);
-	listMount.list.clear();
-	listMount2.list.clear();
-
-	//***************************************************************************************************
-	std::cerr << "\033[0;45m" << "Test: Read mit offset 5 testen text3"
-			<< "\033[1;0m" << std::endl;
-
-	test1.readFile("../mount-dir/text3.txt", &listMount, 5);
-	//test1.readFile(FileInMount, &listMount2);
-	test1.readFile("../input/text3.txt", &listMount2, 5);
-	test1.printTwoFiles("../mount-dir/text3.txt", "../input/text3.txt", 5);
-
-	test1.compareLists(listMount, listMount2);
-	listMount.list.clear();
-	listMount2.list.clear();
-
-//***************************************************************************************************
-	std::cerr << "\033[0;45m" << "Test: Read mit offset 15 testen text3"
-			<< "\033[1;0m" << std::endl;
-
-	test1.readFile("../mount-dir/text3.txt", &listMount, 15);
-	//test1.readFile(FileInMount, &listMount2);
-	test1.readFile("../input/text3.txt", &listMount2, 15);
-	test1.printTwoFiles("../mount-dir/text3.txt", "../input/text3.txt", 15);
-
-	test1.compareLists(listMount, listMount2);
-	listMount.list.clear();
-	listMount2.list.clear();
-
-	//***************************************************************************************************
-	std::cerr << "\033[0;45m" << "Test: Schreiben ohne offset" << "\033[1;0m"
-			<< std::endl;
-	//schreiben
 	int r = rand();
-	char* fcomp = (char*) "../text1.txt";
-	MyList listCompare;
-	test1.myWrite(FileInMount, 5, 1, r);
-	//test1.myWrite(fileToCompare, 200, 0);
-	test1.myWrite(fcomp, 5, 1, r);
+	testFilesytem.myWrite(file1, 1515, offset, r);
+	testFilesytem.myWrite(file2, 1515, offset, r);
 
-	//files auslesen
-	test1.readFile(FileInMount, &listMount);
-	test1.readFile(fcomp, &listCompare);
-	//test1.printingFiles=1;
-	test1.printTwoFiles(FileInMount, fcomp);
-	test1.compareLists(listMount, listCompare);
+	cerr << "\033[0;45m" << "Test writing in file "<< file1 << " and file " <<file2 << " "<< " with offset: "<< offset << "\033[1;0m" << std::endl;
+
+	testFilesytem.readFile(file1, &listMount, offset);
+	testFilesytem.readFile(file2, &listMount2, offset);
+	testFilesytem.printTwoFiles(file1, file2, offset);
+
+	testFilesytem.compareLists(listMount, listMount2);
 	listMount.list.clear();
-	listCompare.list.clear();
+	listMount2.list.clear();
 
-	//***************************************************************************************************
-	std::cerr << "\033[0;45m" << "Test: Schreiben ohne offset" << "\033[1;0m"
-			<< std::endl;
-	//schreiben
-	r = rand();
-	test1.myWrite(FileInMount, 500, 1, r);
-	//test1.myWrite(fileToCompare, 200, 0);
-	test1.myWrite(fcomp, 500, 1, r);
+}
 
-	//files auslesen
-	test1.readFile(FileInMount, &listMount);
-	test1.readFile(fcomp, &listCompare);
-	//test1.printingFiles=1;
-	test1.printTwoFiles(FileInMount, fcomp);
-	test1.compareLists(listMount, listCompare);
-	listMount.list.clear();
-	listCompare.list.clear();
+char* TestFilesytem::convertStringToCharArray(string s){
+	int len = s.length();
+	char * charArray = new char[len+1];
+	strcpy(charArray, s.c_str()); 
+	return charArray;
+}
 
-	//***************************************************************************************************
-	std::cerr << "\033[0;45m" << "Test: Schreiben  mit offset" << "\033[1;0m"
-			<< std::endl;
-	r = rand();
-	test1.myWrite(FileInMount, 5, 5, r);
-	test1.myWrite(fcomp, 5, 5, r);
+void TestFilesytem::testReadTwoFiles(string file1, string file2, int offset){
 
-	//files auslesen
-	test1.readFile(FileInMount, &listMount);
-	test1.readFile(fcomp, &listCompare);
-	test1.printTwoFiles(FileInMount, fcomp);
-	test1.compareLists(listMount, listCompare);
-	listMount.list.clear();
-	listCompare.list.clear();
+	char * fileChar1;
+	char * fileChar2;
 
-	//***************************************************************************************************
-	std::cerr << "\033[0;45m" << "Test: Schreiben  mit offset" << "\033[1;0m"
-			<< std::endl;
-	r = rand()%100;
-	test1.myWrite(FileInMount, 10, 9, r);
-	test1.myWrite(fcomp, 10, 9, r);
+	fileChar1 = convertStringToCharArray(file1);
+	fileChar2 = convertStringToCharArray(file2);
 
-	//files auslesen
-	test1.readFile(FileInMount, &listMount);
-	test1.readFile(fcomp, &listCompare);
-	test1.printTwoFiles(FileInMount, fcomp);
+	TestFilesytem::testReadTwoFiles(fileChar1, fileChar2, offset);
 
-	test1.compareLists(listMount, listCompare);
-	listMount.list.clear();
-	listCompare.list.clear();
+}
 
-	//***************************************************************************************************
-	std::cerr << "\033[0;45m" << "Test: Schreiben  mit offset" << "\033[1;0m"
-			<< std::endl;
-	r = rand();
-	test1.myWrite(FileInMount, 1000, 494, r);
-	test1.myWrite(fcomp, 1000, 494, r);
+void TestFilesytem::testWriteIntoTwoFiles(string file1, string file2, int offset){
 
-	//files auslesen
-	test1.readFile(FileInMount, &listMount);
-	test1.readFile(fcomp, &listCompare);
-	test1.printTwoFiles(FileInMount, fcomp);
+	char * fileChar1 = convertStringToCharArray(file1);
+	char * fileChar2 = convertStringToCharArray(file2);
 
-	test1.compareLists(listMount, listCompare);
-	listMount.list.clear();
-	listCompare.list.clear();
+	TestFilesytem::testWriteIntoTwoFiles(fileChar1, fileChar2, offset);
 
-	//***************************************************************************************************
-	std::cerr << "\033[0;45m" << "Test: Schreiben  mit offset" << "\033[1;0m"
-			<< std::endl;
-	r = rand();
-	test1.myWrite(FileInMount, 500, 15, r);
-	test1.myWrite(fcomp, 500, 15, r);
+}
 
-	//files auslesen
-	test1.readFile(FileInMount, &listMount);
-	test1.readFile(fcomp, &listCompare);
-	test1.printTwoFiles(FileInMount, fcomp);
+int main(int argc, char *argv[]) {
+	/*argv : ./a.out 1 ../mount-dir ../input_for_tests text1.txt text2.txt
+	argc : number of argv 
+	*/
 
-	test1.compareLists(listMount, listCompare);
-	listMount.list.clear();
-	listCompare.list.clear();
+	TestFilesytem testFilesytem;
+	
+	if (atoi(argv[1]) == 1) {
+		PRINT_FILES = true;
+	} else {
+		PRINT_FILES = false;
+	}
+	string pathToMountFile(argv[2]);
+	string pathToTestFile(argv[3]);
 
-	//***************************************************************************************************
-	std::cerr << "\033[0;45m" << "Test: Schreiben  mit offset" << "\033[1;0m"
-			<< std::endl;
-	r = rand();
-	test1.myWrite(FileInMount, 5000, 515, r);
-	test1.myWrite(fcomp, 5000, 515, r);
+	for (int count=4;count<argc;count++){
+		string fileInMountDir = pathToMountFile + "/" + argv[count];
+		string fileInTestDir = pathToTestFile + "/" + argv[count];
+		
+		// test reading file without offset
+		testFilesytem.testReadTwoFiles(fileInMountDir, fileInTestDir);
+		// test reading file with offset 15
+		testFilesytem.testReadTwoFiles(fileInMountDir, fileInTestDir, 15);
+		// test reading file with offset 25
+		testFilesytem.testReadTwoFiles(fileInMountDir, fileInTestDir, 25);
 
-	//files auslesen
-	test1.readFile(FileInMount, &listMount);
-	test1.readFile(fcomp, &listCompare);
-	test1.printTwoFiles(FileInMount, fcomp);
+		// test writing file without offset
+		//testFilesytem.testWriteIntoTwoFiles(fileInMountDir, fileInTestDir);
 
-	test1.compareLists(listMount, listCompare);
-	listMount.list.clear();
-	listCompare.list.clear();
+
+		
+		}
+
 
 	return 0;
 
