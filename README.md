@@ -13,6 +13,8 @@ Creating the simplest filesystem that can :
  *echo Hello World 2 >> newfile1.txt*
  * Delete a file:
  *rm newfile2.txt*
+ * Filesystem can contain not more that 64 files
+ * Filesystem has just 30MB disk space.
 
 
 ## Getting Started

@@ -26,11 +26,6 @@
 #include <string.h>
 #include <stdlib.h>
 
-// fragen zur Folie 31
-//TODO Wie kann ich die anzahl geoefnete Dateien abrufen?
-// wann soll ich die Bloecke schliessen? Nach dem oeffnen oder nach dem Lesen auch
-// wie kann ich pruefen was in gepuffertem Block liegt?
-//in folie steht read (n, p), aber wir haben nur read()
 using namespace std;
 
 MyFS* MyFS::_instance = NULL;
@@ -50,8 +45,6 @@ MyFS::MyFS() {
 	fat = new MyFAT();
 	root = new MyRoot();
 	blocks = new BlockDevice();
-	// printf("Konstruktor von MyFS ist beendet \n");
-	//LOG("Konstruktor von MyFS ist beendet \n");
 }
 
 MyFS::MyFS(char * nameCont) {
@@ -63,14 +56,11 @@ MyFS::MyFS(char * nameCont) {
 	fat = new MyFAT();
 	root = new MyRoot();
 
-	printf("WORK WITH CONTAINER INIT : %s \n", nameCont);
 	blocks->open(nameCont);
 	dmap->read(DMAP_START, blocks);
 	fat->read(FAT_START, blocks);
 	root->read(ROOT_START, blocks);
 
-	// printf("Konstruktor von MyFS ist beendet \n");
-	//LOG("Konstruktor von MyFS ist beendet \n");
 }
 
 MyFS::~MyFS() {
@@ -80,8 +70,6 @@ MyFS::~MyFS() {
 	delete fat;
 	delete root;
 	delete blocks;
-	//printf("Destruktor von MyFS ist beendet \n");
-	//LOG("Destruktor von MyFS ist beendet \n");
 
 }
 
@@ -92,9 +80,6 @@ bool operator ==(MyFS const &f1, MyFS const& f2) {
 
 	if (*(f1.root) != *(f2.root))
 		return false;
-
-	/*if((*(f1.dmap)!=*(f2.dmap)))
-	 return false;*/
 
 	return true;
 
@@ -118,15 +103,15 @@ void MyFS::resize(char * text, int oldSize, int newSize) {
 		*(text++) = char(0);
 		i--;
 	}
-	//*(text-1)='\0';
 	text -= newSize;
 
 }
-//int fuseRead(const char *path, char *buf, size_t size, off_t offset, struct fuse_file_info *fileInfo);
+
 int MyFS::readFile(const char *path, char *buf, size_t size, off_t offset,
 		struct fuse_file_info *fileInfo) {
 
-	LOG("********************************************************************************************** ");LOGF("readFile start , size: %i, offset: %i \n", (int )size, (int )offset);
+	LOG("********************************************************************************************** ");
+	LOGF("readFile start , size: %i, offset: %i \n", (int )size, (int )offset);
 
 	//todo hier vielleicht noch irgendwas in fileInfo prüfen?
 
@@ -135,7 +120,6 @@ int MyFS::readFile(const char *path, char *buf, size_t size, off_t offset,
 	int returnValue;
 	returnValue = root->getFile(path, file);
 	if (returnValue == -1) {
-		//printf("can't get file from root root.getFile(path, &fcopy) \n");
 		LOG("can't get file from root root.getFile(path, &fcopy) \n");
 		RETURN(-ENOENT);
 	}
@@ -144,25 +128,13 @@ int MyFS::readFile(const char *path, char *buf, size_t size, off_t offset,
 	int fileSize = file->getSize();
 
 	LOGF("readFile fileSize= ft->getSize() %i  \n", fileSize);
-	//int blocksNumber = ceil(fcopy.getSize() / BD_BLOCK_SIZE);
-	/*if (fileSize % BD_BLOCK_SIZE != 0) {
-	 printf("File's size is false  fcopy.getSize() mod D_BLOCK_SIZE!=0 \n");
-	 RETURN(-ENOENT);
-	 }*/
 
 	int usedBlocks = fileSize / BD_BLOCK_SIZE;
 	if (fileSize % BD_BLOCK_SIZE != 0)
 		usedBlocks++;
 	LOGF("usedBlocks in readFile : %i \n", usedBlocks);
-	//buf = new char [fcopy->getSize()];
 
-	//grenzüberschreitung überprüfen
-	/*	if((int)offset+(int)size+1>usedBlocks*BD_BLOCK_SIZE){
-	 LOG("Requested Postion not within filesize");
-	 RETURN(-EINVAL);	//TODO ist das der korrekte fehlercode: (Invalid argument)?
-	 }*/
-
-	//Auszulesende stelle berechen
+	//count place to read
 	int blockNumber = offset / BD_BLOCK_SIZE;
 	LOGF("blockNumber: %i \n", blockNumber);
 	int positionInBlock = offset % BD_BLOCK_SIZE;
@@ -710,25 +682,7 @@ int MyFS::fuseWrite(const char *path, const char *buf, size_t size,
 		blockToWrite++;
 	}
 
-/*
-	if (fileInfo->keep_cache != blockToWrite+1) {
-		root->writeToPuffer(path+1, bufWrite);
-		fileInfo->keep_cache = blockToWrite+1;
-		LOGF("fileInfo->keep_cache: %i\n",fileInfo->keep_cache);
-	}
-
-	*/
 	delete[] bufWrite;
-
-	/*newBuf[ret]=char(0);
-	 ret++;
-	 LOGF("newBuf: %s \n", newBuf);
-	 LOGF("ret: %i \n", ret);*/
-	//Size aktualisieren
-	/*if ((size + offset) > fileSize) {
-	 fileSize = size + offset;
-	 root->setSize(path + 1, fileSize);
-	 }*/
 
 	if (((int) size + (int) offset) > fileSize) {
 		fileSize = (int)size + (int)offset;
@@ -744,7 +698,6 @@ int MyFS::fuseWrite(const char *path, const char *buf, size_t size,
 
 	root->showFile(path+1);
 
-	//todo änderungen auf blockdevice persistieren
 	return size;
 
 }
@@ -758,7 +711,7 @@ int MyFS::fuseRelease(const char *path, struct fuse_file_info *fileInfo) {
 	RETURN(0);
 }
 
-int MyFS::fuseOpendir(const char *path, struct fuse_file_info *fileInfo) { // Is it not the same as fuseReaddir?
+int MyFS::fuseOpendir(const char *path, struct fuse_file_info *fileInfo) { 
 	LOGM()
 	;
 
@@ -782,16 +735,7 @@ int MyFS::fuseReaddir(const char *path, void *buffer, fuse_fill_dir_t filler,
 	LOG("start fuseReaddir \n");
 
 	int count = 0;
-	// TODO: Implement this!
-
-	/* if(fileInfo->fh == NULL){ //fh durch fuseopendir gesetzt-> bestaetigt existenz
-	 return -ENOENT ;//Datei oder Verzeichnis existiert nicht
-	 }*/
-
 	LOGF("--> Getting The List of Files of %s\n", path);
-
-	// filler(void *buf, const char *name,const struct stat *stbuf, off_t off);
-	// struct stat <- can contain the file type
 
 	filler(buffer, ".", NULL, 0);	// Current Directory
 	filler(buffer, "..", NULL, 0);	// Parent Directory
@@ -823,9 +767,6 @@ int MyFS::fuseReaddir(const char *path, void *buffer, fuse_fill_dir_t filler,
 int MyFS::fuseReleasedir(const char *path, struct fuse_file_info *fileInfo) {
 	LOGM()
 	;
-
-	// TODO: Implement this!
-	//temporeres Zeug loeschen
 
 	fileInfo->fh = 0;	// Julia: Sonst noch was loeschen?
 
@@ -902,16 +843,9 @@ void* MyFS::fuseInit(struct fuse_conn_info *conn) {
 		// you can get the containfer file name here:
 		LOGF("Container file name: %s", ((MyFsInfo * ) fuse_get_context()->private_data)->contFile);
 
-		// TODO: Implement your initialization methods here!
-		// Konstruktor hier (vermuetlich) schreiben . Es wird schon in mkfs.myfs gemacht
-		//Wieso muessen wir Konstruktor schreiben? Er wird automatisch aufgerufen
-		// Falls wir das von Terminal aufrufen dann? was passiert dann? Muessen wir so was schreiben MyFs mf = new MyFs()?;
-		//MyFS();
 		char * nameCont =
 				((MyFsInfo *) fuse_get_context()->private_data)->contFile;
 
-		//if(*nameCont!=char(0))
-		//{
 		LOG("try to open container \n");
 		blocks->open(nameCont);
 		LOG(" open container sucess \n");
@@ -922,14 +856,6 @@ void* MyFS::fuseInit(struct fuse_conn_info *conn) {
 		LOG(" open dmap sucess \n");
 		fat->read(FAT_START, blocks);
 		LOG(" open fat sucess \n");
-		//}
-		//else
-		//{
-		//	blocks->create("contFuse.bin");
-		//}
-		/*LOG("try blocks->open(nameCont) \n");
-		 BlockDevice * blocks = new BlockDevice();
-		 blocks->open(nameCont);*/
 
 		LOG("sucess blocks->open(nameCont) \n");
 	}
@@ -986,7 +912,8 @@ int MyFS::fuseReadlink(const char *path, char *link, size_t size) {
 	return 0;
 }
 int MyFS::fuseTruncate(const char *path, off_t newSize) {
-	LOGM();LOGF("newSize: %i\n",newSize);
+	LOGM();
+	LOGF("newSize: %i\n",newSize);
 
 	if (newSize == 0) {
 		MyFile *file = new MyFile();
