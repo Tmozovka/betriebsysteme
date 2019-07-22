@@ -14,7 +14,7 @@ Creating the simplest filesystem that can :
  * Delete a file:
  *rm newfile2.txt*
  * Filesystem can contain not more that 64 files
- * Filesystem has just 30MB disk space.
+ * Filesystem has just 30MB memory space.
 
 
 ## Getting Started
