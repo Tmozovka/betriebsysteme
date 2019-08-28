@@ -65,8 +65,6 @@ Hier you can learn how to use git at team : https://jameschambers.co/writing/git
 Unitests could be run after installation of the eclipse enviroment. 
 	
 
-## License
-This project is developed during operation system exercise at the Karlsruhe University of Applied Sciences.
 
 
 
