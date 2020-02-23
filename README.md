@@ -62,7 +62,6 @@ Hier you can learn how to use git at team : https://jameschambers.co/writing/git
  3. Give as arguments: name of the folder with simplest filesystem, name of folder with test-files, names of test-files. Run tests with issue about test runs: *./a.out 1 ../mount-dir ../input_for_tests text1.txt text2.txt*
  4. 3. Run tests without issue about test runs: *./a.out 0 ../mount-dir ../input_for_tests text1.txt text2.txt*
 
-Unitests could be run after installation of the eclipse enviroment. 
 	
 
 
