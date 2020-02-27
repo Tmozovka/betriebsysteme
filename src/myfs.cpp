@@ -1,10 +1,4 @@
 //
-//  myfs.cpp
-//  myfs
-//
-//  Created by Oliver Waldhorst on 02.08.17.
-//  Copyright © 2017 Oliver Waldhorst. All rights reserved.
-//
 
 // For documentation of FUSE methods see https://libfuse.github.io/doxygen/structfuse__operations.html
 
